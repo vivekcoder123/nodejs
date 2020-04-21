@@ -19,14 +19,21 @@
 
       <div class="form-group">
         <label for="status">Category</label>
-        <select class="form-control" name="category" id="category">
-         {{#select post.Category}}
-          {{#each categories}}
-            <option value="{{id}}">{{name}}</option>
-          {{/each}} 
-         {{/select}}        
+        <select name="category" id="status" class="form-control">
+
+
+            {{#select post.Category}}
+
+                 {{#each categories}}
+
+                <option value="{{id}}">{{name}}</option>
+
+                {{/each}}
+
+            {{/select}}
+
         </select>
-      </div>
+    </div>
 
       <div class="form-check">
         <label for="allowcomments">

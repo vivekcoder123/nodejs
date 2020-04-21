@@ -136,10 +136,27 @@ router.post('/register', (req, res)=>{
 });
 
 
-router.get('/post/:id',(req,res)=>{
-	Post.findOne({_id:req.params.id}).then(post=>{
-		res.render('home/post',{post: post});
-	});
+
+
+
+router.get('/post/:id', (req, res)=>{
+
+    Post.findOne({_id: req.params.id})
+
+        .populate({path: 'comments', match: {approveComment: true}, populate: {path: 'user', model: 'users'}})
+        .populate('user')
+
+        .then(post =>{
+
+            Category.find({}).then(categories=>{
+
+                res.render('home/post', {post: post, categories: categories});
+
+            });
+
+
+        });
+
 });
 
 module.exports = router;

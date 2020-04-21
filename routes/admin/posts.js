@@ -15,8 +15,8 @@ router.all('/*', userAuthenticated,(req,res,next)=>{
 router.get('/',(req,res)=>{
 	Post.find({})
 	.populate('Category')
-	.then(post=>{
-		res.render('admin/posts/index',{post:post});
+	.then(posts=>{
+		res.render('admin/posts/index',{posts:posts});
 	});
 });
 
@@ -25,6 +25,17 @@ router.get('/create',(req,res)=>{
 		res.render('admin/posts/create',{categories: categories});
 	});
 });
+
+ 
+router.get('/my-posts', (req, res)=>{
+    Post.find({user: req.user.id})
+        .populate('Category')
+        .then(posts=>{
+        	console.log(posts);
+            res.render('admin/posts/my-posts', {posts: posts});
+        });
+});
+
 
 router.post('/create',(req,res)=>{
 
@@ -50,6 +61,7 @@ router.post('/create',(req,res)=>{
 	}
 
 	const post = new Post({
+		user:req.user.id,
 		title: req.body.title,
 		status: req.body.status,
 		allowComments: allowComments,
@@ -59,7 +71,7 @@ router.post('/create',(req,res)=>{
 	});
 	post.save().then(savedPost=>{		
 		req.flash('success_message', `Post ${savedPost.title} was CREATED succesfully`);	
-		res.redirect('/admin/posts');
+		res.redirect('/admin/posts/my-posts');
 
 	});	
 });
@@ -67,6 +79,7 @@ router.post('/create',(req,res)=>{
 router.get('/edit/:id',(req,res) =>{
 	Post.findOne({_id:req.params.id}).then(post=>{
 		Category.find({}).then(categories => {
+			console.log(post.Category,categories);
 			res.render('admin/posts/edit',{post:post, categories: categories});
 		});
 	});
@@ -80,6 +93,7 @@ router.put('/edit/:id',(req,res) =>{
 			}else{
 				allowComments = false;
 			}
+		post.user = req.user.id;
 		post.title = req.body.title;
 		post.status = req.body.status;
 		post.allowComments = allowComments;
@@ -102,21 +116,30 @@ router.put('/edit/:id',(req,res) =>{
 		post.save().then(savedPost=>{
 			if(savedPost){
 				req.flash('success_message', `Post ${savedPost.title} was UPDATED succesfully`);
-				res.redirect('/admin/posts');
+				res.redirect('/admin/posts/my-posts');
 			}
 		});		
 	});
 });
 
-router.delete('/:id', (req,res) => {
-	Post.findOne({_id:req.params.id})
-	.then(post=>{
-		fs.unlink('./public/uploads/'+post.file,(err)=>{		
-			post.remove();
-			req.flash('success_message', `Post was DELETED succesfully`);
-			res.redirect('/admin/posts');
-		});
-	});
+router.delete('/:id', (req, res)=>{
+
+    Post.findOne({_id: req.params.id})
+        .populate('comments')
+        .then(post =>{ 
+            fs.unlink('./public/uploads/' + post.file, (err)=>{
+
+                if(!post.comments.length < 1){
+                      post.comments.forEach(comment=>{
+                      comment.remove();
+                   });
+                }
+                post.remove().then(postRemoved=>{
+                    req.flash('success_message', 'Post was successfully deleted');
+                    res.redirect('/admin/posts/my-posts');
+                });
+            });
+     });
 });
 
-module.exports = router;
+module.exports = router;                               

@@ -17,9 +17,9 @@ app.use(express.static(path.join(__dirname,'public')));
 
 //set view engine
 
-const {select, generateTime} = require('./helpers/handlebars-helpers');
+const {select, generateTime, paginate} = require('./helpers/handlebars-helpers');
 
-app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select: select, generateTime: generateTime}}));
+app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select: select, generateTime: generateTime, paginate: paginate}}));
 app.set('view engine','handlebars');
  
 //upload middleware

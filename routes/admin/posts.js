@@ -31,7 +31,6 @@ router.get('/my-posts', (req, res)=>{
     Post.find({user: req.user.id})
         .populate('Category')
         .then(posts=>{
-        	console.log(posts);
             res.render('admin/posts/my-posts', {posts: posts});
         });
 });
@@ -79,7 +78,6 @@ router.post('/create',(req,res)=>{
 router.get('/edit/:id',(req,res) =>{
 	Post.findOne({_id:req.params.id}).then(post=>{
 		Category.find({}).then(categories => {
-			console.log(post.Category,categories);
 			res.render('admin/posts/edit',{post:post, categories: categories});
 		});
 	});

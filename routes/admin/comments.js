@@ -18,7 +18,7 @@ router.get('/', (req, res)=>{
 });
 
 router.post('/', (req, res)=>{
-    Post.findOne({_id: req.body.id}).then(post=>{
+    Post.findOne({slug: req.body.id}).then(post=>{
         const newComment = new Comment({
             user: req.user.id,
             body: req.body.body
@@ -27,7 +27,7 @@ router.post('/', (req, res)=>{
         post.save().then(savedPost=>{
             newComment.save().then(savedComment=>{
             	req.flash('success_message', 'Comment was successfully added');
-                res.redirect(`/post/${post.id}`);
+                res.redirect(`/post/${post.slug}`);
             })
         });
     });

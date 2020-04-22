@@ -13,13 +13,26 @@ router.all('/*',(req,res,next)=>{
 	next();
 });
 
-router.get('/',(req,res)=>{
-	Post.find({}).then(post => {
-		Category.find({}).then(categories => {
-			res.render('home/index',{post:post, categories:categories});
-		});		
-	});
-}); 
+
+router.get('/', (req, res)=>{
+    const perPage = 10;
+    const page = req.query.page || 1;
+    Post.find({})
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
+        .then(posts =>{
+        Post.count().then(postCount=>{
+            Category.find({}).then(categories=>{
+                res.render('home/index', {
+                    posts: posts,
+                    categories:categories,
+                    current: parseInt(page),
+                    pages: Math.ceil(postCount / perPage)
+                });
+            });
+        });
+    });
+});
  
 
 router.get('/about',(req,res)=>{
@@ -73,12 +86,6 @@ router.get('/logout', (req, res)=>{
 });
 
 
-router.get('/register',(req,res)=>{
-	res.render('home/register');
-});
-
-
-
 router.post('/register', (req, res)=>{
 
     let errors = [];
@@ -121,7 +128,6 @@ router.post('/register', (req, res)=>{
                     bcrypt.hash(newUser.password, salt, (err, hash)=>{
                         newUser.password = hash;
                         newUser.save().then(savedUser=>{
-                        	console.log(savedUser);
                             req.flash('success_message', 'You are now registered, please login')
                             res.redirect('/login');
                         });
@@ -139,9 +145,9 @@ router.post('/register', (req, res)=>{
 
 
 
-router.get('/post/:id', (req, res)=>{
+router.get('/post/:slug', (req, res)=>{
 
-    Post.findOne({_id: req.params.id})
+    Post.findOne({slug: req.params.slug})
 
         .populate({path: 'comments', match: {approveComment: true}, populate: {path: 'user', model: 'users'}})
         .populate('user')

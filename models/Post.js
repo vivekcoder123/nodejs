@@ -40,7 +40,16 @@ const PostSchema = new Schema({
     comments: [{
         type: Schema.Types.ObjectId,
         ref: 'comments'
-    }]
+    }],
+    likes: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }
+    }
+  ]
+
 },{usePushEach: true});
 
 PostSchema.plugin(URLSlugs('title', {field: 'slug'}));

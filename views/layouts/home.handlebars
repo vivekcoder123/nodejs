@@ -4,29 +4,35 @@
   <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>Postidal - Multi Vendor &amp; Marketplace</title>
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700&amp;amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="fonts/Linearicons/Linearicons/Font/demo-files/demo.css">
+    <link rel="stylesheet" href="plugins/bootstrap4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/owl-carousel/assets/owl.carousel.css">
+    <link rel="stylesheet" href="plugins/slick/slick/slick.css">
+    <link rel="stylesheet" href="plugins/lightGallery-master/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css">
+    <link rel="stylesheet" href="plugins/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="plugins/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/electronic.css">
 
-    <title>Blog Home - Start Bootstrap Template</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.css">
-
-    <!-- Custom styles for this template -->
-    <link href="/css/blog-home.css" rel="stylesheet">
-    <link href="/css/blog-post.css" rel="stylesheet">
 
   </head>
 
   <body>
-
-    <!-- Navigation -->
     
     {{>home/home-nav}}
 
-    <!-- Page Content -->
-    <div class="container">
+    <div class="mainContainer">
 
 
         {{#if errors}}
@@ -38,9 +44,12 @@
         {{/if}}
 
         {{#if success_message}}
-            <div class="alert alert-success">
-                <strong>{{success_message}}</strong>
-            </div>
+          <div class="alert alert-success alert-dismissible fade show mt-2">
+            <button class="close" data-dismiss="alert" type="button">
+                <span>&times;</span>
+            </button>
+            <strong>{{success_message}}</strong>
+          </div>
         {{/if}}
 
         {{#if error_message}}
@@ -55,15 +64,28 @@
 
 
     </div>
-    <!-- /.container -->
 
-    <!-- Footer -->
     {{>home/footer}}
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/popper.min.js"></script>
+    <script src="plugins/jquery-1.12.4.min.js"></script>
+    <script src="plugins/popper.min.js"></script>
+    <script src="plugins/owl-carousel/owl.carousel.min.js"></script>
+    <script src="plugins/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="plugins/imagesloaded.pkgd.min.js"></script>
+    <script src="plugins/masonry.pkgd.min.js"></script>
+    <script src="plugins/isotope.pkgd.min.js"></script>
+    <script src="plugins/jquery.matchHeight-min.js"></script>
+    <script src="plugins/slick/slick/slick.min.js"></script>
+    <script src="plugins/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
+    <script src="plugins/slick-animation.min.js"></script>
+    <script src="plugins/lightGallery-master/dist/js/lightgallery-all.min.js"></script>
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="plugins/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
+    <script src="plugins/jquery.slimscroll.min.js"></script>
+    <script src="plugins/select2/dist/js/select2.full.min.js"></script>
+    <script src="plugins/gmap3.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxflHHc5FlDVI-J71pO7hM1QJNW1dRp4U&amp;region=GB"></script>
 
   </body>
 

@@ -10,6 +10,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 
+
+
  
 mongoose.Promise = global.Promise;
 
@@ -29,7 +31,7 @@ app.use(upload());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
  
-mongoose.connect('mongodb://localhost:27017/node_project',{useNewUrlParser:true}).then(db=>{
+mongoose.connect('mongodb://localhost:27017/postidal',{useNewUrlParser:true}).then(db=>{
 	console.log('connected to server');
 }).catch(error=>{
 	console.log('could not connect');
@@ -39,7 +41,7 @@ mongoose.connect('mongodb://localhost:27017/node_project',{useNewUrlParser:true}
 app.use(methodOverride('_method'));
 
 app.use(session({
-	secret: 'khalidali8696345',
+	secret: 'vivek12345',
 	resave: true,
 	saveUninitialized: true
 }));

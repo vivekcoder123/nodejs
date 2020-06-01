@@ -1,14 +1,16 @@
 {
-  "name": "node_project",
+  "name": "postidal",
   "version": "1.0.0",
-  "description": "learning",
+  "description": "ecommerce",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app.js"
   },
-  "author": "khalid ali",
+  "author": "vivek rautela",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
@@ -21,7 +23,9 @@
     "moment": "^2.24.0",
     "mongoose": "^5.6.3",
     "mongoose-url-slugs": "^1.0.2",
+    "nodemailer": "^6.4.6",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "unirest": "^0.6.0"
   }
 }

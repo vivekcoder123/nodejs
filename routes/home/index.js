@@ -17,32 +17,17 @@ router.all('/*',(req,res,next)=>{
 router.get('/', (req, res)=>{
     const perPage = 10;
     const page = req.query.page || 1;
-    Post.find({})
-        .skip((perPage * page) - perPage)
-        .limit(perPage)
-        .then(posts =>{
-        Post.count().then(postCount=>{
-            Category.find({}).then(categories=>{
-                res.render('home/index', {
-                    posts: posts,
-                    categories:categories,
-                    current: parseInt(page),
-                    pages: Math.ceil(postCount / perPage)
-                });
-            });
-        });
-    });
+    res.render('home/index');
 });
  
 
-router.get('/about',(req,res)=>{
-	res.render('home/about');
+router.get('/my-account',(req,res)=>{
+	res.render('home/my-account');
 });
 
-router.get('/login',(req,res)=>{
-	res.render('home/login');
+router.get('/product-detail',(req,res)=>{
+	res.render('home/product-detail');
 });
-
 
 // APP LOGIN
 
@@ -143,8 +128,6 @@ router.post('/register', (req, res)=>{
 
 
 
-
-
 router.get('/post/:slug', (req, res)=>{
 
     Post.findOne({slug: req.params.slug})
@@ -164,5 +147,8 @@ router.get('/post/:slug', (req, res)=>{
         });
 
 });
+
+
+
 
 module.exports = router;

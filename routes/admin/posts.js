@@ -13,7 +13,7 @@ router.all('/*', userAuthenticated,(req,res,next)=>{
 });
 
 router.get('/',(req,res)=>{
-	Post.find({})
+	Post.find({}).sort({date:-1})
 	.populate('Category')
 	.then(posts=>{
 		res.render('admin/posts/index',{posts:posts});
@@ -28,7 +28,7 @@ router.get('/create',(req,res)=>{
 
  
 router.get('/my-posts', (req, res)=>{
-    Post.find({user: req.user.id})
+    Post.find({user: req.user.id}).sort({date:-1})
         .populate('Category')
         .then(posts=>{
             res.render('admin/posts/my-posts', {posts: posts});
@@ -46,10 +46,7 @@ router.post('/create',(req,res)=>{
 		file.mv('./public/uploads/'+filename,(err)=>{
 			if(err) throw err;
 		});
-		console.log('not empty');
-	}
-	else{
-		console.log('empty');
+		
 	}
 
 	let allowComments = true;
@@ -99,17 +96,18 @@ router.put('/edit/:id',(req,res) =>{
 		post.body = req.body.body;
 
 		if(!isEmpty(req.files)){
+			fs.unlink('./public/uploads/' + post.file, (err)=>{ console.log(err);
+            });
 			let file = req.files.file;
 			filename = Date.now()+'-'+file.name;
 			post.file = filename;
 			file.mv('./public/uploads/'+filename,(err)=>{
 				if(err) throw err;
 			});
-			console.log('not empty');
+			
+			
 		}
-		else{
-			console.log('empty');
-		}
+		
 
 		post.save().then(savedPost=>{
 			if(savedPost){
@@ -139,5 +137,83 @@ router.delete('/:id', (req, res)=>{
             });
      });
 });
+
+
+
+
+
+router.post('/like/:id',(req, res) => {
+
+   
+      Post.findById(req.params.id)
+        .then(post => {
+          if (
+            post.likes.filter(like => like.user.toString() === req.user.id)
+              .length > 0
+          ) {
+                toastr.success(`you have allready liked this post`);
+                res.redirect(`/post/${post.slug}`);
+          }
+
+          // Add user id to likes array
+          else{
+          	post.likes.unshift({ user: req.user.id });
+
+          post.save().then(post =>{
+          	
+          	res.send(post);
+          	
+          });
+          }
+          
+        })
+        .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
+    
+  }
+);
+
+// @route   POST api/posts/unlike/:id
+// @desc    Unlike post
+// @access  Private
+router.post(
+  '/unlike/:id',
+  
+  (req, res) => {
+   
+      Post.findById(req.params.id)
+        .then(post => {
+          if (
+            post.likes.filter(like => like.user.toString() === req.user.id)
+              .length === 0
+          ) {
+            	toastr.success(`you have already unliked this post`);
+                res.redirect(`/post/${post.slug}`);
+          }
+          else{
+          	// Get remove index
+          const removeIndex = post.likes
+            .map(item => item.user.toString())
+            .indexOf(req.user.id);
+
+          // Splice out of array
+          post.likes.splice(removeIndex, 1);
+
+          // Save
+          post.save().then(post => {
+          	
+          	
+          	
+          	res.send(post);
+          });
+          }
+          
+        })
+        .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
+   
+  }
+);
+
+
+
 
 module.exports = router;                               

@@ -75,16 +75,8 @@ app.use('/admin/posts', posts);
 app.use('/admin/categories', categories);
 app.use('/admin/comments', comments);
 
-<<<<<<< HEAD
 const port = process.env.PORT || 8080;
 
 app.listen(port, ()=>{
 	console.log(`listening on port 8080`);
 });
-=======
-const port = process.env.PORT || 3000;
-
-app.listen(port, ()=>{
-	console.log(`listening on port 3000`);
-});
->>>>>>> e3524e1444a37ae7eca4afcea6fa40c6718c3f50

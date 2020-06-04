@@ -14,7 +14,6 @@ const passport = require('passport');
 
  
 mongoose.Promise = global.Promise;
-
 app.use(express.static(path.join(__dirname,'public')));
 
 //set view engine

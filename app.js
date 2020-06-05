@@ -9,12 +9,13 @@ const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
-var config=require('./env.json');
-
+const config=require('./env.json');
+const compression = require('compression')
 
 
  
 mongoose.Promise = global.Promise;
+app.use(compression());
 app.use(express.static(path.join(__dirname,'public')));
 
 //set view engine

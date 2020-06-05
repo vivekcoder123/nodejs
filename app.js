@@ -15,7 +15,6 @@ var config=require('./env.json');
 
  
 mongoose.Promise = global.Promise;
-
 app.use(express.static(path.join(__dirname,'public')));
 
 //set view engine

@@ -30,7 +30,7 @@
         </div>
         <div class="header__content">
             <div class="container">
-                <div class="header__content-left"><a class="ps-logo" href="/"><img src="img/logo-electronic.png" alt=""></a>
+                <div class="header__content-left"><a class="ps-logo" href="{{config.root}}"><img src="img/logo-electronic.png" alt=""></a>
                     <div class="menu--product-categories">
                         <div class="menu__toggle"><i class="icon-menu"></i><span> Shop by Department</span></div>
                         <div class="menu__content">
@@ -97,12 +97,6 @@
                             <div class="ps-cart__content">
                                 <div class="ps-cart__items">
                                     <div class="ps-product--cart-mobile">
-                                        <div class="ps-product__thumbnail"><a href="#"><img src="img/products/clothing/7.jpg" alt=""></a></div>
-                                        <div class="ps-product__content"><a class="ps-product__remove" href="#"><i class="icon-cross"></i></a><a href="product-default.html">MVMTH Classical Leather Watch In Black</a>
-                                            <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
-                                        </div>
-                                    </div>
-                                    <div class="ps-product--cart-mobile">
                                         <div class="ps-product__thumbnail"><a href="#"><img src="img/products/clothing/5.jpg" alt=""></a></div>
                                         <div class="ps-product__content"><a class="ps-product__remove" href="#"><i class="icon-cross"></i></a><a href="product-default.html">Sleeve Linen Blend Caro Pane Shirt</a>
                                             <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
@@ -117,7 +111,7 @@
                         </div>
                         <div class="ps-block--user-header">
                             <div class="ps-block__left"><i class="icon-user"></i></div>
-                            <div class="ps-block__right"><a href="/my-account">Login</a><a href="/my-account">Register</a></div>
+                            <div class="ps-block__right"><a href="{{config.root}}my-account">Login</a><a href="{{config.root}}my-account">Register</a></div>
                         </div>
                     </div>
                 </div>
@@ -169,18 +163,12 @@
             </div>
         </div>
         <div class="navigation--mobile">
-            <div class="navigation__left"><a class="ps-logo" href="/"><img src="img/logo-electronic.png" alt=""></a></div>
+            <div class="navigation__left"><a class="ps-logo" href="{{config.root}}"><img src="img/logo-electronic.png" alt=""></a></div>
             <div class="navigation__right">
                 <div class="header__actions">
                     <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>0</i></span></a>
                         <div class="ps-cart__content">
                             <div class="ps-cart__items">
-                                <div class="ps-product--cart-mobile">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="img/products/clothing/7.jpg" alt=""></a></div>
-                                    <div class="ps-product__content"><a class="ps-product__remove" href="#"><i class="icon-cross"></i></a><a href="product-default.html">MVMTH Classical Leather Watch In Black</a>
-                                        <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
-                                    </div>
-                                </div>
                                 <div class="ps-product--cart-mobile">
                                     <div class="ps-product__thumbnail"><a href="#"><img src="img/products/clothing/5.jpg" alt=""></a></div>
                                     <div class="ps-product__content"><a class="ps-product__remove" href="#"><i class="icon-cross"></i></a><a href="product-default.html">Sleeve Linen Blend Caro Pane Shirt</a>
@@ -196,7 +184,7 @@
                     </div>
                     <div class="ps-block--user-header">
                         <div class="ps-block__left"><i class="icon-user"></i></div>
-                        <div class="ps-block__right"><a href="/my-account">Login</a><a href="/my-account">Register</a></div>
+                        <div class="ps-block__right"><a href="{{config.root}}my-account">Login</a><a href="{{config.root}}my-account">Register</a></div>
                     </div>
                 </div>
             </div>
@@ -287,7 +275,7 @@
         </div>
         <div class="ps-panel__content">
             <ul class="menu--mobile">
-                <li class="current-menu-item menu-item-has-children"><a href="/">Home</a><span class="sub-toggle"></span>
+                <li class="current-menu-item menu-item-has-children"><a href="{{config.root}}">Home</a><span class="sub-toggle"></span>
                     <ul class="sub-menu">
                         <li><a href="index.html">Marketplace Full Width</a>
                         </li>

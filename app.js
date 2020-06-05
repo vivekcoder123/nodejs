@@ -12,7 +12,6 @@ const passport = require('passport');
 const config=require('./env.json');
 const compression = require('compression')
 
-
  
 mongoose.Promise = global.Promise;
 app.use(compression());

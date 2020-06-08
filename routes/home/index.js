@@ -29,6 +29,34 @@ router.get('/product-detail',(req,res)=>{
 	res.render('home/product-detail');
 });
 
+router.get('/cart',(req,res)=>{
+    res.render('home/cart');
+});
+
+router.get('/checkout',(req,res)=>{
+    res.render('home/checkout');
+});
+
+router.get('/shop-categories',(req,res)=>{
+    res.render('home/shop-categories');
+});
+
+router.get('/all-products',(req,res)=>{
+    res.render('home/all-products');
+});
+
+router.get('/about-us',(req,res)=>{
+    res.render('home/about-us');
+});
+
+router.get('/contact-us',(req,res)=>{
+    res.render('home/contact-us');
+});
+
+router.get('/faq',(req,res)=>{
+    res.render('home/faq');
+});
+
 // APP LOGIN
 
 passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done)=>{

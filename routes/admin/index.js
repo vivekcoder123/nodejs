@@ -24,13 +24,7 @@ router.get('/',(req,res)=>{
 		//res.render('admin/index',{postCount:postCount, categoryCount:categoryCount, commentCount:commentCount});
 	//});
 
-	Post.count({}).then(postCount=>{
-		Category.count({}).then(categoryCount=>{
-			Comment.count({}).then(commentCount=>{
-				res.render('admin/index',{postCount:postCount, categoryCount:categoryCount, commentCount:commentCount});
-			});
-		});
-	});	
+	res.render('admin/index');	
 });
 
 router.get('/dashboard',(req,res)=>{

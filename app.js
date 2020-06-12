@@ -10,8 +10,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const config=require('./env.json');
-const compression = require('compression')
-
+const compression = require('compression');
+const redis=require("redis");
  
 mongoose.Promise = global.Promise;
 app.use(compression());
@@ -65,18 +65,21 @@ app.use((req,res,next) => {
 //set routes
 const home = require('./routes/home/index');
 const admin = require('./routes/admin/index');
-const posts = require('./routes/admin/posts');
+const products = require('./routes/admin/products');
 const categories = require('./routes/admin/categories');
 const comments = require('./routes/admin/comments');
 
 //use routes
 app.use('/', home);
 app.use('/admin', admin);
-app.use('/admin/posts', posts);
+app.use('/admin/products', products);
 app.use('/admin/categories', categories);
 app.use('/admin/comments', comments);
 
+// const port_redis=process.env.REDIST_PORT || 6379;
 const port = process.env.PORT || 8080;
+
+// const redis_client=redis.createClient(port_redis);
 
 app.listen(port, ()=>{
 	console.log(`listening on port 8080`);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../../models/Post');
+const Product = require('../../models/Product');
 const Category = require('../../models/Category');
 const fs = require('fs');
 const { isEmpty } = require('../../helpers/upload-helper');
@@ -12,26 +12,18 @@ router.all('/*', userAuthenticated,(req,res,next)=>{
 	next();
 });
 
-router.get('/',(req,res)=>{
-	Post.find({}).sort({date:-1})
-	.populate('Category')
-	.then(posts=>{
-		res.render('admin/posts/index',{posts:posts});
-	});
-});
-
-router.get('/create',(req,res)=>{
+router.get('/add',(req,res)=>{
 	Category.find({}).then(categories => {
-		res.render('admin/posts/create',{categories: categories});
+		res.render('admin/products/create',{categories: categories});
 	});
 });
 
  
-router.get('/my-posts', (req, res)=>{
+router.get('/my-products', (req, res)=>{
     Post.find({user: req.user.id}).sort({date:-1})
         .populate('Category')
-        .then(posts=>{
-            res.render('admin/posts/my-posts', {posts: posts});
+        .then(products=>{
+            res.render('admin/products/my-products', {products: products});
         });
 });
 

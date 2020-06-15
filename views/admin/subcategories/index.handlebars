@@ -1,0 +1,50 @@
+<h2 class="text-center my-4">Create Subcategories</h2>
+
+	<form class="form" action="/admin/subcategories/create" method="post">
+		<div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" placeholder="name" class="form-control" required/>
+                </div>
+                <div class="col-md-6">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" class="form-control">
+                        {{#each categories}}
+                            <option value="{{_id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+		</div>
+        <button type="submit" class="btn btn-info">Add Subcategory</button>
+	</form>
+	<hr>
+
+	<h2 class="text-center my-4">All Subcategories Data</h2>
+		<table class="table table-bordered table-striped text-center">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+                <th>Category</th>
+				<th>Date</th>
+			</tr>
+
+			{{#each subcategories}}
+			<tr>
+				<td>{{_id}}</td>
+				<td>{{name}}</td>
+                <td>{{category.name}}</td>
+				<td>{{generateTime date 'MMMM Do YYYY'}}</td>
+				<td><a href="/admin/subcategories/edit/{{_id}}" class="btn btn-info">Edit</a></td>
+				<td>
+					<form action="/admin/subcategories/{{_id}}?_method=DELETE" method="post">
+						<button class="btn btn-danger" type="submit">Delete</button>
+					</form>
+				</td>
+			</tr>
+			{{/each}}
+		</table>
+	
+
+

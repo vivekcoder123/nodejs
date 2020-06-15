@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../../models/Category');
+const SubCategory = require('../../models/SubCategory');
 const {userAuthenticated} = require('../../helpers/authentication')
 
 
@@ -17,11 +18,20 @@ router.get('/',(req,res)=>{
 });
 
 router.post('/create',(req,res)=>{
-	const categories = new Category({
-		name: req.body.name
-	});
-	categories.save().then(savedCategory =>{
-		res.redirect('/admin/categories');
+	Category.findOne({name:req.body.name}).then(category=>{
+		console.log('category',category)
+		if(category==null){
+			const categories = new Category({
+				name: req.body.name
+			});
+			categories.save().then(savedCategory =>{
+				req.flash('success_message', 'Category created !');
+				res.redirect('/admin/categories');
+			});
+		}else{
+			req.flash('error_message', 'Category already exists !');
+			res.redirect('/admin/categories');
+		}
 	});
 	
 });
@@ -37,16 +47,19 @@ router.put('/edit/:id',(req,res)=>{
 	Category.findOne({_id:req.params.id}).then(categories => {
 		categories.name = req.body.name;
 		categories.save().then(savedCategory =>{
+			req.flash("success_message","Category updated successfully !");
 		    res.redirect('/admin/categories');
 	    });
 	});	
 });
 
 router.delete('/:id', (req,res) => {
-	Category.findOne({_id:req.params.id})
-	.then(categories=>{
-		categories.remove();			
-		res.redirect('/admin/categories');
+	Category.deleteOne({_id:req.params.id})
+	.then(category=>{			
+		SubCategory.deleteMany({category:req.params.id}).then(subcategories=>{
+			req.flash("success_message","Category deleted successfully !");
+			res.redirect('/admin/categories');
+		});
 	});
 });
 

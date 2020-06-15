@@ -1,0 +1,21 @@
+<h2 class="text-center my-4">Edit Category</h2>
+
+<form class="form" action="/admin/subcategories/edit/{{subcategory._id}}?_method=PUT" method="post">
+  <div class="form-group row">
+    <div class="col-md-6">
+        <label for="name">Name</label>
+	    <input type="text" name="name" value="{{subcategory.name}}" placeholder="subcategory name" class="form-control" required/>
+    </div>
+    <div class="col-md-6">
+        <label for="category">Category</label>
+        <select name="category" id="category" class="form-control">
+            {{#select subcategory.category}}
+            {{#each categories}}
+                <option value="{{_id}}">{{name}}</option>
+            {{/each}}
+            {{/select}}
+        </select>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-info">Update SubCategory</button>
+</form>

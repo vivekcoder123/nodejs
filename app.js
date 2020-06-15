@@ -31,7 +31,7 @@ app.use(upload());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
  
-mongoose.connect('mongodb://localhost:27017/postidal',{useNewUrlParser:true}).then(db=>{
+mongoose.connect('mongodb://localhost:27017/postidal',{useNewUrlParser:true,useCreateIndex:true}).then(db=>{
 	console.log('connected to server');
 }).catch(error=>{
 	console.log('could not connect');
@@ -67,6 +67,7 @@ const home = require('./routes/home/index');
 const admin = require('./routes/admin/index');
 const products = require('./routes/admin/products');
 const categories = require('./routes/admin/categories');
+const subcategories = require('./routes/admin/subcategories');
 const comments = require('./routes/admin/comments');
 
 //use routes
@@ -74,6 +75,7 @@ app.use('/', home);
 app.use('/admin', admin);
 app.use('/admin/products', products);
 app.use('/admin/categories', categories);
+app.use('/admin/subcategories', subcategories);
 app.use('/admin/comments', comments);
 
 // const port_redis=process.env.REDIST_PORT || 6379;

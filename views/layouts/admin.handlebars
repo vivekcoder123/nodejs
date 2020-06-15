@@ -22,6 +22,11 @@
   {{>admin/admin-top-bar}}
    <div class="page-wrapper">
       <div class="page-content-tab">
+          {{#if success_message}}
+            <div class="alert alert-success text-center mt-2">{{success_message}}</div>
+          {{else if error_message}}
+            <div class="alert alert-danger text-center mt-2">{{error_message}}</div>
+          {{/if}}
          <div class="container">
             {{{body}}}
          </div>

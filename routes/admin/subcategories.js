@@ -50,6 +50,7 @@ router.get('/edit/:id',(req,res)=>{
 router.put('/edit/:id',(req,res)=>{
 	SubCategory.findOne({_id:req.params.id}).then(subcategory => {
 		subcategory.name = req.body.name;
+		subcategory.category = req.body.category;
 		subcategory.save().then(savedSubCategory =>{
 			req.flash("success_message","subcategory updated successfully !");
 		    res.redirect('/admin/subcategories');

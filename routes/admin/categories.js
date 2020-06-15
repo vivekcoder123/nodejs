@@ -13,7 +13,8 @@ router.all('/*', userAuthenticated,(req,res,next)=>{
 
 router.get('/',(req,res)=>{
 	Category.find({}).then(categories => {
-		res.render('admin/categories/index', {categories:categories});
+		console.log('categories',categories);
+		res.render('admin/categories/index', {categories});
 	});
 });
 
@@ -25,13 +26,18 @@ router.post('/create',(req,res)=>{
 				name: req.body.name
 			});
 			categories.save().then(savedCategory =>{
+				console.log('savedCategory',savedCategory);
 				req.flash('success_message', 'Category created !');
 				res.redirect('/admin/categories');
+			}).catch(err=>{
+				console.log('err',err);
 			});
 		}else{
 			req.flash('error_message', 'Category already exists !');
 			res.redirect('/admin/categories');
 		}
+	}).catch(err=>{
+		console.log('err',err);
 	});
 	
 });

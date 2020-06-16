@@ -25,8 +25,10 @@ app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select: select,
 app.set('view engine','handlebars');
  
 //upload middleware
-app.use(upload());
- 
+app.use(upload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+}));
 //bodyparser middleware
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());

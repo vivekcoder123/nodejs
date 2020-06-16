@@ -1,32 +1,37 @@
-<h2 class="text-center my-4">Create Categories</h2>
+<h4 class="text-center my-4">Create Categories</h4>
 
-	<form class="form" action="/admin/categories/create" method="post">
+	<form class="form" action="/admin/categories/create" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 		<div class="row">
 			<div class="col-md-6">
 				<label for="name">Name</label>
 				<input type="text" name="name" placeholder="category name" class="form-control" required/>
 			</div>
-			<div class="col-md-6" style="margin-top:2.6%;">
-				<button type="submit" class="btn btn-info">Add Category</button>
+			<div class="col-md-6">
+				<label for="image">Image</label>
+				<input type="file" name="image" placeholder="category image" class="form-control" required/>
 			</div>
 		</div>
+		<button type="submit" class="btn btn-info">Add Category</button>
 		</div>
 	</form>
 	<hr>
 
-	<h2 class="text-center my-4">All Categories Data</h2>
+	<h4 class="text-center my-4">All Categories Data</h4>
 		<table class="table table-bordered table-striped text-center">
 			<tr>
 				<th>ID</th>
 				<th>Name</th>
+				<th>Image</th>
 				<th>Date</th>
+				<th colspan="2">Action</th>
 			</tr>
 
 			{{#each categories}}
 			<tr>
 				<td>{{_id}}</td>
 				<td>{{name}}</td>
+				<td><a href="{{image}}" target="_blank"><img src="{{image}}" width="50" height="50"></a></td>
 				<td>{{generateTime date 'MMMM Do YYYY'}}</td>
 				<td><a href="/admin/categories/edit/{{_id}}" class="btn btn-info">Edit</a></td>
 				<td>

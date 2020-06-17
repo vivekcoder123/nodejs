@@ -31,29 +31,30 @@ const ProductSchema = new Schema({
         default:'publish'
     },
     description:{
-        type:String,
+        type:String
+    },
+	images:{
+        type:Array,
         required:true
     },
-	image:{
-        type:String,
-        required:true
+    specifications:{
+        type:Array
     },
-    specification:{
-        type:String,
-        required:true
+    mainPoints:{
+        type:Array
     },
     vendor:{
         type:String,
         required:true
     },
+    tags:{
+        type:Array,
+        required:true
+    },
     created_at:{
         type:Date,
         default:Date.now()
-    },
-    reviews: [{
-        type: Schema.Types.ObjectId,
-        ref: 'reviews'
-    }],
+    }
 
 },{usePushEach: true});
 

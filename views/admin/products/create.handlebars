@@ -4,41 +4,51 @@
   }
 </style>
 <h2 class="text-center my-2">Add Product</h2>
-<form action="/admin/posts/create" method="post" enctype="multipart/form-data" >
+<form action="/admin/products/create" method="post" enctype="multipart/form-data" >
 
       <div class="form-group">
         <label for="name">Name</label>
         <input type="text" name="name" class="form-control" id="name" placeholder="Enter Name" required>
       </div>
 
+      <ul id="mainPointDiv">
+
+      </ul>
+      <input type="hidden" name="hidden_main_point">
       <div class="form-group">
         <label for="main_points">Main Points</label>
         <div class="row">
           <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="Enter point">
+            <input type="text" class="form-control" placeholder="Enter point" id="main_point">
           </div>
           <div class="col-md-2" style="margin-top:0.6%;cursor:pointer;">
-            <i class="fa fa-plus fa-2x"></i>
+            <i class="fa fa-plus fa-2x" id="addPoint"></i>
           </div>
         </div>
       </div>
 
+      <input type="hidden" name="hidden_description">
       <div class="form-group">
         <label for="description">Description</label>
-        <textarea name="description" cols="30" rows="3" placeholder="Enter Description" id="description" class="form-control" required></textarea>
+        <textarea cols="30" rows="3" placeholder="Enter Description" id="description" class="form-control"></textarea>
       </div>
 
+      <ul id="specsDiv">
+
+      </ul>
+
+      <input type="hidden" name="hidden_specs">
       <div class="form-group">
         <label for="specification">Specifications</label>
         <div class="row">
           <div class="col-md-2">
-            <input type="text" class="form-control" placeholder="key">
+            <input type="text" class="form-control" placeholder="key" id="spec_key">
           </div>
           <div class="col-md-8">
-            <input type="text" class="form-control" placeholder="Value">
+            <input type="text" class="form-control" placeholder="Value" id="spec_value">
           </div>
           <div class="col-md-2" style="margin-top:0.6%;cursor:pointer;">
-            <i class="fa fa-plus fa-2x"></i>
+            <i class="fa fa-plus fa-2x" id="spec_button"></i>
           </div>
         </div>
       </div>
@@ -47,7 +57,7 @@
         <label for="category">Category</label>
         <select class="form-control" name="category" id="category" required>
         {{#each categories}}
-          <option value="{{id}}">{{name}}</option>
+          <option value="{{_id}}">{{name}}</option>
         {{/each}}
         </select>
       </div>
@@ -55,9 +65,7 @@
       <div class="form-group">
         <label for="subcategory">Sub Category</label>
         <select class="form-control" name="subcategory" id="subcategory" required>
-        {{#each categories}}
-          <option value="{{id}}">{{name}}</option>
-        {{/each}}
+        
         </select>
       </div>
 
@@ -74,14 +82,19 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label for="tags">Tags</label>
+        <input type="text" name="tags" class="form-control" id="tags" placeholder="Enter tags" required>
+      </div>
+
 			<div class="form-group">
-        <label for="file">Upload Images</label>
-        <input type="file" name="file" class="form-control" multiple required>
+        <label for="images">Upload Images</label>
+        <input type="file" name="images" class="form-control" multiple required>
       </div>
 
       <div class="form-group">
         <label for="vendor">Vendor</label>
-        <input type="text" vendor="vendor" class="form-control" id="vendor" placeholder="Enter Vendor" required>
+        <input type="text" name="vendor" class="form-control" id="vendor" placeholder="Enter Vendor" required>
       </div>
 
       <div class="form-group">
@@ -94,3 +107,63 @@
 
 			<button type="submit" class="btn btn-info btn-block">Save</button>
 </form>
+
+<script>
+
+        tinymce.init(
+            {
+                selector:'textarea',plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+
+                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+
+                toolbar_mode: "floating",
+
+                menubar: "file edit view insert format tools table help",
+
+                init_instance_callback: function(editor) {
+                  editor.on('keyup', function(e) {
+                    $("input[name=hidden_description]").val(tinymce.activeEditor.getContent());
+                  });
+                }                                                                                        
+            });  
+
+    </script>
+
+<script type="text/javascript">
+  let mainPoints=[];
+  let specs=[];
+  $(document).on("click","#addPoint",function(){
+    const mainPoint=$("#main_point").val();
+    if(mainPoint && mainPoint!=""){
+      mainPoints.push(mainPoint);
+      $("#mainPointDiv").append(`<li>${mainPoint}</li>`);
+      $("#main_point").val("");
+      $("input[name=hidden_main_point]").val(JSON.stringify(mainPoints));
+    }
+  });
+
+  $(document).on("click","#spec_button",function(){
+    const specs_key=$("#spec_key").val();
+    const specs_value=$("#spec_value").val();
+    if(specs_key!="" && specs_value!=""){
+      const spec={key:specs_key,value:specs_value};
+      specs.push(spec);
+      $("#spec_key").val("");
+      $("#spec_value").val("");
+      $("input[name=hidden_specs]").val(JSON.stringify(specs));
+      $("#specsDiv").append(`<li>${specs_key}:${specs_value}</li>`);
+    }
+  });
+  $(document).on("change","#category",function(){
+    const cat_id=$(this).val();
+    $.ajax({
+      url:`/admin/categories/getSubcategories/${cat_id}`
+    }).then(response=>{
+      $("#subcategory").html(response);
+    });
+  });
+  $("#category").trigger("change");
+  $(document).on("keyup","#tinymce",function(){
+    console.log('this',$(this),$(this).html());
+  });
+</script>

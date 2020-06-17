@@ -1,34 +1,42 @@
-<h1>All Posts</h1>
+<h2 class="text-center mt-2 mb-4">All Products Data</h2>
 
 <table class="table table-striped">
   <thead class="thead-inverse">
     <tr>
-      <th>Id</th>
-      <th>Title</th>
-      <th>Status</th>
-      <th>Image</th>
-      <th>Allow Comments</th>
-      <th>View Post</th>
+      <th>Name</th>
       <th>Category</th>
-      <th>Date</th>
+      <th>Subcategory</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th colspan="2">Images</th>
+      <th colspan="3">Action</th>
       
     </tr>
   </thead>
   <tbody>
 
-    {{#each posts}}
+    {{#each products}}
 
     <tr>
-      <td>{{id}}</td>
-      <td>{{title}}</td>
+      <td>{{name}}</td>
+      <td>{{category.name}}</td>
+      <td>{{subcategory.name}}</td>
+      <td>{{price}}</td>
+      <td>{{quantity}}</td>
       <td>{{status}}</td>
-      <td>
-        <img src="/uploads/{{file}}" height="50px" alt=""/>
+      <td colspan="2">
+        {{#each images}}
+        <a href="{{.}}" target="_blank"><img src="{{.}}" width="50px" height="50px" alt="image"/></a>
+        {{/each}}
       </td>
-      <td>{{allowComments}}</td>
-      <td><a href="/post/{{slug}}">View</a></td>
-      <td>{{Category.name}}</td>
-      <td>{{generateTime date 'MMMM Do YYYY'}}</td>
+      <td><a href="#">View</a></td>
+      <td><a href="/admin/products/edit/{{_id}}" class="btn btn-info">Edit</a></td>
+				<td>
+					<form action="/admin/products/{{_id}}?_method=DELETE" method="post">
+						<button class="btn btn-danger" type="submit">Delete</button>
+					</form>
+				</td>
       
     </tr>
 

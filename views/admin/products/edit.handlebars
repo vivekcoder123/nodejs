@@ -1,54 +1,180 @@
-<h1>Edit post</h1>
-<form action="/admin/posts/edit/{{post.id}}?_method=PUT" method="post" enctype="multipart/form-data" >
+<style>
+  .tox-tinymce{
+    height:20rem !important;
+  }
+</style>
+<h2 class="text-center my-2">Edit Product</h2>
+<form action="/admin/products/edit/{{product.id}}?_method=PUT" method="post" enctype="multipart/form-data" >
 
       <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" name="title"  class="form-control" id="title" placeholder="Enter title" value="{{post.title}}">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control" id="name" placeholder="Enter Name" required value="{{product.name}}">
+      </div>
+
+      <ul id="mainPointDiv">
+
+      </ul>
+      <input type="hidden" name="hidden_main_point" value="{{product.mainPoints}}">
+      <div class="form-group">
+        <label for="main_points">Main Points</label>
+        <div class="row">
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder="Enter point" id="main_point">
+          </div>
+          <div class="col-md-2" style="margin-top:0.6%;cursor:pointer;">
+            <i class="fa fa-plus fa-2x" id="addPoint"></i>
+          </div>
+        </div>
+      </div>
+
+      <input type="hidden" name="hidden_description" value="{{product.description}}">
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea cols="30" rows="3" placeholder="Enter Description" id="description" class="form-control"></textarea>
+      </div>
+
+      <ul id="specsDiv">
+
+      </ul>
+
+      <input type="hidden" name="hidden_specs" value="{{product.specifications}}">
+      <div class="form-group">
+        <label for="specification">Specifications</label>
+        <div class="row">
+          <div class="col-md-2">
+            <input type="text" class="form-control" placeholder="key" id="spec_key">
+          </div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" placeholder="Value" id="spec_value">
+          </div>
+          <div class="col-md-2" style="margin-top:0.6%;cursor:pointer;">
+            <i class="fa fa-plus fa-2x" id="spec_button"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select class="form-control" name="category" id="category" required>
+          {{#select product.category}}
+        {{#each categories}}
+          <option value="{{_id}}">{{name}}</option>
+        {{/each}}
+         {{/select}}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="subcategory">Sub Category</label>
+        <select class="form-control" name="subcategory" id="subcategory" required>
+        
+        </select>
+      </div>
+
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="price">Price</label>
+            <input type="number" min="0" placeholder="Enter price" name="price" required class="form-control" value={{product.price}}>
+          </div>
+          <div class="col-md-6">
+            <label for="quantity">Quantity</label>
+            <input type="number" min="0" placeholder="Enter quantity" name="quantity" required class="form-control" value="{{product.quantity}}">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">Tags</label>
+        <input type="text" name="tags" class="form-control" id="tags" placeholder="Enter tags" required value="{{product.tags}}">
+      </div>
+
+			<div class="form-group">
+        <label for="images">Upload Images</label>
+        <input type="file" name="images" class="form-control" multiple>
+        <span class="text-danger">* Ignore it if you dont want to update the images</span>
+      </div>
+
+      <div class="form-group">
+        <label for="vendor">Vendor</label>
+        <input type="text" name="vendor" class="form-control" id="vendor" placeholder="Enter Vendor" required value="{{product.vendor}}">
       </div>
 
       <div class="form-group">
         <label for="status">Status</label>
-        <select class="form-control" name="status" id="status">
-        {{#select post.status}}
-          <option value="public">Public</option>
-          <option value="private">Private</option>
+        <select class="form-control" name="status" id="status" required>
+           {{#select product.status}}
+          <option value="publish">Publish</option>
           <option value="draft">Draft</option>
-        {{/select}}
+          {{/select}}
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="status">Category</label>
-        <select name="category" id="status" class="form-control">
-
-
-            {{#select post.Category}}
-
-                 {{#each categories}}
-
-                <option value="{{id}}">{{name}}</option>
-
-                {{/each}}
-
-            {{/select}}
-
-        </select>
-    </div>
-
-      <div class="form-check">
-        <label for="allowcomments">
-        <input type="checkbox" name="allowComments" id="allowComment" {{#if post.allowComments}} checked="checked" {{/if}}> Allow Comments</label>
-      </div>
-
-			<div class="form-group">
-        <label for="file">Upload File</label>
-        <input type="file" name="file" class="form-control">
-      </div>
-            
-      <div class="form-group">
-        <label for="body">Body</label>
-        <textarea name="body" cols="30" rows="10" placeholder="Enter Description" id="body" class="form-control">{{post.body}}</textarea>
-      </div>
-
-			<button type="submit" class="btn btn-primary">Submit</button>
+			<button type="submit" class="btn btn-info btn-block">Save</button>
 </form>
+
+<script>
+
+        tinymce.init(
+            {
+                selector:'textarea',plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+
+                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+
+                toolbar_mode: "floating",
+
+                menubar: "file edit view insert format tools table help",
+
+                init_instance_callback: function(editor) {
+                  tinymce.activeEditor.setContent("{{{product.description}}}");
+                  editor.on('keyup', function(e) {
+                    $("input[name=hidden_description]").val(tinymce.activeEditor.getContent());
+                  });
+                }                                                                                        
+            });  
+
+    </script>
+
+<script type="text/javascript">
+  let mainPoints=$("input[name=hidden_main_point]").val();
+  let specs=$("input[name=hidden_specs]").val();
+  let mainPointsArray=JSON.parse(mainPoints);
+  mainPointsArray.forEach(mp=>{
+    $("#mainPointDiv").append(`<li>${mp}</li>`);
+  });
+  let specsArray=JSON.parse(specs);
+  specsArray.forEach(sp=>{
+    $("#specsDiv").append(`<li>${sp.key}:${sp.value}</li>`);
+  });
+  $(document).on("click","#addPoint",function(){
+    const mainPoint=$("#main_point").val();
+    if(mainPoint && mainPoint!=""){
+      mainPointsArray.push(mainPoint);
+      $("#mainPointDiv").append(`<li>${mainPoint}</li>`);
+      $("#main_point").val("");
+      $("input[name=hidden_main_point]").val(JSON.stringify(mainPointsArray));
+    }
+  });
+
+  $(document).on("click","#spec_button",function(){
+    const specs_key=$("#spec_key").val();
+    const specs_value=$("#spec_value").val();
+    if(specs_key!="" && specs_value!=""){
+      const spec={key:specs_key,value:specs_value};
+      specsArray.push(spec);
+      $("#spec_key").val("");
+      $("#spec_value").val("");
+      $("input[name=hidden_specs]").val(JSON.stringify(specsArray));
+      $("#specsDiv").append(`<li>${specs_key}:${specs_value}</li>`);
+    }
+  });
+  $(document).on("change","#category",function(){
+    const cat_id=$(this).val();
+    $.ajax({
+      url:`/admin/categories/getSubcategories/${cat_id}`
+    }).then(response=>{
+      $("#subcategory").html(`{{#select product.subcategory}}${response}{{/select}}`);
+    });
+  });
+  $("#category").trigger("change");
+</script>

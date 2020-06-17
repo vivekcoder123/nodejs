@@ -85,6 +85,16 @@ router.delete('/:id', (req,res) => {
 	});
 });
 
+router.get('/getSubcategories/:id',(req,res)=>{
+	SubCategory.find({category:req.params.id}).then(subcategories=>{
+		let response="";
+		subcategories.forEach(subcat=>{
+			response+=`<option value="${subcat._id}">${subcat.name}</option>`;
+		});
+		res.send(response);
+	});
+});
+
 
 
 module.exports = router;

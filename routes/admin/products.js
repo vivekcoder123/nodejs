@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../../models/Product');
 const Category = require('../../models/Category');
+const SubCategory = require('../../models/SubCategory');
 const fs = require('fs');
 const { isEmpty } = require('../../helpers/upload-helper');
-const {userAuthenticated} = require('../../helpers/authentication')
-
+const {userAuthenticated} = require('../../helpers/authentication');
+const cloudinary=require('../../config/cloudinary').cloud;
 
 router.all('/*', userAuthenticated,(req,res,next)=>{
 	req.app.locals.layout = 'admin';
@@ -19,94 +20,129 @@ router.get('/add',(req,res)=>{
 });
 
  
-router.get('/my-products', (req, res)=>{
-    Post.find({user: req.user.id}).sort({date:-1})
-        .populate('Category')
+router.get('/view', (req, res)=>{
+    Product.find({}).sort({created_at:-1})
+        .populate('category').populate('subcategory')
         .then(products=>{
-            res.render('admin/products/my-products', {products: products});
+            res.render('admin/products/index', {products});
         });
 });
 
 
-router.post('/create',(req,res)=>{
+router.post('/create',async (req,res)=>{
 
-	let filename = 'Koala.jpg';
-
-	if(!isEmpty(req.files)){
-		let file = req.files.file;
-		filename = Date.now()+'-'+file.name;
-		file.mv('./public/uploads/'+filename,(err)=>{
-			if(err) throw err;
-		});
-		
+	const category=req.body.category;
+	const subcategory=req.body.subcategory;
+	const price=req.body.price;
+	const quantity=req.body.quantity;
+	const name=req.body.name;
+	const status=req.body.status;
+	const description=req.body.hidden_description;
+	let specifications=[];
+	let mainPoints=[];
+	if(req.body.hidden_specs && req.body.hidden_specs!=""){
+		specifications=JSON.parse(req.body.hidden_specs);
 	}
+	if(req.body.hidden_main_point && req.body.hidden_main_point!=""){
+		mainPoints=JSON.parse(req.body.hidden_main_point);
+	}
+	const vendor=req.body.vendor;
+	const tags=req.body.tags.split(",");
+	let images=[];
+	if(typeof req.files.images.length !="undefined"){
 
-	let allowComments = true;
-	if(req.body.allowComments){
-		allowComments = true;
+		for(const image of req.files.images){
+			const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"webp"});
+			images.push(cloudRes.secure_url);
+		}
+
 	}else{
-		allowComments = false;
+
+		const cloudRes=await cloudinary.uploader.upload(req.files.images.tempFilePath,{quality:"auto",format:"webp"});
+		images.push(cloudRes.secure_url);
 	}
-
-	const post = new Post({
-		user:req.user.id,
-		title: req.body.title,
-		status: req.body.status,
-		allowComments: allowComments,
-		Category: req.body.category,
-		body: req.body.body,
-		file:filename
+	const product = new Product({
+		category,
+		subcategory,
+		price,
+		quantity,
+		name,
+		status,
+		description,
+		specifications,
+		mainPoints,
+		vendor,
+		tags,
+		images
 	});
-	post.save().then(savedPost=>{		
-		req.flash('success_message', `Post ${savedPost.title} was CREATED succesfully`);	
-		res.redirect('/admin/posts/my-posts');
+	product.save().then(savedproduct=>{		
+		req.flash('success_message', `product ${savedproduct.name} was CREATED succesfully`);	
+		res.redirect('/admin/products/add');
+	}).catch(err=>{
+		console.log('err',err);
+	});
 
-	});	
 });
 
 router.get('/edit/:id',(req,res) =>{
-	Post.findOne({_id:req.params.id}).then(post=>{
+	Product.findOne({_id:req.params.id}).then(product=>{
+		let specsArray=[];
+		let mainPointsArray=[];
+		product.specifications.forEach(sp=>{
+			specsArray.push(sp);
+		});
+		product.mainPoints.forEach(mp=>{
+			mainPointsArray.push(mp);
+		});
+		product.specifications=JSON.stringify(specsArray);
+		product.mainPoints=JSON.stringify(mainPointsArray);
 		Category.find({}).then(categories => {
-			res.render('admin/posts/edit',{post:post, categories: categories});
+			SubCategory.find({}).then(subcategories=>{
+				res.render('admin/products/edit',{product,categories,subcategories});
+			});
 		});
 	});
 });
 
-router.put('/edit/:id',(req,res) =>{
-	Post.findOne({_id:req.params.id}).then(post=>{
-		let allowComments = true;
-			if(req.body.allowComments){
-				allowComments = true;
-			}else{
-				allowComments = false;
-			}
-		post.user = req.user.id;
-		post.title = req.body.title;
-		post.status = req.body.status;
-		post.allowComments = allowComments;
-		post.Category = req.body.category;
-		post.body = req.body.body;
-
-		if(!isEmpty(req.files)){
-			fs.unlink('./public/uploads/' + post.file, (err)=>{ console.log(err);
-            });
-			let file = req.files.file;
-			filename = Date.now()+'-'+file.name;
-			post.file = filename;
-			file.mv('./public/uploads/'+filename,(err)=>{
-				if(err) throw err;
-			});
-			
-			
+router.put('/edit/:id',async (req,res) =>{
+	Product.findOne({_id:req.params.id}).then(async(product)=>{
+		product.category=req.body.category;
+		product.subcategory=req.body.subcategory;
+		product.price=req.body.price;
+		product.quantity=req.body.quantity;
+		product.name=req.body.name;
+		product.status=req.body.status;
+		product.description=req.body.hidden_description;
+		if(req.body.hidden_specs && req.body.hidden_specs!=""){
+			product.specifications=JSON.parse(req.body.hidden_specs);
 		}
-		
+		if(req.body.hidden_main_point && req.body.hidden_main_point!=""){
+			product.mainPoints=JSON.parse(req.body.hidden_main_point);
+		}
+		product.vendor=req.body.vendor;
+		product.tags=req.body.tags.split(",");
+		if(req.files.images.size!=0){
+			let images=[];
+			if(typeof req.files.images.length !="undefined"){
 
-		post.save().then(savedPost=>{
-			if(savedPost){
-				req.flash('success_message', `Post ${savedPost.title} was UPDATED succesfully`);
-				res.redirect('/admin/posts/my-posts');
+				for(const image of req.files.images){
+					const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"webp"});
+					images.push(cloudRes.secure_url);
+				}
+	
+			}else{
+	
+				const cloudRes=await cloudinary.uploader.upload(req.files.images.tempFilePath,{quality:"auto",format:"webp"});
+				images.push(cloudRes.secure_url);
 			}
-		});		
+			product.images=images;
+		}
+		product.save().then(savedproduct=>{		
+			req.flash('success_message', `product ${savedproduct.name} was updated succesfully`);	
+			res.redirect('/admin/products/view');
+		}).catch(err=>{
+			console.log('err',err);
+		});	
 	});
 });
 

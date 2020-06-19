@@ -20,12 +20,32 @@ router.get('/add',(req,res)=>{
 });
 
  
-router.get('/view', (req, res)=>{
-    Product.find({}).sort({created_at:-1})
-        .populate('category').populate('subcategory')
-        .then(products=>{
-            res.render('admin/products/index', {products});
-        });
+router.get('/view/:page', (req, res)=>{
+	let page=req.params.page;
+	Product.paginate({}, { page, limit: 10,populate:['category','subcategory'],sort:{created_at:-1} }).then(response=>{
+		const products=response.docs;
+		const current_page=parseInt(response.page);
+		const totalPages=parseInt(response.pages);
+		let previous_page=current_page-1;
+		let next_page=current_page+1;
+		if(previous_page<1){
+			previous_page=1;
+		}
+		if(next_page>totalPages){
+			next_page=totalPages;
+		}
+		let pagination="";
+		pagination+=`<ul class="pagination text-center"><li class="page-item"><a class="page-link" href="/admin/products/view/${previous_page}">Previous</a></li>`;
+		for(let i=1;i<=totalPages;i++){
+			if(i==current_page){
+				pagination+=`<li class="page-item active"><a class="page-link" href="/admin/products/view/${i}">${i}</a></li>`;
+			}else{
+				pagination+=`<li class="page-item"><a class="page-link" href="/admin/products/view/${i}">${i}</a></li>`;
+			}
+		}			
+		pagination+=`<li class="page-item"><a class="page-link" href="/admin/products/view/${next_page}">Next</a></li></ul>`;
+		res.render('admin/products/index', {products,pagination});
+	});
 });
 
 
@@ -35,6 +55,7 @@ router.post('/create',async (req,res)=>{
 	const subcategory=req.body.subcategory;
 	const price=req.body.price;
 	const quantity=req.body.quantity;
+	const discount=req.body.discount;
 	const name=req.body.name;
 	const status=req.body.status;
 	const description=req.body.hidden_description;
@@ -65,6 +86,7 @@ router.post('/create',async (req,res)=>{
 		category,
 		subcategory,
 		price,
+		discount,
 		quantity,
 		name,
 		status,
@@ -109,6 +131,7 @@ router.put('/edit/:id',async (req,res) =>{
 		product.category=req.body.category;
 		product.subcategory=req.body.subcategory;
 		product.price=req.body.price;
+		product.discount=req.body.discount;
 		product.quantity=req.body.quantity;
 		product.name=req.body.name;
 		product.status=req.body.status;
@@ -139,7 +162,7 @@ router.put('/edit/:id',async (req,res) =>{
 		}
 		product.save().then(savedproduct=>{		
 			req.flash('success_message', `product ${savedproduct.name} was updated succesfully`);	
-			res.redirect('/admin/products/view');
+			res.redirect('/admin/products/view/1');
 		}).catch(err=>{
 			console.log('err',err);
 		});	
@@ -148,21 +171,10 @@ router.put('/edit/:id',async (req,res) =>{
 
 router.delete('/:id', (req, res)=>{
 
-    Post.findOne({_id: req.params.id})
-        .populate('comments')
-        .then(post =>{ 
-            fs.unlink('./public/uploads/' + post.file, (err)=>{
-
-                if(!post.comments.length < 1){
-                      post.comments.forEach(comment=>{
-                      comment.remove();
-                   });
-                }
-                post.remove().then(postRemoved=>{
-                    req.flash('success_message', 'Post was successfully deleted');
-                    res.redirect('/admin/posts/my-posts');
-                });
-            });
+    Product.deleteOne({_id: req.params.id})
+        .then(product =>{ 
+            req.flash('success_message', `Product ${product.name} was successfully deleted`);
+			res.redirect('/admin/products/view/1');
      });
 });
 
@@ -241,7 +253,19 @@ router.post(
   }
 );
 
-
+router.get('/update_deals_of_the_day/:action/:id',(req,res)=>{
+	Product.findOne({_id:req.params.id}).then(product=>{
+		if(req.params.action=="show"){
+			product.show_in_deals_of_day=true;
+		}else{
+			product.show_in_deals_of_day=false;
+		}
+		product.save().then(product=>{
+			req.flash('success_message', `Product ${product.name} was successfully updated`);
+			res.redirect('/admin/products/view/1');
+		});
+	}).catch(err=>console.log('err',err));
+});
 
 
 module.exports = router;                               

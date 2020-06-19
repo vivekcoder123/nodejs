@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const URLSlugs = require('mongoose-url-slugs');
+const mongoosePaginate = require('mongoose-paginate');
 
 const ProductSchema = new Schema({
     category:{
@@ -51,6 +52,16 @@ const ProductSchema = new Schema({
         type:Array,
         required:true
     },
+    discount:{
+        type:Number,
+        required:true
+    }
+    ,
+    show_in_deals_of_day:{
+        type:Boolean,
+        default:false
+    }
+    ,
     created_at:{
         type:Date,
         default:Date.now()
@@ -59,5 +70,6 @@ const ProductSchema = new Schema({
 },{usePushEach: true});
 
 ProductSchema.plugin(URLSlugs('name', {field: 'slug'}));
+ProductSchema.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('products',ProductSchema);

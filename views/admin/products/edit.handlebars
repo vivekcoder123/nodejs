@@ -73,11 +73,15 @@
 
       <div class="form-group">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label for="price">Price</label>
-            <input type="number" min="0" placeholder="Enter price" name="price" required class="form-control" value={{product.price}}>
+            <input type="number" min="0" placeholder="Enter price" name="price" required class="form-control" value="{{product.price}}">
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <label for="discount">Discount (In %)</label>
+            <input type="number" min="0" placeholder="Enter discount" name="discount" required class="form-control" value="{{product.discount}}">
+          </div>
+          <div class="col-md-4">
             <label for="quantity">Quantity</label>
             <input type="number" min="0" placeholder="Enter quantity" name="quantity" required class="form-control" value="{{product.quantity}}">
           </div>
@@ -126,7 +130,7 @@
                 menubar: "file edit view insert format tools table help",
 
                 init_instance_callback: function(editor) {
-                  tinymce.activeEditor.setContent("{{{product.description}}}");
+                  tinymce.activeEditor.setContent(`{{{product.description}}}`);
                   editor.on('keyup', function(e) {
                     $("input[name=hidden_description]").val(tinymce.activeEditor.getContent());
                   });
@@ -173,8 +177,14 @@
     $.ajax({
       url:`/admin/categories/getSubcategories/${cat_id}`
     }).then(response=>{
-      $("#subcategory").html(`{{#select product.subcategory}}${response}{{/select}}`);
+      $("#subcategory").html(response);
     });
   });
-  $("#category").trigger("change");
+  $(document).on("ready",function(){
+    $.ajax({
+      url:`/admin/categories/getSelectedSubcategory/{{product._id}}`
+    }).then(response=>{
+      $("#subcategory").html(response);
+    });
+  });
 </script>

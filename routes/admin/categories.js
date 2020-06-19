@@ -3,6 +3,7 @@ const router = express.Router();
 const Category = require('../../models/Category');
 const SubCategory = require('../../models/SubCategory');
 const {userAuthenticated} = require('../../helpers/authentication');
+const Product = require('../../models/Product');
 const cloudinary=require('../../config/cloudinary').cloud;
 
 router.all('/*', userAuthenticated,(req,res,next)=>{
@@ -92,6 +93,24 @@ router.get('/getSubcategories/:id',(req,res)=>{
 			response+=`<option value="${subcat._id}">${subcat.name}</option>`;
 		});
 		res.send(response);
+	});
+});
+
+router.get('/getSelectedSubcategory/:id',(req,res)=>{
+	Product.findOne({_id:req.params.id}).then(product=>{
+		const subcat_id=product.subcategory;
+		const cat_id=product.category;
+		let response="";
+		SubCategory.find({category:cat_id}).then(subcategories=>{
+			subcategories.forEach(subcat=>{
+				if(subcat._id.equals(subcat_id)){
+					response+=`<option value="${subcat._id}" selected>${subcat.name}</option>`;
+				}else{
+					response+=`<option value="${subcat._id}">${subcat.name}</option>`;
+				}
+			});
+			res.send(response);
+		});
 	});
 });
 

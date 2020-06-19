@@ -173,7 +173,7 @@ router.delete('/:id', (req, res)=>{
 
     Product.deleteOne({_id: req.params.id})
         .then(product =>{ 
-            req.flash('success_message', `Product ${product.name} was successfully deleted`);
+            req.flash('success_message', `Product was successfully deleted`);
 			res.redirect('/admin/products/view/1');
      });
 });

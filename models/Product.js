@@ -20,12 +20,18 @@ const ProductSchema = new Schema({
         type: Number,
         required:true
     },
+    final_price:{
+        type:Number,
+        required:true
+    }
+    ,
     name:{
         type:String,
         required:true
     },
     slug: {
-        type: String
+        type: String,
+        index:true
     },
     status:{
         type:String,
@@ -67,7 +73,7 @@ const ProductSchema = new Schema({
         default:Date.now()
     }
 
-},{usePushEach: true});
+},{usePushEach: true,strict:false});
 
 ProductSchema.plugin(URLSlugs('name', {field: 'slug'}));
 ProductSchema.plugin(mongoosePaginate)

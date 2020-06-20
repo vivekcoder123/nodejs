@@ -41,18 +41,18 @@
     }
     .midPageAdImg{
         width:100% !important;
-        height:28rem !important;
+        height:20rem !important;
     }
     .bottomPageAdImg1{
         width:100% !important;
-        height:28rem !important;
+        height:20rem !important;
     }
     .bottomPageAdImg2{
         width:100% !important;
-        height:28rem !important;
+        height:20rem !important;
     }
     .androidAppAdImg{
-        width:100% !important;
-        height:35rem !important;
+        width:85% !important;
+        height:40rem !important;
     }
 }

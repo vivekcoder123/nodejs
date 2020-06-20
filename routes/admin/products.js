@@ -56,6 +56,7 @@ router.post('/create',async (req,res)=>{
 	const price=req.body.price;
 	const quantity=req.body.quantity;
 	const discount=req.body.discount;
+	const final_price=parseInt(price)-(parseInt(price)*parseInt(discount)/100);
 	const name=req.body.name;
 	const status=req.body.status;
 	const description=req.body.hidden_description;
@@ -87,6 +88,7 @@ router.post('/create',async (req,res)=>{
 		subcategory,
 		price,
 		discount,
+		final_price,
 		quantity,
 		name,
 		status,
@@ -132,6 +134,7 @@ router.put('/edit/:id',async (req,res) =>{
 		product.subcategory=req.body.subcategory;
 		product.price=req.body.price;
 		product.discount=req.body.discount;
+		product.final_price=parseInt(product.price)-(parseInt(product.price)*parseInt(product.discount)/100);
 		product.quantity=req.body.quantity;
 		product.name=req.body.name;
 		product.status=req.body.status;

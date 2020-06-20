@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../../models/Product');
 const Category = require('../../models/Category');
+const Homepage = require('../../models/Homepage');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
@@ -14,10 +15,25 @@ router.all('/*',(req,res,next)=>{
 });
 
 
-router.get('/', (req, res)=>{
-    const perPage = 10;
-    const page = req.query.page || 1;
-    res.render('home/index');
+router.get('/', async (req, res)=>{
+    const dotdProducts=await Product.find({show_in_deals_of_day:true,status:"publish"})
+                     .limit(10).sort({created_at:-1})
+                     .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1,quantity:1});
+    const categories=await Category.find({},{name:1,image:1}).sort({created_at:1}).limit(3);
+    let arrayCats=[];
+    categories.forEach(cat=>{
+        arrayCats.push(cat._id);
+    });
+    const allCategoriesWithProducts=await Product.aggregate([{$match:{category:{$in:arrayCats},status:"publish"}},
+        {$lookup:{from:"categories",localField:"category",foreignField:"_id",as:"cat"}},{$sort:{created_at:-1}}])
+        .group({_id:{category_id:'$category'},products:{$push:{name:"$name",_id:"$_id",slug:"$slug",images:"$images",price:"$price",discount:"$discount",final_price:"$final_price"}},category:{$addToSet:"$cat"}})
+        .project({products:{$slice:['$products',10]},category:{$arrayElemAt:[{$arrayElemAt:["$category",0]},0]},_id:0});
+    
+    const topCategories=await Category.find({}).limit(12);
+    const newArrivals=await Product.find({status:"publish"}).sort({created_at:-1}).limit(8)
+                        .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1});
+    const homepage=await Homepage.findOne({type:'homepage'});
+    res.render('home/index',{dotdProducts,allCategoriesWithProducts,topCategories,newArrivals,homepage});
 });
  
 

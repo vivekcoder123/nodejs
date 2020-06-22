@@ -2,11 +2,11 @@
 @media only screen and (max-width:800px){
     .carouselAdImg{
         width:100% !important;
-        height:16rem !important;
+        height:12rem !important;
     }
     .topSideAdImg{
         width:100% !important;
-        height:12rem !important;
+        height:8rem !important;
     }
     .midPageAdImg{
         width:100% !important;
@@ -14,7 +14,7 @@
     }
     .bottomPageAdImg1{
         width:100% !important;
-        height:20rem !important;
+        height:10rem !important;
     }
     .bottomPageAdImg2{
         width:100% !important;

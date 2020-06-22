@@ -12,7 +12,8 @@ const passport = require('passport');
 const config=require('./env.json');
 const compression = require('compression');
 const redis=require("redis");
- 
+let headerCategories=[];
+
 mongoose.Promise = global.Promise;
 app.use(compression());
 app.use(express.static(path.join(__dirname,'public')));
@@ -33,8 +34,9 @@ app.use(upload({
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
  
-mongoose.connect('mongodb://localhost:27017/postidal',{useNewUrlParser:true,useCreateIndex:true}).then(db=>{
+mongoose.connect('mongodb://localhost:27017/postidal',{useNewUrlParser:true,useCreateIndex:true}).then(async (db)=>{
 	console.log('connected to server');
+	headerCategories=await mongoose.model('categories').aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}])
 }).catch(error=>{
 	console.log('could not connect');
 }); 
@@ -61,6 +63,7 @@ app.use((req,res,next) => {
 	res.locals.error_message = req.flash('error_message');
 	res.locals.error = req.flash('error');
 	res.locals.config=config;
+	res.locals.headerCategories=headerCategories;
 	next();
 })
 

@@ -20,9 +20,9 @@ app.use(express.static(path.join(__dirname,'public')));
 
 //set view engine
 
-const {select, generateTime, paginate, gt} = require('./helpers/handlebars-helpers');
+const {select, generateTime, paginate, gt, ne} = require('./helpers/handlebars-helpers');
 
-app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select,generateTime,paginate,gt}}));
+app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select,generateTime,paginate,gt,ne}}));
 app.set('view engine','handlebars');
  
 //upload middleware
@@ -36,7 +36,6 @@ app.use(bodyParser.json());
  
 mongoose.connect('mongodb://localhost:27017/postidal',{useNewUrlParser:true,useCreateIndex:true}).then(async (db)=>{
 	console.log('connected to server');
-	headerCategories=await mongoose.model('categories').aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}])
 }).catch(error=>{
 	console.log('could not connect');
 }); 

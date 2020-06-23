@@ -54,6 +54,10 @@ const ProductSchema = new Schema({
         type:String,
         required:true
     },
+    brand:{
+        type:String
+    }
+    ,
     tags:{
         type:Array,
         required:true

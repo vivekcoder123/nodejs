@@ -16,6 +16,7 @@ router.all('/*',(req,res,next)=>{
 
 
 router.get('/', async (req, res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     const dotdProducts=await Product.find({show_in_deals_of_day:true,status:"publish"})
                      .limit(10).sort({created_at:-1})
                      .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1,quantity:1});
@@ -33,7 +34,7 @@ router.get('/', async (req, res)=>{
     const newArrivals=await Product.find({status:"publish"}).sort({created_at:-1}).limit(8)
                         .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1});
     const homepage=await Homepage.findOne({type:'homepage'});
-    res.render('home/index',{dotdProducts,allCategoriesWithProducts,topCategories,newArrivals,homepage});
+    res.render('home/index',{dotdProducts,allCategoriesWithProducts,topCategories,newArrivals,homepage,headerCategories});
 });
  
 
@@ -41,8 +42,12 @@ router.get('/my-account',(req,res)=>{
 	res.render('home/my-account');
 });
 
-router.get('/product-detail',(req,res)=>{
-	res.render('home/product-detail');
+router.get('/product/:slug',async (req,res)=>{
+    const product=await Product.findOne({slug:req.params.slug}).populate('category').populate('subcategory');
+    const relatedProducts=await Product.find({category:product.category}).select({slug:1,name:1,images:1,price:1,final_price:1}).where('_id').ne(product._id).sort({created_at:-1}).limit(10);
+    const sameBrandProducts=await Product.find({brand:product.brand}).select({slug:1,name:1,images:1,price:1,final_price:1}).where('_id').ne(product._id).sort({created_at:-1}).limit(2);
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+	res.render('home/product-detail',{product,relatedProducts,sameBrandProducts,headerCategories});
 });
 
 router.get('/cart',(req,res)=>{
@@ -57,7 +62,7 @@ router.get('/shop-categories',(req,res)=>{
     res.render('home/shop-categories');
 });
 
-router.get('/all-products',(req,res)=>{
+router.get('/shop',(req,res)=>{
     res.render('home/all-products');
 });
 

@@ -24,6 +24,10 @@
         width:100% !important;
         height:20rem !important;
     }
+    .imgProductDetail{
+        height:22em;
+        width:100%;
+    }
 }
 @media only screen and (min-width:701px) and (max-width:800px){
     .midPageAdImg{
@@ -54,5 +58,9 @@
     .androidAppAdImg{
         width:80% !important;
         height:38rem !important;
+    }
+    .imgProductDetail{
+        height:22em;
+        width:100%;
     }
 }

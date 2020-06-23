@@ -30,13 +30,13 @@
                             <p>If goods have problems</p>
                         </div>
                     </div>
-                    <div class="ps-block__item">
+                    {{!-- <div class="ps-block__item">
                         <div class="ps-block__left"><i class="icon-credit-card"></i></div>
                         <div class="ps-block__right">
                             <h4>Secure Payment</h4>
                             <p>100% secure payment</p>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="ps-block__item">
                         <div class="ps-block__left"><i class="icon-bubbles"></i></div>
                         <div class="ps-block__right">
@@ -72,13 +72,13 @@
                                 </ul>
                             </figure>
                         </div>
-                    </div><a href="{{config.root}}all-products">View all</a>
+                    </div><a href="{{config.root}}shop">View all</a>
                 </div>
                 <div class="ps-section__content">
                     <div class="ps-carousel--nav owl-slider" data-owl-auto="false" data-owl-loop="false" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="7" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="5" data-owl-item-xl="6" data-owl-duration="1000" data-owl-mousedrag="on">
                         {{#each dotdProducts}}
                         <div class="ps-product ps-product--inner">
-                            <div class="ps-product__thumbnail"><a href="{{config.root}}product-detail"><img class="imgFixed" src="{{images.[0]}}" alt=""></a>
+                            <div class="ps-product__thumbnail"><a href="{{config.root}}product/{{slug}}"><img class="imgFixed" src="{{images.[0]}}" alt=""></a>
                                 {{#if (gt discount 0) }}<div class="ps-product__badge">-{{discount}}%</div>{{/if}}
                                 <ul class="ps-product__actions">
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Read More"><i class="icon-bag2"></i></a></li>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="ps-product__container">
                                 <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}<small>{{discount}}% off</small></p>
-                                <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product-detail">{{name}}</a>
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product/{{slug}}">{{name}}</a>
                                     {{!-- <div class="ps-product__rating">
                                         <select class="ps-rating" data-read-only="true">
                                             <option value="1">1</option>
@@ -165,7 +165,7 @@
                         
                         {{#each products}}
                         <div class="ps-product">
-                            <div class="ps-product__thumbnail"><a href="{{config.root}}product-detail"><img class="imgFixed" src="{{images.[0]}}" alt=""></a>
+                            <div class="ps-product__thumbnail"><a href="{{config.root}}product/{{slug}}"><img class="imgFixed" src="{{images.[0]}}" alt=""></a>
                                 {{#if (gt discount 0) }}<div class="ps-product__badge">-{{discount}}%</div>{{/if}}
                                 <ul class="ps-product__actions">
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Read More"><i class="icon-bag2"></i></a></li>
@@ -175,7 +175,7 @@
                                 </ul>
                             </div>
                             <div class="ps-product__container"><a class="ps-product__vendor" href="#">{{vendor}}</a>
-                                <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product-detail">{{name}}</a>
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product/{{slug}}">{{name}}</a>
                                     {{!-- <div class="ps-product__rating">
                                         <select class="ps-rating" data-read-only="true">
                                             <option value="1">1</option>
@@ -187,7 +187,7 @@
                                     </div> --}}
                                     <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}</p>
                                 </div>
-                                <div class="ps-product__content hover"><a class="ps-product__title" href="{{config.root}}product-detail">{{name}}</a>
+                                <div class="ps-product__content hover"><a class="ps-product__title" href="{{config.root}}product/{{slug}}">{{name}}</a>
                                     <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}</p>
                                 </div>
                             </div>
@@ -253,7 +253,7 @@
                         <li><a href="shop-grid.html">Furnitures</a></li>
                         <li><a href="shop-grid.html">Clothing & Apparel</a></li>
                         <li><a href="shop-grid.html">Health & Beauty</a></li> --}}
-                        <li><a href="{{config.root}}all-products">View All</a></li>
+                        <li><a href="{{config.root}}shop">View All</a></li>
                     </ul>
                 </div>
                 <div class="ps-section__content">
@@ -262,8 +262,8 @@
                         {{#each newArrivals}}
                         <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12 ">
                             <div class="ps-product--horizontal">
-                        <div class="ps-product__thumbnail"><a href="{{config.root}}product-detail"><img style="width:100px;height:100px;" src="{{images.[0]}}" alt=""></a></div>
-                                <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product-detail">{{name}}</a>
+                        <div class="ps-product__thumbnail"><a href="{{config.root}}product/{{slug}}"><img style="width:100px;height:100px;" src="{{images.[0]}}" alt=""></a></div>
+                                <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product/{{slug}}">{{name}}</a>
                                     {{!-- <div class="ps-product__rating">
                                         <select class="ps-rating" data-read-only="true">
                                             <option value="1">1</option>

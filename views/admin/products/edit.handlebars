@@ -77,6 +77,36 @@
       </div>
 
       <div class="form-group">
+        <label for="size">Ask Size</label>
+        <select class="form-control" name="size" id="size" required>
+          {{#select product.size}}
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+          {{/select}}
+        </select>
+      </div>
+
+      <div class="form-group" id="sizesAvailable">
+        <label for="sizesAvailable">Size Available (Enter comma separated, ex- S,XS,M)</label>
+        <input type="text" placeholder="Enter available sizes" name="sizesAvailable" class="form-control" value="{{product.sizesAvailable}}">
+      </div>
+
+      <div class="form-group">
+        <label for="color">Ask Color</label>
+        <select class="form-control" name="color" id="color" required>
+          {{#select product.color}}
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+          {{/select}}
+        </select>
+      </div>
+      
+      <div class="form-group" id="colorsAvailable">
+        <label for="colorsAvailable">Color Available (Enter comma separated, ex- blue,red)</label>
+        <input type="text" placeholder="Enter available colors" name="colorsAvailable" class="form-control" value="{{product.colorsAvailable}}">
+      </div>
+
+      <div class="form-group">
         <div class="row">
           <div class="col-md-4">
             <label for="price">Price</label>
@@ -192,4 +222,24 @@
       $("#subcategory").html(response);
     });
   });
+  $(document).on("change","#size",function(){
+    const size=$(this).val();
+    if(size=="yes"){
+      $("#sizesAvailable").show();
+    }else{
+      $("#sizesAvailable").hide();
+    }
+  });
+
+  $("#size").trigger("change");
+  $(document).on("change","#color",function(){
+    const color=$(this).val();
+    if(color=="yes"){
+      $("#colorsAvailable").show();
+    }else{
+      $("#colorsAvailable").hide();
+    }
+  });
+
+  $("#color").trigger("change");
 </script>

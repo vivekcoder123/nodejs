@@ -53,6 +53,7 @@ router.post('/create',async (req,res)=>{
 
 	const category=req.body.category;
 	const subcategory=req.body.subcategory;
+	const size=req.body.size;
 	const price=req.body.price;
 	const brand=req.body.brand;
 	const quantity=req.body.quantity;
@@ -61,6 +62,9 @@ router.post('/create',async (req,res)=>{
 	const name=req.body.name;
 	const status=req.body.status;
 	const description=req.body.hidden_description;
+	const sizesAvailable=req.body.sizesAvailable;
+	const color=req.body.color;
+	const colorsAvailable=req.body.colorsAvailable;
 	let specifications=[];
 	let mainPoints=[];
 	if(req.body.hidden_specs && req.body.hidden_specs!=""){
@@ -87,6 +91,8 @@ router.post('/create',async (req,res)=>{
 	const product = new Product({
 		category,
 		subcategory,
+		sizesAvailable,
+		size,
 		price,
 		brand,
 		discount,
@@ -99,7 +105,9 @@ router.post('/create',async (req,res)=>{
 		mainPoints,
 		vendor,
 		tags,
-		images
+		images,
+		color,
+		colorsAvailable
 	});
 	product.save().then(savedproduct=>{		
 		req.flash('success_message', `product ${savedproduct.name} was CREATED succesfully`);	
@@ -136,7 +144,11 @@ router.put('/edit/:id',async (req,res) =>{
 		product.subcategory=req.body.subcategory;
 		product.price=req.body.price;
 		product.brand=req.body.brand;
+		product.size=req.body.size;
 		product.discount=req.body.discount;
+		product.sizesAvailable=req.body.sizesAvailable;
+		product.color=req.body.color;
+		product.colorsAvailable=req.body.colorsAvailable;
 		product.final_price=parseInt(product.price)-(parseInt(product.price)*parseInt(product.discount)/100);
 		product.quantity=req.body.quantity;
 		product.name=req.body.name;

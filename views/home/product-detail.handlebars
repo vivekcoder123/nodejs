@@ -213,9 +213,11 @@
                         <p><i class="icon-credit-card"></i> Pay online or when receiving goods</p>
                     </aside>
                     <aside class="widget widget_sell-on-site">
-                        <p><i class="icon-store"></i> Sell on Postidal?<a href="#"> Register Now !</a></p>
+                        <p><i class="icon-store"></i> Sell on Postidal?<a href="{{config.root}}my-account"> Register Now !</a></p>
                     </aside>
-                    <aside class="widget widget_ads"><a href="#"><img src="/img/ads/product-ads.png" alt=""></a></aside>
+                    {{!-- <aside class="widget widget_ads"><a href="#"><img src="/img/ads/product-ads.png" alt=""></a></aside> --}}
+                    
+                    {{#if sameBrandProducts.length}}
                     <aside class="widget widget_same-brand">
                         <h3>Same Brand</h3>
                         <div class="widget__content">
@@ -251,6 +253,8 @@
                             {{/each}}
                         </div>
                     </aside>
+                    {{/if}}
+
                 </div>
             </div>
             {{!-- <div class="ps-section--default ps-customer-bought">
@@ -441,6 +445,7 @@
                     </div>
                 </div>
             </div> --}}
+            {{#if relatedProducts.length}}
             <div class="ps-deal-of-day">
             <div class="ps-container">
                 <div class="ps-section__header">
@@ -488,6 +493,7 @@
             </div>
              </div>
             </div>
+            {{/if}}
         </div>
         </div>
     </div>

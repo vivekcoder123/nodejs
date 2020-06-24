@@ -58,6 +58,22 @@ const ProductSchema = new Schema({
         type:String
     }
     ,
+    size:{
+        type:String
+    }
+    ,
+    sizesAvailable:{
+        type:String
+    }
+    ,
+    color:{
+        type:String
+    }
+    ,
+    colorsAvailable:{
+        type:String
+    }
+    ,
     tags:{
         type:Array,
         required:true

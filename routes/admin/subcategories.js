@@ -3,8 +3,7 @@ const router = express.Router();
 const SubCategory = require('../../models/SubCategory');
 const {userAuthenticated} = require('../../helpers/authentication');
 const Category = require('../../models/Category');
-
-
+const cloudinary=require('../../config/cloudinary').cloud;
 
 router.all('/*', userAuthenticated,(req,res,next)=>{
 	req.app.locals.layout = 'admin';
@@ -22,13 +21,19 @@ router.get('/',(req,res)=>{
 router.post('/create',(req,res)=>{
 	SubCategory.findOne({name:req.body.name}).then(subcategory=>{
 		if(subcategory==null){
-			const subcategory = new SubCategory({
-                name: req.body.name,
-                category: req.body.category
-			});
-			subcategory.save().then(savedSubCategory =>{
-				req.flash('success_message', 'subcategory created !');
-				res.redirect('/admin/subcategories');
+			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+				const subcategory = new SubCategory({
+					name: req.body.name,
+					image:result.secure_url
+				});
+				subcategory.save().then(savedSubcategory =>{
+					req.flash('success_message', 'subcategory created !');
+					res.redirect('/admin/subcategories');
+				}).catch(err=>{
+					console.log('err',err);
+				});
+			}).catch(err=>{
+				console.log('err',err)
 			});
 		}else{
 			req.flash('error_message', 'subcategory already exists !');
@@ -51,10 +56,22 @@ router.put('/edit/:id',(req,res)=>{
 	SubCategory.findOne({_id:req.params.id}).then(subcategory => {
 		subcategory.name = req.body.name;
 		subcategory.category = req.body.category;
-		subcategory.save().then(savedSubCategory =>{
-			req.flash("success_message","subcategory updated successfully !");
-		    res.redirect('/admin/subcategories');
-	    });
+		if(req.files.image.size!=0){
+			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+				subcategory.image=result.secure_url;
+				subcategory.save().then(savedCategory =>{
+					req.flash("success_message","subcategory updated successfully !");
+					res.redirect('/admin/subcategories');
+				});
+			}).catch(err=>{
+				console.log('err',err)
+			});
+		}else{
+			subcategory.save().then(savedSubCategory =>{
+				req.flash("success_message","subcategory updated successfully !");
+				res.redirect('/admin/subcategories');
+			});
+		}
 	});	
 });
 

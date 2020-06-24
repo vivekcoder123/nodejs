@@ -58,12 +58,90 @@ router.get('/checkout',(req,res)=>{
     res.render('home/checkout');
 });
 
-router.get('/shop-categories',(req,res)=>{
-    res.render('home/shop-categories');
+router.get('/shop/categories',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    // const categories=await Category.find({},{name:1,image:1}).sort({created_at:1}).select({_id:1});
+    // let arrayCats=[];
+    // categories.forEach(cat=>{
+    //     arrayCats.push(cat._id);
+    // });
+    // const allCategoriesWithProducts=await Product.aggregate([{$match:{category:{$in:arrayCats},status:"publish"}},
+    //     {$lookup:{from:"categories",localField:"category",foreignField:"_id",as:"cat"}},{$sort:{created_at:-1}}])
+    //     .group({_id:{category_id:'$category'},products:{$push:{name:"$name",_id:"$_id",slug:"$slug",images:"$images",price:"$price",discount:"$discount",final_price:"$final_price"}},category:{$addToSet:"$cat"}})
+    //     .project({products:{$slice:['$products',10]},category:{$arrayElemAt:[{$arrayElemAt:["$category",0]},0]},_id:0});
+    res.render('home/shop-categories',{headerCategories});
 });
 
-router.get('/shop',(req,res)=>{
-    res.render('home/all-products');
+router.get('/shop/:first?/:second?/:third?',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let page=req.query.page;
+    if(!page){
+        page=1;
+    }
+    let queryParams=``;
+    for (const key in req.query) {
+        if(key!="page")
+            queryParams+=`&${key}=${req.query[key]}`;
+    }
+    let sortKey="created_at";
+    let sortValue=-1;
+    let sortConditions={};
+    if(req.query.sortKey){
+        sortKey=req.query.sortKey;
+    }
+    if(req.query.sortValue){
+        sortValue=req.query.sortValue;
+    }
+    sortConditions[sortKey]=sortValue;
+    let conditions={"status":"publish"};
+    if(req.query.subcategory){
+        conditions['subcategory']=req.query.subcategory;
+    }
+    if(req.query.category){
+        conditions['category']=req.query.category;
+    }
+    if(req.query.brands){
+        conditions['brands']={$in:req.query.brands};
+    }
+    if(req.query.price){
+        conditions['price']={$range:req.query.price}
+    }
+    const brands=await Product.aggregate([{$match:{status:"publish"}}]).group({_id:{name:'$brand',count:{$sum:1}}});
+    let brandsData=[];
+    brands.forEach(brand=>{
+        if(brand._id.name && brand._id.count){
+            let brandSingle={};
+            brandSingle['name']=brand._id.name;
+            brandSingle['count']=brand._id.count;
+            brandsData.push(brandSingle);
+        }
+    });
+    const countProducts=await Product.countDocuments(conditions);
+	Product.paginate(conditions, { page, limit: 12,populate:['category','subcategory'],sort:sortConditions }).then(response=>{
+        const products=response.docs;
+		const current_page=parseInt(response.page);
+		const totalPages=parseInt(response.pages);
+		let previous_page=current_page-1;
+		let next_page=current_page+1;
+		if(previous_page<1){
+			previous_page=1;
+		}
+		if(next_page>totalPages){
+			next_page=totalPages;
+		}
+		let pagination="";
+		pagination+=`<ul class="pagination"><li><a href="/shop?page=${previous_page}${queryParams}">Previous</a></li>`;
+		for(let i=1;i<=totalPages;i++){
+			if(i==current_page){
+				pagination+=`<li class="active"><a href="/shop?page=${i}${queryParams}">${i}</a></li>`;
+			}else{
+				pagination+=`<li><a href="/shop?page=${i}${queryParams}">${i}</a></li>`;
+			}
+		}			
+		pagination+=`<li><a href="/shop?page=${next_page}${queryParams}">Next</a></li></ul>`;
+		res.render('home/all-products',{headerCategories,products,pagination,countProducts,brandsData});
+	});
+    
 });
 
 router.get('/about-us',(req,res)=>{

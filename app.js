@@ -12,7 +12,6 @@ const passport = require('passport');
 const config=require('./env.json');
 const compression = require('compression');
 const redis=require("redis");
-const cookieParser = require('cookie-parser');
 let headerCategories=[];
 
 mongoose.Promise = global.Promise;
@@ -47,12 +46,10 @@ app.use(methodOverride('_method'));
 app.use(session({
 	secret: 'vivek12345',
 	resave: true,
-	saveUninitialized: true,
-	cookie: { maxAge: 8*60*60*1000 },
+	saveUninitialized: true
 }));
 
 app.use(flash());
-app.use(cookieParser());
 
 //passport
 app.use(passport.initialize())

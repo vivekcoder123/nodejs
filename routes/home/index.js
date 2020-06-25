@@ -173,6 +173,15 @@ router.get('/shop/:first?/:second?/:third?',async (req,res)=>{
     
 });
 
+router.get('/category/:slug',async (req,res)=>{
+    const category=await Category.findOne({slug:req.params.slug})
+    let metaData=[];
+    metaData.title=category.name;
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description=`Get the best deals on ${category.name} when you shop the largest ...`;
+    res.render('home/category-detail',{metaData});
+});
+
 router.get('/about-us',(req,res)=>{
     let metaData=[];
     metaData.title="About Us";

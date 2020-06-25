@@ -34,12 +34,20 @@ router.get('/', async (req, res)=>{
     const newArrivals=await Product.find({status:"publish"}).sort({created_at:-1}).limit(8)
                         .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1});
     const homepage=await Homepage.findOne({type:'homepage'});
-    res.render('home/index',{dotdProducts,allCategoriesWithProducts,topCategories,newArrivals,homepage,headerCategories});
+    let metaData=[];
+    metaData.title="Postidal: Online Shopping for Electronics, Furniture ...";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Free delivery on millions of items with Gold Membership. Very low prices on top brands, books, furniture, Clothes, electronics, computers, software, apparel ...";
+    res.render('home/index',{metaData,dotdProducts,allCategoriesWithProducts,topCategories,newArrivals,homepage,headerCategories});
 });
  
 
 router.get('/my-account',(req,res)=>{
-	res.render('home/my-account');
+    let metaData=[];
+    metaData.title="Postidal Sign In";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Hello Welcome to Your Postidal Log In. Use your email or username, or continue ...";
+	res.render('home/my-account',{metaData});
 });
 
 router.get('/product/:slug',async (req,res)=>{
@@ -47,15 +55,28 @@ router.get('/product/:slug',async (req,res)=>{
     const relatedProducts=await Product.find({category:product.category}).select({slug:1,name:1,images:1,price:1,final_price:1}).where('_id').ne(product._id).sort({created_at:-1}).limit(10);
     const sameBrandProducts=await Product.find({brand:product.brand}).select({slug:1,name:1,images:1,price:1,final_price:1}).where('_id').ne(product._id).sort({created_at:-1}).limit(2);
     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
-	res.render('home/product-detail',{product,relatedProducts,sameBrandProducts,headerCategories});
+    let metaData=[];
+    metaData.title=product.name;
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description=product.description.replace(/<(.|\n)*?>/g, '');
+    metaData.description=metaData.description.replace(/&nbsp;/g,' ');
+	res.render('home/product-detail',{metaData,product,relatedProducts,sameBrandProducts,headerCategories});
 });
 
 router.get('/cart',(req,res)=>{
-    res.render('home/cart');
+    let metaData=[];
+    metaData.title="Your Cart";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Your cart is ready , please click on buy now to book these items";
+    res.render('home/cart',{metaData});
 });
 
 router.get('/checkout',(req,res)=>{
-    res.render('home/checkout');
+    let metaData=[];
+    metaData.title="Checkout Page";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Checkout to buy the items you have in your cart";
+    res.render('home/checkout',{metaData});
 });
 
 router.get('/shop/categories',async (req,res)=>{
@@ -69,7 +90,11 @@ router.get('/shop/categories',async (req,res)=>{
     //     {$lookup:{from:"categories",localField:"category",foreignField:"_id",as:"cat"}},{$sort:{created_at:-1}}])
     //     .group({_id:{category_id:'$category'},products:{$push:{name:"$name",_id:"$_id",slug:"$slug",images:"$images",price:"$price",discount:"$discount",final_price:"$final_price"}},category:{$addToSet:"$cat"}})
     //     .project({products:{$slice:['$products',10]},category:{$arrayElemAt:[{$arrayElemAt:["$category",0]},0]},_id:0});
-    res.render('home/shop-categories',{headerCategories});
+    let metaData=[];
+    metaData.title="Shop By Category";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Shop by department, purchase cars, fashion apparel ...";
+    res.render('home/shop-categories',{metaData,headerCategories});
 });
 
 router.get('/shop/:first?/:second?/:third?',async (req,res)=>{
@@ -139,21 +164,37 @@ router.get('/shop/:first?/:second?/:third?',async (req,res)=>{
 			}
 		}			
 		pagination+=`<li><a href="/shop?page=${next_page}${queryParams}">Next</a></li></ul>`;
-		res.render('home/all-products',{headerCategories,products,pagination,countProducts,brandsData});
+        let metaData=[];
+        metaData.title="Daily Deals";
+        metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+        metaData.description="Save money on the Best Deals online on Postidal Daily Deals….";
+        res.render('home/all-products',{metaData,headerCategories,products,pagination,countProducts,brandsData});
 	});
     
 });
 
 router.get('/about-us',(req,res)=>{
-    res.render('home/about-us');
+    let metaData=[];
+    metaData.title="About Us";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="We connect millions of buyers and sellers around the world, empowering people & creating economic opportunity for all.";
+    res.render('home/about-us',{metaData});
 });
 
 router.get('/contact-us',(req,res)=>{
-    res.render('home/contact-us');
+    let metaData=[];
+    metaData.title="Contact Us";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Contact Us For Any Questions";
+    res.render('home/contact-us',{metaData});
 });
 
 router.get('/faq',(req,res)=>{
-    res.render('home/faq');
+    let metaData=[];
+    metaData.title="FAQ";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Frequently Asked Questions";
+    res.render('home/faq',{metaData});
 });
 
 // APP LOGIN

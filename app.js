@@ -12,6 +12,7 @@ const passport = require('passport');
 const config=require('./env.json');
 const compression = require('compression');
 const redis=require("redis");
+const cookieParser = require('cookie-parser');
 let headerCategories=[];
 
 mongoose.Promise = global.Promise;
@@ -46,10 +47,12 @@ app.use(methodOverride('_method'));
 app.use(session({
 	secret: 'vivek12345',
 	resave: true,
-	saveUninitialized: true
+	saveUninitialized: true,
+	cookie: { maxAge: 8*60*60*1000 },
 }));
 
 app.use(flash());
+app.use(cookieParser());
 
 //passport
 app.use(passport.initialize())
@@ -81,6 +84,9 @@ app.use('/admin/products', products);
 app.use('/admin/categories', categories);
 app.use('/admin/subcategories', subcategories);
 app.use('/admin/comments', comments);
+app.use((req, res) => {
+	res.render("errors/404",{error_page:Math.ceil(Math.random()*2)})
+});
 
 // const port_redis=process.env.REDIST_PORT || 6379;
 const port = process.env.PORT || 8080;

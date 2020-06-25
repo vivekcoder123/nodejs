@@ -206,6 +206,38 @@ router.get('/faq',(req,res)=>{
     res.render('home/faq',{metaData});
 });
 
+router.get('/privacy-policy',(req,res)=>{
+    let metaData=[];
+    metaData.title="Privacy Policy";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Privacy Policy";
+    res.render('home/privacy-policy',{metaData});
+});
+
+router.get('/cookie-policy',(req,res)=>{
+    let metaData=[];
+    metaData.title="Cookie Policy";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Cookie Policy";
+    res.render('home/cookie-policy',{metaData});
+});
+
+router.get('/return-policy',(req,res)=>{
+    let metaData=[];
+    metaData.title="Return Policy";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Return Policy";
+    res.render('home/return-policy',{metaData});
+});
+
+router.get('/terms-and-conditions',(req,res)=>{
+    let metaData=[];
+    metaData.title="Terms and Conditions";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Terms and Conditions";
+    res.render('home/terms-and-conditions',{metaData});
+});
+
 // APP LOGIN
 
 passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done)=>{
@@ -302,30 +334,5 @@ router.post('/register', (req, res)=>{
         });
     }
 });
-
-
-
-router.get('/post/:slug', (req, res)=>{
-
-    Post.findOne({slug: req.params.slug})
-
-        .populate({path: 'comments', match: {approveComment: true}, populate: {path: 'user', model: 'users'}})
-        .populate('user')
-
-        .then(post =>{
-
-            Category.find({}).then(categories=>{
-
-                res.render('home/post', {post: post, categories: categories});
-
-            });
-
-
-        });
-
-});
-
-
-
 
 module.exports = router;

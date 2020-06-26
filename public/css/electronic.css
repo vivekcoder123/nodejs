@@ -80,3 +80,9 @@
         height:10em;
     }
 }
+iframe{
+    height:100vh;
+}
+::-webkit-scrollbar {
+    display: none;
+}

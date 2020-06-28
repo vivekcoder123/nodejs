@@ -36,6 +36,19 @@
         width:100%;
         height:10em;
     }
+    .hideInMobile{
+        display:none;
+    }
+    #menu-mobile .menu--mobile .current-menu-item span{
+        margin-left:4.4rem;
+        position:absolute;
+    }
+    #menu-mobile .menu--mobile .current-menu-item .fa{
+        font-size:1.5em;
+    }
+    #menu-mobile .menu--mobile .current-menu-item a{
+        display:flex;
+    }
 }
 @media only screen and (min-width:701px) and (max-width:800px){
     .midPageAdImg{

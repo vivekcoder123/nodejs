@@ -6,7 +6,9 @@ const Homepage = require('../../models/Homepage');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const { route } = require('../admin');
 const LocalStrategy = require('passport-local').Strategy;
+const Cart = require('../../config/Cart');
 
 
 router.all('/*',(req,res,next)=>{
@@ -64,11 +66,49 @@ router.get('/product/:slug',async (req,res)=>{
 });
 
 router.get('/cart',(req,res)=>{
+    let sess = req.session;
+    let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
     let metaData=[];
     metaData.title="Your Cart";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Your cart is ready , please click on buy now to book these items";
-    res.render('home/cart',{metaData});
+    console.log('cart',cart);
+    res.render('home/cart',{metaData,cart});
+});
+
+router.post('/cart',(req,res)=>{
+    let qty = parseInt(req.body.qty, 10);
+    let product = req.body._id;
+    if(qty > 0) {
+        Product.findOne({_id: product}).then(prod => {
+            let cart = (req.session.cart) ? req.session.cart : null;
+            Cart.addToCart(prod, qty, cart);
+            res.redirect('/cart');
+        }).catch(err => {
+            console.log('err',err);
+           res.redirect('/');
+        });
+    } else {
+        res.redirect('/');
+    }
+});
+
+router.post('/cart/remove/:id',(req,res)=>{
+    const id = req.params.id;
+    Cart.removeFromCart(id, req.session.cart);
+    res.redirect('/cart');
+});
+
+router.post('/cart/empty',(req,res)=>{
+    Cart.emptyCart(req);
+    res.redirect('/cart');
+});
+
+router.post('/cart/update/:id',(req,res)=>{
+    const product_id=req.params.id;
+    const qty=req.body.qty;
+    Cart.updateProductQuantity(product_id,qty,req.session.cart);
+    res.redirect('/cart');
 });
 
 router.get('/checkout',(req,res)=>{

@@ -10,6 +10,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const config=require('./env.json');
+const Cartconfig = require('./config/config.js');
 const compression = require('compression');
 const redis=require("redis");
 let headerCategories=[];
@@ -20,9 +21,9 @@ app.use(express.static(path.join(__dirname,'public')));
 
 //set view engine
 
-const {select, generateTime, paginate, gt, ne} = require('./helpers/handlebars-helpers');
+const {select, generateTime, paginate, gt, ne, multiply} = require('./helpers/handlebars-helpers');
 
-app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select,generateTime,paginate,gt,ne}}));
+app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select,generateTime,paginate,gt,ne,multiply}}));
 app.set('view engine','handlebars');
  
 //upload middleware
@@ -63,6 +64,16 @@ app.use((req,res,next) => {
 	res.locals.error = req.flash('error');
 	res.locals.config=config;
 	res.locals.headerCategories=headerCategories;
+	res.locals.paypal = Cartconfig.paypal;
+	res.locals.locale = Cartconfig.locale;
+	res.locals.session=req.session;
+	if(!req.session.cart) {
+		req.session.cart = {
+			items: [],
+			totals: 0.00,
+			formattedTotals: ''
+		};
+	} 
 	next();
 })
 

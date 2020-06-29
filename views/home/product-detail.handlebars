@@ -84,15 +84,21 @@
                                     </figure>
                                 </div> --}}
                                 <div class="ps-product__shopping">
-                                    <figure>
+                                    {{!-- <figure>
                                         <figcaption>Quantity</figcaption>
                                         <div class="form-group--number">
                                             <button class="up"><i class="fa fa-plus"></i></button>
                                             <button class="down"><i class="fa fa-minus"></i></button>
                                             <input class="form-control" type="text" placeholder="1">
                                         </div>
-                                    </figure><a class="ps-btn ps-btn--black" href="#">Add to cart</a><a class="ps-btn" href="#">Buy Now</a>
-                                    <div class="ps-product__actions"><a href="#"><i class="icon-heart"></i></a><a href="#"><i class="icon-chart-bars"></i></a></div>
+                                    </figure> --}}
+                                    <form method="post" action="{{config.root}}cart">
+                                    <input type="hidden" name="_id" value="{{product._id}}">
+                                    <input type="hidden" name="qty" value="1">
+                                    <button class="ps-btn ps-btn--black" type="submit">Add to cart</button>
+                                    </form>
+                                    <a class="ps-btn" href="#">Buy Now</a>
+                                    {{!-- <div class="ps-product__actions"><a href="#"><i class="icon-heart"></i></a></div> --}}
                                 </div>
                                 <div class="ps-product__specification">
                                     {{!-- <p><strong>SKU:</strong> SF1133569600-1</p> --}}
@@ -212,9 +218,9 @@
                         <p><i class="icon-receipt"></i> Supplier give bills for this product.</p>
                         <p><i class="icon-credit-card"></i> Pay online or when receiving goods</p>
                     </aside>
-                    <aside class="widget widget_sell-on-site">
+                    {{!-- <aside class="widget widget_sell-on-site">
                         <p><i class="icon-store"></i> Sell on Postidal?<a href="{{config.root}}my-account"> Register Now !</a></p>
-                    </aside>
+                    </aside> --}}
                     {{!-- <aside class="widget widget_ads"><a href="#"><img src="/img/ads/product-ads.png" alt=""></a></aside> --}}
                     
                     {{#if sameBrandProducts.length}}

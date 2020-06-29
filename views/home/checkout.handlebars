@@ -2,8 +2,8 @@
         <div class="ps-breadcrumb">
             <div class="container">
                 <ul class="breadcrumb">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="shop-default.html">Shop</a></li>
+                    <li><a href="{{config.root}}">Home</a></li>
+                    <li><a href="{{config.root}}shop">Shop</a></li>
                     <li>Checkout</li>
                 </ul>
             </div>
@@ -101,22 +101,18 @@
                                             <div class="ps-block__content">
                                                 <table class="table ps-block__products">
                                                     <tbody>
+                                                        {{#each session.cart.items}}
                                                         <tr>
-                                                            <td><a href="#"> MVMTH Classical Leather Watch In Black ×1</a>
-                                                                <p>Sold By:<strong>YOUNG SHOP</strong></p>
+                                                            <td><a href="#"> {{title}} ×{{qty}}</a>
+                                                                <p>Sold By:<strong style="text-transform:uppercase;">{{vendor}}</strong></p>
                                                             </td>
-                                                            <td>$57.99</td>
+                                                            <td>${{multiply price qty}}</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td><a href="#"> Apple Macbook Retina Display 12” × 1</a>
-                                                                <p>Sold By:<strong>ROBERT’S STORE</strong></p>
-                                                            </td>
-                                                            <td>$625.50</td>
-                                                        </tr>
+                                                        {{/each}}
                                                     </tbody>
                                                 </table>
-                                                <h4 class="ps-block__title">Subtotal <span>$863.49</span></h4>
-                                                <div class="ps-block__shippings">
+                                                {{!-- <h4 class="ps-block__title">Subtotal <span>$863.49</span></h4> --}}
+                                                {{!-- <div class="ps-block__shippings">
                                                     <figure>
                                                         <h4>YOUNG SHOP Shipping</h4>
                                                         <p>Free shipping</p><a href="#"> MVMTH Classical Leather Watch In Black ×1</a>
@@ -125,8 +121,8 @@
                                                         <h4>ROBERT’S STORE Shipping</h4>
                                                         <p>Free shipping</p><a href="#">Apple Macbook Retina Display 12” ×1</a>
                                                     </figure>
-                                                </div>
-                                                <h3>Total <span>$683.49</span></h3>
+                                                </div> --}}
+                                                <h3>Total <span>{{session.cart.formattedTotals}}</span></h3>
                                             </div>
                                         </div><a class="ps-btn ps-btn--fullwidth" href="checkout.html">Proceed to checkout</a>
                                     </div>

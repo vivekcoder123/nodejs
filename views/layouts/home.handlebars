@@ -23,15 +23,19 @@
     <link rel="stylesheet" href="{{config.root}}plugins/select2/dist/css/select2.min.css">
     <link rel="stylesheet" href="{{config.root}}css/style.css">
     <link rel="stylesheet" href="{{config.root}}css/electronic.css">
-
+    <style>
+      #mainContainer{
+        opacity:0;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
   </head>
 
-  <body>
-    
-    {{>home/home-nav}}
+  <body onload="loadContent()">
 
-    <div class="mainContainer">
+    <div id="mainContainer">
 
+      {{>home/home-nav}}
 
         {{#if errors}}
             {{#each errors}}
@@ -55,34 +59,56 @@
                 <strong>{{error_message}}</strong>
             </div>
         {{/if}}
-      
 
     	{{{body}}}
 
-
+      {{>home/footer}}
 
     </div>
-
-    {{>home/footer}}
-
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="{{config.root}}plugins/owl-carousel/owl.carousel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="{{config.root}}plugins/imagesloaded.pkgd.min.js"></script>
-    <script src="{{config.root}}plugins/masonry.pkgd.min.js"></script>
-    <script src="{{config.root}}plugins/isotope.pkgd.min.js"></script>
-    <script src="{{config.root}}plugins/jquery.matchHeight-min.js"></script>
-    <script src="{{config.root}}plugins/slick/slick/slick.min.js"></script>
-    <script src="{{config.root}}plugins/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
-    <script src="{{config.root}}plugins/slick-animation.min.js"></script>
-    <script src="{{config.root}}plugins/lightGallery-master/dist/js/lightgallery-all.min.js"></script>
-    <script src="{{config.root}}plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="{{config.root}}plugins/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
-    <script src="{{config.root}}plugins/jquery.slimscroll.min.js"></script>
-    <script src="{{config.root}}plugins/select2/dist/js/select2.full.min.js"></script>
-    <script src="{{config.root}}js/main.js"></script>
-    <script src="https://use.fontawesome.com/62e26e8a6e.js"></script>
   </body>
 
 </html>
+<script src="{{config.root}}plugins/owl-carousel/owl.carousel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="{{config.root}}plugins/imagesloaded.pkgd.min.js"></script>
+<script src="{{config.root}}plugins/masonry.pkgd.min.js"></script>
+<script src="{{config.root}}plugins/isotope.pkgd.min.js"></script>
+<script src="{{config.root}}plugins/jquery.matchHeight-min.js"></script>
+<script src="{{config.root}}plugins/slick/slick/slick.min.js"></script>
+<script src="{{config.root}}plugins/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
+<script src="{{config.root}}plugins/slick-animation.min.js"></script>
+<script src="{{config.root}}plugins/lightGallery-master/dist/js/lightgallery-all.min.js"></script>
+<script src="{{config.root}}plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="{{config.root}}plugins/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
+<script src="{{config.root}}plugins/jquery.slimscroll.min.js"></script>
+<script src="{{config.root}}plugins/select2/dist/js/select2.full.min.js"></script>
+<script src="{{config.root}}js/main.js"></script>
+<script src="https://use.fontawesome.com/62e26e8a6e.js"></script>
+<script>
+(function(e,n){"use strict";!function(){for(var n=0,t=["ms","moz","webkit","o"],a=0;a<t.length&&!e.requestAnimationFrame;++a)e.requestAnimationFrame=e[t[a]+"RequestAnimationFrame"],e.cancelAnimationFrame=e[t[a]+"CancelAnimationFrame"]||e[t[a]+"CancelRequestAnimationFrame"];e.requestAnimationFrame||(e.requestAnimationFrame=function(t,a){var o=(new Date).getTime(),i=Math.max(0,16-(o-n)),r=e.setTimeout(function(){t(o+i)},i);return n=o+i,r}),e.cancelAnimationFrame||(e.cancelAnimationFrame=function(e){clearTimeout(e)})}();var t,a,o,i,r,s={autoRun:!0,barThickness:3,barColors:{0:"rgba(26,  188, 156, .9)",".25":"rgba(52,  152, 219, .9)",".50":"rgba(241, 196, 15,  .9)",".75":"rgba(230, 126, 34,  .9)","1.0":"rgba(211, 84,  0,   .9)"},shadowBlur:10,shadowColor:"rgba(0,   0,   0,   .6)"},l=function(){t.width=e.innerWidth,t.height=5*s.barThickness;var n=t.getContext("2d");n.shadowBlur=s.shadowBlur,n.shadowColor=s.shadowColor;var a=n.createLinearGradient(0,0,t.width,0);for(var o in s.barColors)a.addColorStop(o,s.barColors[o]);n.lineWidth=s.barThickness,n.beginPath(),n.moveTo(0,s.barThickness/2),n.lineTo(Math.ceil(i*t.width),s.barThickness/2),n.strokeStyle=a,n.stroke()},c={config:function(e){for(var n in e)s.hasOwnProperty(n)&&(s[n]=e[n])},show:function(){var u,d,m,h;r||(r=!0,null!==o&&e.cancelAnimationFrame(o),t||((h=(t=n.createElement("canvas")).style).position="fixed",h.top=h.left=h.right=h.margin=h.padding=0,h.zIndex=100001,h.display="none",n.body.appendChild(t),d="resize",m=l,(u=e).addEventListener?u.addEventListener(d,m,!1):u.attachEvent?u.attachEvent("on"+d,m):u["on"+d]=m),t.style.opacity=1,t.style.display="block",c.progress(0),s.autoRun&&function n(){a=e.requestAnimationFrame(n),c.progress("+"+.05*Math.pow(1-Math.sqrt(i),2))}())},progress:function(e){return void 0===e?i:("string"==typeof e&&(e=(e.indexOf("+")>=0||e.indexOf("-")>=0?i:0)+parseFloat(e)),i=e>1?1:e,l(),i)},hide:function(){r&&(r=!1,null!=a&&(e.cancelAnimationFrame(a),a=null),function n(){if(c.progress("+.1")>=1&&(t.style.opacity-=.05,t.style.opacity<=.05))return t.style.display="none",void(o=null);o=e.requestAnimationFrame(n)}())}};"object"==typeof module&&"object"==typeof module.exports?module.exports=c:"function"==typeof define&&define.amd?define(function(){return c}):this.topbar=c}).call(this,window,document);
+</script>
+<script>
+  
+function resetToDefaults() {
+topbar.config({
+autoRun      : true,
+barThickness : 3,
+barColors    : {
+  '0'      : 'rgba(26,  188, 156, .9)',
+  '.25'    : 'rgba(52,  152, 219, .9)',
+  '.50'    : 'rgba(241, 196, 15,  .9)',
+  '.75'    : 'rgba(230, 126, 34,  .9)',
+  '1.0'    : 'rgba(211, 84,  0,   .9)'
+},
+shadowBlur   : 10,
+shadowColor  : 'rgba(0,   0,   0,   .6)'
+})
+}
+  resetToDefaults()
+    topbar.show()
+  function loadContent(){
+      $("#mainContainer").css("opacity",1);
+      topbar.hide()
+  }
+</script>

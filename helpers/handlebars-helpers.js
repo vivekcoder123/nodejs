@@ -49,5 +49,7 @@ module.exports = {
              output += `<li class="page-item "><a href="?page=${options.hash.pages}" class="page-link">Last</a></li>`;
          }
         return output;
-    }
+    },
+
+    multiply: (v1,v2) => v1*v2,
 };

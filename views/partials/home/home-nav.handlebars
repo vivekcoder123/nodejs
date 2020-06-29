@@ -73,18 +73,24 @@
                 </div>
                 <div class="header__content-right">
                     <div class="header__actions"><a class="header__extra" href="#"><i class="icon-heart"></i><span><i>0</i></span></a>
-                        <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>0</i></span></a>
+                        <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>{{session.cart.items.length}}</i></span></a>
                             <div class="ps-cart__content">
                                 <div class="ps-cart__items">
+                                    {{#each session.cart.items}}
                                     <div class="ps-product--cart-mobile">
-                                        <div class="ps-product__thumbnail"><a href="#"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1591384727/new/5.jpg" alt=""></a></div>
-                                        <div class="ps-product__content"><a class="ps-product__remove" href="#"><i class="icon-cross"></i></a><a href="product-default.html">Sleeve Linen Blend Caro Pane Shirt</a>
-                                            <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
+                                        <div class="ps-product__thumbnail"><a href="#"><img src="{{image}}" alt="" width="56" height="56"></a></div>
+                                        <div class="ps-product__content">
+                                            <form action="{{config.root}}cart/remove/{{id}}" method="post">
+                                            <button style="border:0px;background-color:white;" class="ps-product__remove" type="submit"><i class="icon-cross"></i></button>
+                                            </form>
+                                            <a href="{{config.root}}product/{{slug}}">{{title}}</a>
+                                            <p><strong>Sold by:</strong> {{vendor}}</p><small>{{qty}} x {{formattedPrice}}</small>
                                         </div>
                                     </div>
+                                    {{/each}}
                                 </div>
                                 <div class="ps-cart__footer">
-                                    <h3>Sub Total:<strong>$59.99</strong></h3>
+                                    <h3>Sub Total:<strong>{{session.cart.formattedTotals}}</strong></h3>
                                     <figure><a class="ps-btn" href="{{config.root}}cart">View Cart</a><a class="ps-btn" href="{{config.root}}checkout">Checkout</a></figure>
                                 </div>
                             </div>
@@ -147,15 +153,21 @@
                     <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>0</i></span></a>
                         <div class="ps-cart__content">
                             <div class="ps-cart__items">
+                                {{#each session.cart.items}}
                                 <div class="ps-product--cart-mobile">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1591384727/new/5.jpg" alt=""></a></div>
-                                    <div class="ps-product__content"><a class="ps-product__remove" href="#"><i class="icon-cross"></i></a><a href="product-default.html">Sleeve Linen Blend Caro Pane Shirt</a>
-                                        <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
-                                    </div>
+                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{image}}" alt="" width="56" height="56"></a></div>
+                                        <div class="ps-product__content">
+                                            <form action="{{config.root}}cart/remove/{{id}}" method="post">
+                                            <button style="border:0px;background-color:white;" class="ps-product__remove" type="submit"><i class="icon-cross"></i></button>
+                                            </form>
+                                            <a href="{{config.root}}product/{{slug}}">{{title}}</a>
+                                            <p><strong>Sold by:</strong> {{vendor}}</p><small>{{qty}} x {{formattedPrice}}</small>
+                                        </div>
                                 </div>
+                                {{/each}}
                             </div>
                             <div class="ps-cart__footer">
-                                <h3>Sub Total:<strong>$59.99</strong></h3>
+                                <h3>Sub Total:<strong>{{session.cart.formattedTotals}}</strong></h3>
                                 <figure><a class="ps-btn" href="{{config.root}}cart">View Cart</a><a class="ps-btn" href="{{config.root}}checkout">Checkout</a></figure>
                             </div>
                         </div>
@@ -182,16 +194,22 @@
         </div>
         <div class="navigation__content">
             <div class="ps-cart--mobile">
+                {{#each session.cart.items}}
                 <div class="ps-cart__content">
                     <div class="ps-product--cart-mobile">
-                        <div class="ps-product__thumbnail"><a href="#"><img src="" alt="image"></a></div>
-                        <div class="ps-product__content"><a class="ps-product__remove" href="#"><i class="icon-cross"></i></a><a href="{{config.root}}product-detail">MVMTH Classical Leather Watch In Black</a>
-                            <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
+                        <div class="ps-product__thumbnail"><a href="#"><img src="{{image}}" alt="image" width="56" height="56"></a></div>
+                        <div class="ps-product__content">
+                            <form action="{{config.root}}cart/remove/{{id}}" method="post">
+                            <button style="border:0px;background-color:white;" class="ps-product__remove" type="submit"><i class="icon-cross"></i></button>
+                            </form>
+                            <a href="{{config.root}}product/{{slug}}">{{title}}</a>
+                            <p><strong>Sold by:</strong> {{vendor}}</p><small>{{qty}} x {{formattedPrice}}</small>
                         </div>
                     </div>
                 </div>
+                {{/each}}
                 <div class="ps-cart__footer">
-                    <h3>Sub Total:<strong>$59.99</strong></h3>
+                    <h3>Sub Total:<strong>{{formattedTotals}}</strong></h3>
                     <figure><a class="ps-btn" href="{{config.root}}cart">View Cart</a><a class="ps-btn" href="{{config.root}}checkout">Checkout</a></figure>
                 </div>
             </div>

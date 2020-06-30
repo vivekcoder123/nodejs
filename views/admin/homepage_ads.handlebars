@@ -1,91 +1,154 @@
 <div class="row">
     <form action="/admin/save_ads" method="post" enctype="multipart/form-data" style="width:100%;">
 
-        <div class="form-group row">
-            <div class="col-md-6">
+        <div class="form-group row my-4">
+            <div class="col-md-4">
                 <label for="carousel_images">Carousel Images (Recommended 783*280)</label>
                 <input type="file" name="carousel_images" class="form-control" multiple>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="carousel_images_link">Link</label>
+                <input type="text" name="carousel_images_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 {{#each homepage.carousel_images}}
                 <a href="{{.}}" target="_blank"><img src="{{.}}" alt="image" width="100px" height="100px"></a>
                 {{/each}}
             </div>   
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/carousel_images/{{homepage._id}}">DELETE</a>
+            </div>
        </div>
 
-       <div class="form-group row">
-            <div class="col-md-6">
+       <div class="form-group row my-4">
+            <div class="col-md-4">
                 <label for="top_side_ad_1">Top Side Ad 1 (Recommended 390*200)</label>
                 <input type="file" name="top_side_ad_1" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="top_side_ad_1_link">Link</label>
+                <input type="text" name="top_side_ad_1_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.top_side_ad_1}}" target="_blank"><img src="{{homepage.top_side_ad_1}}" alt="image" width="100px" height="100px"></a>
             </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/top_side_ad_1/{{homepage._id}}">DELETE</a>
+            </div>
        </div>
-       <div class="form-group row">
-           <div class="col-md-6">
+       <div class="form-group row my-4">
+           <div class="col-md-4">
                <label for="top_side_ad_2">Top Side Ad 2 ((Recommended 390*200))</label>
                <input type="file" name="top_side_ad_2" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="top_side_ad_2_link">Link</label>
+                <input type="text" name="top_side_ad_2_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.top_side_ad_2}}" target="_blank"><img src="{{homepage.top_side_ad_2}}" alt="image" width="100px" height="100px"></a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/top_side_ad_2/{{homepage._id}}">DELETE</a>
             </div>
        </div>
 
-       <div class="form-group row">
-           <div class="col-md-6">
+       <div class="form-group row my-4">
+           <div class="col-md-4">
                <label for="mid_page_ad_1">Mid Page Ad 1 (Recommended 381*280)</label>
                <input type="file" name="mid_page_ad_1" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="top_mid_page_ad_1_link">Link</label>
+                <input type="text" name="top_mid_page_ad_1_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.mid_page_ad_1}}" target="_blank"><img src="{{homepage.mid_page_ad_1}}" alt="image" width="100px" height="100px"></a>
             </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/mid_page_ad_1/{{homepage._id}}">DELETE</a>
+            </div>
        </div>
-       <div class="form-group row">
-           <div class="col-md-6">
+       <div class="form-group row my-4">
+           <div class="col-md-4">
                <label for="mid_page_ad_2">Mid Page Ad 2 (Recommended 381*280)</label>
                <input type="file" name="mid_page_ad_2" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="top_mid_page_ad_2_link">Link</label>
+                <input type="text" name="top_mid_page_ad_2_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.mid_page_ad_2}}" target="_blank"><img src="{{homepage.mid_page_ad_2}}" alt="image" width="100px" height="100px"></a>
             </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/mid_page_ad_2/{{homepage._id}}">DELETE</a>
+            </div>
        </div>
-       <div class="form-group row">
-           <div class="col-md-6">
+       <div class="form-group row my-4">
+           <div class="col-md-4">
                <label for="mid_page_ad_3">Mid Page Ad 3 (Recommended 381*280)</label>
                 <input type="file" name="mid_page_ad_3" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="top_mid_page_ad_3_link">Link</label>
+                <input type="text" name="top_mid_page_ad_3_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.mid_page_ad_3}}" target="_blank"><img src="{{homepage.mid_page_ad_3}}" alt="image" width="100px" height="100px"></a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/mid_page_ad_3/{{homepage._id}}">DELETE</a>
             </div>
        </div>
 
-       <div class="form-group row">
-           <div class="col-md-6">
+       <div class="form-group row my-4">
+           <div class="col-md-4">
                <label for="bottom_page_ad_1">Bottom Page Ad 1 (Recommended 783*280)</label>
                <input type="file" name="bottom_page_ad_1" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="top_bottom_page_ad_1_link">Link</label>
+                <input type="text" name="top_bottom_page_ad_1_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.bottom_page_ad_1}}" target="_blank"><img src="{{homepage.bottom_page_ad_1}}" alt="image" width="100px" height="100px"></a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/bottom_page_ad_1/{{homepage._id}}">DELETE</a>
             </div>           
        </div>
-       <div class="form-group row">
-           <div class="col-md-6">
+       <div class="form-group row my-4">
+           <div class="col-md-4">
                <label for="bottom_page_ad_2">Bottom Page Ad 2 (Recommended 381*280)</label>
                 <input type="file" name="bottom_page_ad_2" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="top_bottom_page_ad_2_link">Link</label>
+                <input type="text" name="top_bottom_page_ad_2_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.bottom_page_ad_2}}" target="_blank"><img src="{{homepage.bottom_page_ad_2}}" alt="image" width="100px" height="100px"></a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/bottom_page_ad_2/{{homepage._id}}">DELETE</a>
             </div>
        </div>
 
-       <div class="form-group row">
-           <div class="col-md-6">
+       <div class="form-group row my-4">
+           <div class="col-md-4">
                <label for="android_app">Android App (Recommended 585*350)</label>
                <input type="file" name="android_app" class="form-control">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label for="android_app_link">Link</label>
+                <input type="text" name="android_app_link" class="form-control">
+            </div>
+            <div class="col-md-2">
                 <a href="{{homepage.android_app}}" target="_blank"><img src="{{homepage.android_app}}" alt="image" width="100px" height="100px"></a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger text-white" type="submit" href="/admin/delete_ads_image/android_app/{{homepage._id}}">DELETE</a>
             </div>
        </div>
 

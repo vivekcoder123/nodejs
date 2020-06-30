@@ -21,10 +21,28 @@ router.get('/',(req,res)=>{
 router.post('/create',(req,res)=>{
 	SubCategory.findOne({name:req.body.name}).then(subcategory=>{
 		if(subcategory==null){
-			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+
+			if(req.files.image.size!=0){
+
+				cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+					const subcategory = new SubCategory({
+						name: req.body.name,
+						image:result.secure_url
+					});
+					subcategory.save().then(savedSubcategory =>{
+						req.flash('success_message', 'subcategory created !');
+						res.redirect('/admin/subcategories');
+					}).catch(err=>{
+						console.log('err',err);
+					});
+				}).catch(err=>{
+					console.log('err',err)
+				});
+
+			}else{
+
 				const subcategory = new SubCategory({
-					name: req.body.name,
-					image:result.secure_url
+					name: req.body.name
 				});
 				subcategory.save().then(savedSubcategory =>{
 					req.flash('success_message', 'subcategory created !');
@@ -32,9 +50,9 @@ router.post('/create',(req,res)=>{
 				}).catch(err=>{
 					console.log('err',err);
 				});
-			}).catch(err=>{
-				console.log('err',err)
-			});
+
+			}
+
 		}else{
 			req.flash('error_message', 'subcategory already exists !');
 			res.redirect('/admin/subcategories');

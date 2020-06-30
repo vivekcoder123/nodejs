@@ -21,11 +21,27 @@ router.post('/create',(req,res)=>{
 	Category.findOne({name:req.body.name}).then(category=>{
 		console.log('category',category)
 		if(category==null){
+			if(req.files.image.size!=0){
 
-			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+				cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+					const categories = new Category({
+						name: req.body.name,
+						image:result.secure_url
+					});
+					categories.save().then(savedCategory =>{
+						req.flash('success_message', 'Category created !');
+						res.redirect('/admin/categories');
+					}).catch(err=>{
+						console.log('err',err);
+					});
+				}).catch(err=>{
+					console.log('err',err)
+				});
+
+			}else{
+
 				const categories = new Category({
-					name: req.body.name,
-					image:result.secure_url
+					name: req.body.name
 				});
 				categories.save().then(savedCategory =>{
 					req.flash('success_message', 'Category created !');
@@ -33,9 +49,8 @@ router.post('/create',(req,res)=>{
 				}).catch(err=>{
 					console.log('err',err);
 				});
-			}).catch(err=>{
-				console.log('err',err)
-			});
+
+			}
 			
 		}else{
 			req.flash('error_message', 'Category already exists !');

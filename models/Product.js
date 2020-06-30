@@ -88,6 +88,10 @@ const ProductSchema = new Schema({
         default:false
     }
     ,
+    shipping_price:{
+        type:Number
+    }
+    ,
     created_at:{
         type:Date,
         default:Date.now()

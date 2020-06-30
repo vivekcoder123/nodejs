@@ -129,4 +129,15 @@ router.post('/save_ads',async (req,res)=>{
 	
 });
 
+router.get('/delete_ads_image/:name/:id',(req,res)=>{
+	Homepage.findOne({_id:req.params.id}).then(homepage=>{
+		console.log('homepage',homepage);
+		homepage[req.params.name]=null;
+		homepage.save().then(response=>{
+			req.flash('success_message', `homepage ads was updated succesfully`);	
+			res.redirect('/admin/homepage_ads');
+		}).catch(err=>console.log('err',err));
+	})
+});
+
 module.exports = router;

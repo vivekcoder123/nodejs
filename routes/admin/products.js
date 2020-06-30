@@ -63,6 +63,7 @@ router.post('/create',async (req,res)=>{
 	const status=req.body.status;
 	const description=req.body.hidden_description;
 	const sizesAvailable=req.body.sizesAvailable;
+	const shipping_price=req.body.shipping_price;
 	const color=req.body.color;
 	const colorsAvailable=req.body.colorsAvailable;
 	let specifications=[];
@@ -107,7 +108,8 @@ router.post('/create',async (req,res)=>{
 		tags,
 		images,
 		color,
-		colorsAvailable
+		colorsAvailable,
+		shipping_price
 	});
 	product.save().then(savedproduct=>{		
 		req.flash('success_message', `product ${savedproduct.name} was CREATED succesfully`);	
@@ -146,6 +148,7 @@ router.put('/edit/:id',async (req,res) =>{
 		product.brand=req.body.brand;
 		product.size=req.body.size;
 		product.discount=req.body.discount;
+		product.shipping_price=req.body.shipping_price;
 		product.sizesAvailable=req.body.sizesAvailable;
 		product.color=req.body.color;
 		product.colorsAvailable=req.body.colorsAvailable;

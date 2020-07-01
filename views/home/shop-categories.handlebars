@@ -19,7 +19,7 @@
                             <div class="ps-block__content">
                                 <ul class="ps-list--menu-cateogories">
                                     {{#each headerCategories as |cat indexCat|}}
-                                    <li class="menu-item-has-children"><a href="{{config.root}}category/{{cat.slug}}">{{cat.name}}</a>
+                                    <li class="menu-item-has-children"><a href="/{{config.root}}category/{{cat.slug}}">{{cat.name}}</a>
                                         {{!-- {{#if subcat.length}} --}}
                                         {{!-- <ul class="sub-menu">
                                             {{#each subcat as |sub indexSub|}}
@@ -43,11 +43,11 @@
                                     {{#if subcat.length}}
                                     <ul>
                                         {{#each subcat as |sub indexSub|}}
-                                        <li><a href="{{config.root}}category/{{cat.slug}}/{{sub.slug}}">{{sub.name}}</a></li>
+                                        <li><a href="{{config.root}}shop?page=1&subcategory={{sub._id}}">{{sub.name}}</a></li>
                                         {{/each}}
                                     </ul>
                                     {{/if}}
-                                    <a href="{{config.root}}category/{{cat.slug}}">Shop All</a>
+                                    <a href="/{{config.root}}/category/{{cat.slug}}">Shop All</a>
                                 </div>
                             </div>
                             {{/each}}
@@ -889,7 +889,7 @@
                 <div class="ps-block__content">
                     {{#each subcat as |sub indexSub|}}
                     <div class="ps-block__item">
-                        <a class="ps-block__overlay" href="{{config.root}}category/{{cat.slug}}/{{sub.slug}}"></a>
+                        <a class="ps-block__overlay" href="/{{config.root}}shop?page=1&subcategory={{sub._id}}"></a>
                         <img src="{{sub.image}}" alt="" class="imgSubCat">
                         <p>{{sub.name}} </p>
                         {{!-- <span>2 Items</span> --}}

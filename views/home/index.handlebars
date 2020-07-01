@@ -5,12 +5,12 @@
                     <div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
                         
                         {{#each homepage.carousel_images}}
-                        <div class="ps-banner"><a href="#"><img class="carouselAdImg" src="{{.}}" alt=""></a></div>
+                        <div class="ps-banner"><a href="{{homepage.carousel_images_link}}"><img class="carouselAdImg" src="{{.}}" alt=""></a></div>
                         {{/each}}
 
                     </div>
                 </div>
-                <div class="ps-section__right"><a class="ps-collection" href="#"><img class="topSideAdImg" src="{{homepage.top_side_ad_1}}" alt=""></a><a class="ps-collection" href="#"><img class="topSideAdImg" src="{{homepage.top_side_ad_2}}" alt=""></a></div>
+                <div class="ps-section__right"><a class="ps-collection" href="{{homepage.top_side_ad_1_link}}"><img class="topSideAdImg" src="{{homepage.top_side_ad_1}}" alt=""></a><a class="ps-collection" href="{{homepage.top_side_ad_2_link}}"><img class="topSideAdImg" src="{{homepage.top_side_ad_2}}" alt=""></a></div>
             </div>
         </div>
         
@@ -76,17 +76,17 @@
             <div class="ps-container">
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                        <a class="ps-collection" href="#">
+                        <a class="ps-collection" href="{{homepage.mid_page_ad_1_link}}">
                             <img class="midPageAdImg" src="{{homepage.mid_page_ad_1}}" alt="">
                         </a>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                        <a class="ps-collection" href="#">
+                        <a class="ps-collection" href="{{homepage.mid_page_ad_2_link}}">
                             <img class="midPageAdImg" src="{{homepage.mid_page_ad_2}}" alt="">
                         </a>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                        <a class="ps-collection" href="#">
+                        <a class="ps-collection" href="{{homepage.mid_page_ad_3_link}}">
                             <img class="midPageAdImg" src="{{homepage.mid_page_ad_3}}" alt="">
                         </a>
                     </div>
@@ -165,12 +165,12 @@
             <div class="ps-container">
                 <div class="row">
                     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 ">
-                        <a class="ps-collection" href="#">
+                        <a class="ps-collection" href="{{homepage.bottom_page_ad_1_link}}">
                             <img class="bottomPageAdImg1" src="{{homepage.bottom_page_ad_1}}" alt="">
                         </a>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                        <a class="ps-collection" href="#">
+                        <a class="ps-collection" href="{{homepage.bottom_page_ad_2_link}}">
                             <img class="bottomPageAdImg2" src="{{homepage.bottom_page_ad_2}}" alt="">
                         </a>
                     </div>

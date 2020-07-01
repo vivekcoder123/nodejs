@@ -137,7 +137,7 @@ router.get('/shop/categories',async (req,res)=>{
     res.render('home/shop-categories',{metaData,headerCategories});
 });
 
-router.get('/shop/:first?/:second?/:third?',async (req,res)=>{
+router.get('/shop',async (req,res)=>{
     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let page=req.query.page;
     if(!page){
@@ -157,20 +157,30 @@ router.get('/shop/:first?/:second?/:third?',async (req,res)=>{
     if(req.query.sortValue){
         sortValue=req.query.sortValue;
     }
+    const sorting=`sortKey=${sortKey}&sortValue=${sortValue}`;
     sortConditions[sortKey]=sortValue;
     let conditions={"status":"publish"};
-    if(req.query.subcategory){
+    if(req.query.subcategory && req.query.subcategory!=""){
         conditions['subcategory']=req.query.subcategory;
     }
-    if(req.query.category){
+    if(req.query.category && req.query.category!=""){
         conditions['category']=req.query.category;
     }
-    if(req.query.brands){
+    if(req.query.brands && req.query.brands!=""){
         conditions['brands']={$in:req.query.brands};
     }
-    if(req.query.price){
+    if(req.query.price && req.query.price!=""){
         conditions['price']={$range:req.query.price}
     }
+    let searchValue="";
+    if(req.query.search && req.query.search!=""){
+        conditions['name']={ $regex : req.query.search };
+        searchValue=req.query.search;
+    }
+    if(req.query.tag && req.query.tag!=""){
+        conditions['tags']={$in:[req.query.tag]};
+    }
+    console.log('c',conditions);
     const brands=await Product.aggregate([{$match:{status:"publish"}}]).group({_id:{name:'$brand',count:{$sum:1}}});
     let brandsData=[];
     brands.forEach(brand=>{
@@ -208,18 +218,48 @@ router.get('/shop/:first?/:second?/:third?',async (req,res)=>{
         metaData.title="Daily Deals";
         metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
         metaData.description="Save money on the Best Deals online on Postidal Daily Deals….";
-        res.render('home/all-products',{metaData,headerCategories,products,pagination,countProducts,brandsData});
+        res.render('home/all-products',{metaData,headerCategories,products,pagination,countProducts,brandsData,sorting,searchValue});
 	});
     
 });
 
 router.get('/category/:slug',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let page=req.query.page;
+    if(!page){
+        page=1;
+    }
     const category=await Category.findOne({slug:req.params.slug})
     let metaData=[];
     metaData.title=category.name;
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description=`Get the best deals on ${category.name} when you shop the largest ...`;
-    res.render('home/category-detail',{metaData});
+    const products=Product.paginate({category:category._id,status:"publish"},{ page, limit: 20,sort:{created_at:-1}}).then(response=>{
+
+        const products=response.docs;
+		const current_page=parseInt(response.page);
+		const totalPages=parseInt(response.pages);
+		let previous_page=current_page-1;
+		let next_page=current_page+1;
+		if(previous_page<1){
+			previous_page=1;
+		}
+		if(next_page>totalPages){
+			next_page=totalPages;
+		}
+		let pagination="";
+		pagination+=`<ul class="pagination"><li><a href="/category/${req.params.slug}?page=${previous_page}">Previous</a></li>`;
+		for(let i=1;i<=totalPages;i++){
+			if(i==current_page){
+				pagination+=`<li class="active"><a href="/category/${req.params.slug}?page=${i}">${i}</a></li>`;
+			}else{
+				pagination+=`<li><a href="/category/${req.params.slug}?page=${i}">${i}</a></li>`;
+			}
+		}			
+		pagination+=`<li><a href="/category/${req.params.slug}?page=${next_page}">Next</a></li></ul>`;
+        res.render('home/category-detail',{metaData,category,products,pagination,headerCategories});
+
+    });
 });
 
 router.get('/about-us',(req,res)=>{

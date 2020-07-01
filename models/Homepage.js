@@ -33,6 +33,33 @@ const HomepageSchema = new Schema({
     type:{
         type:String,
         default:"homepage"
+    },
+    carousel_images_link:{
+        type:String
+    },
+    top_side_ad_1_link:{
+        type:String
+    },
+    top_side_ad_2_link:{
+        type:String
+    },
+    mid_page_ad_1_link:{
+        type:String
+    },
+    mid_page_ad_2_link:{
+        type:String
+    },
+    mid_page_ad_3_link:{
+        type:String
+    },
+    bottom_page_ad_1_link:{
+        type:String
+    },
+    bottom_page_ad_2_link:{
+        type:String
+    },
+    android_app_link:{
+        type:String
     }
 });
 module.exports = mongoose.model('homepage',HomepageSchema);

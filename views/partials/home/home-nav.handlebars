@@ -37,13 +37,13 @@
                             <ul class="menu--dropdown">
 
                                 {{#each headerCategories}}
-                                <li class="menu-item-has-children has-mega-menu"><a href="#"><i class="icon-laundry"></i> {{name}}</a>
+                                <li class="menu-item-has-children has-mega-menu"><a href="/{{config.root}}category/{{slug}}"><i class="icon-laundry"></i> {{name}}</a>
                                     {{#if subcat.length}}
                                     <div class="mega-menu">
                                         <div class="mega-menu__column">
                                             <ul class="mega-menu__list">
                                                 {{#each subcat}}
-                                                <li><a href="#">{{name}}</a></li>
+                                                <li><a href="/{{config.root}}shop?page=1&subcategory={{_id}}">{{name}}</a></li>
                                                 {{/each}}
                                             </ul>
                                         </div>
@@ -57,17 +57,17 @@
                     </div>
                 </div>
                 <div class="header__content-center">
-                    <form class="ps-form--quick-search" action="index.html" method="get">
+                    <form class="ps-form--quick-search" action="{{config.root}}shop" method="get">
                         <div class="form-group--icon">
                             <div><i class="icon-chevron-down"></i></div>
-                            <select class="form-control">
-                                <option value="all">All</option>
+                            <select class="form-control" name="category">
+                                <option value="">All</option>
                                 {{#each headerCategories}}
-                                <option value="{{slug}}">{{name}}</option>
+                                <option value="{{_id}}">{{name}}</option>
                                 {{/each}}
                             </select>
                         </div>
-                        <input class="form-control" type="text" placeholder="I'm shopping for...">
+                        <input class="form-control" type="text" placeholder="I'm shopping for..." name="search" value={{searchValue}}>
                         <button>Search</button>
                     </form>
                 </div>
@@ -146,7 +146,7 @@
                 </ul>
             </div>
         </div>
-        <div class="navigation--mobile">
+        <div class="navigation--mobile" style="padding-bottom:0 !important;">
             <div class="navigation__left"><a class="ps-logo" href="{{config.root}}"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593630269/WhatsApp_Image_2020-07-02_at_12.32.47_AM.jpg" alt=""></a></div>
             <div class="navigation__right">
                 <div class="header__actions">

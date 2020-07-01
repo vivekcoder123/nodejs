@@ -120,6 +120,42 @@ router.post('/save_ads',async (req,res)=>{
 
 		}
 
+		if(req.body.carousel_images_link){
+			homepage.carousel_images_link=req.body.carousel_images_link;
+		}
+
+		if(req.body.top_side_ad_1_link){
+			homepage.top_side_ad_1_link=req.body.top_side_ad_1_link;
+		}
+		
+		if(req.body.top_side_ad_2_link){
+			homepage.top_side_ad_2_link=req.body.top_side_ad_2_link;
+		}
+
+		if(req.body.mid_page_ad_1_link){
+			homepage.mid_page_ad_1_link=req.body.mid_page_ad_1_link;
+		}
+
+		if(req.body.mid_page_ad_2_link){
+			homepage.mid_page_ad_2_link=req.body.mid_page_ad_2_link;
+		}
+
+		if(req.body.mid_page_ad_3_link){
+			homepage.mid_page_ad_3_link=req.body.mid_page_ad_3_link;
+		}
+
+		if(req.body.bottom_page_ad_1_link){
+			homepage.bottom_page_ad_1_link=req.body.bottom_page_ad_1_link;
+		}
+
+		if(req.body.bottom_page_ad_2_link){
+			homepage.bottom_page_ad_2_link=req.body.bottom_page_ad_2_link;
+		}
+
+		if(req.body.android_app_link){
+			homepage.android_app_link=req.body.android_app_link;
+		}
+
 		homepage.save().then(response=>{
 			req.flash('success_message', `homepage ads was updated succesfully`);	
 			res.redirect('/admin/homepage_ads');

@@ -9,6 +9,7 @@ const passport = require('passport');
 const { route } = require('../admin');
 const LocalStrategy = require('passport-local').Strategy;
 const Cart = require('../../config/Cart');
+const PaypalConfig = require('../../config/config');
 
 
 router.all('/*',(req,res,next)=>{
@@ -44,12 +45,28 @@ router.get('/', async (req, res)=>{
 });
  
 
-router.get('/my-account',(req,res)=>{
+router.get('/my-account',async (req,res)=>{
+    if(res.locals.user){
+        return res.redirect('/dashboard');
+    }
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="Postidal Sign In";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Hello Welcome to Your Postidal Log In. Use your email or username, or continue ...";
-	res.render('home/my-account',{metaData});
+	res.render('home/my-account',{metaData,headerCategories});
+});
+
+router.get('/dashboard',async (req,res)=>{
+    if(!res.locals.user){
+        return res.redirect('/my-account');
+    }
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let metaData=[];
+    metaData.title="User Dashboard";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Hello Welcome to Your Dashboard";
+	res.render('home/dashboard',{metaData,headerCategories});
 });
 
 router.get('/product/:slug',async (req,res)=>{
@@ -111,12 +128,18 @@ router.post('/cart/update/:id',(req,res)=>{
     res.redirect('/cart');
 });
 
-router.get('/checkout',(req,res)=>{
+router.get('/checkout',async (req,res)=>{
+    if(!res.locals.user){
+        return res.redirect('/my-account');
+    }
+    let cart = (req.session.cart) ? req.session.cart : null;
+    console.log('cart',cart);
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="Checkout Page";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Checkout to buy the items you have in your cart";
-    res.render('home/checkout',{metaData});
+    res.render('home/checkout',{metaData,PaypalConfig,headerCategories,cart});
 });
 
 router.get('/shop/categories',async (req,res)=>{
@@ -320,15 +343,20 @@ router.get('/terms-and-conditions',(req,res)=>{
 
 // APP LOGIN
 
-passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done)=>{
+passport.use(new LocalStrategy({usernameField: 'email',passReqToCallback:true}, (req,email, password, done)=>{
     User.findOne({email: email}).then(user=>{
-        if(!user) return done(null, false, {message: 'No user found'});
+        if(!user) {
+            req.flash("error_message","Please enter correct credentials !");
+            return done(null, false);
+        }
         bcrypt.compare(password, user.password, (err, matched)=>{
             if(err) return err;
             if(matched){
+                req.flash("success_message","You have logged in successfully !");
                 return done(null, user);
             } else {
-                return done(null, false, { message: 'Incorrect password' });
+                req.flash("error_message","Please enter correct credentials !");
+                return done(null, false);
             }
         });
     });
@@ -348,71 +376,45 @@ passport.deserializeUser(function(id, done) {
 
 router.post('/login', (req, res, next)=>{
     passport.authenticate('local', {
-        successRedirect: '/admin',
-        failureRedirect: '/login',
-        failureFlash: true
+        successRedirect: '/dashboard',
+        failureRedirect: '/my-account',
     })(req, res, next);
 });
 
 router.get('/logout', (req, res)=>{
     req.logOut();
-    res.redirect('/login');
+    res.redirect('/my-account');
 });
 
 
 router.post('/register', (req, res)=>{
-
-    let errors = [];
-
-    if(!req.body.firstName) {
-        errors.push({message: 'please enter your first name'});
-    }
-    if(!req.body.lastName) {
-        errors.push({message: 'please add a last name'});
-    }
-    if(!req.body.email) {
-        errors.push({message: 'please add an email'});
-    }
-    if(!req.body.password) {
-        errors.push({message: 'please enter a password'});
-    }
-    if(!req.body.passwordConfirm) {
-        errors.push({message: 'This field cannot be blank'});
-    }
-    if(req.body.password !== req.body.passwordConfirm) {
-        errors.push({message: "Password fields don't match"});
-    }
-    if(errors.length > 0){
-        res.render('home/register', {
-            errors: errors,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-        })
-    } else {
-        User.findOne({email: req.body.email}).then(user=>{
-            if(!user){
-                const newUser = new User({
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    password: req.body.password,
-                });
-                bcrypt.genSalt(10, (err, salt)=>{
-                    bcrypt.hash(newUser.password, salt, (err, hash)=>{
-                        newUser.password = hash;
-                        newUser.save().then(savedUser=>{
-                            req.flash('success_message', 'You are now registered, please login')
-                            res.redirect('/login');
-                        });
-                    })
-                });
-            } else {
-                req.flash('error_message', 'That email exist please login');
-                res.redirect('/login');
-            }
-        });
-    }
+    User.findOne({email: req.body.email}).then(user=>{
+        if(!user){
+            const newUser = new User({
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                email: req.body.email,
+                password: req.body.password,
+                gender:req.body.gender,
+                city:req.body.city,
+                country:req.body.country,
+                phone:req.body.phone,
+                address:req.body.address
+            });
+            bcrypt.genSalt(10, (err, salt)=>{
+                bcrypt.hash(newUser.password, salt, (err, hash)=>{
+                    newUser.password = hash;
+                    newUser.save().then(savedUser=>{
+                        req.flash('success_message', 'You have been registered successfully, please login !')
+                        res.redirect('/my-account');
+                    });
+                })
+            });
+        } else {
+            req.flash('error_message', 'That email already exists, please login !');
+            res.redirect('/my-account');
+        }
+    });
 });
 
 module.exports = router;

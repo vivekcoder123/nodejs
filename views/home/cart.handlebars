@@ -61,9 +61,11 @@
                     </div>
                     <div class="ps-section__cart-actions">
                         <a class="ps-btn" href="{{config.root}}shop"><i class="icon-arrow-left"></i> Back to Shop</a>
+                    {{#if cart.items.length}}
                     <form action="{{config.root}}cart/empty" method="post">
                     <button class="ps-btn ps-btn--outline" type="submit"><i class="icon-sync"></i> Empty cart</a>
                     </form>
+                    {{/if}}
                     </div>
                 </div>
                 <div class="ps-section__footer">
@@ -100,6 +102,7 @@
                                 </div>
                             </figure>
                         </div> --}}
+                        {{#if cart.items.length}}
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
                             <div class="ps-block--shopping-total">
                                 <div class="ps-block__header">
@@ -120,6 +123,7 @@
                                 </div>
                             </div><a class="ps-btn ps-btn--fullwidth" href="{{config.root}}checkout">Proceed to checkout</a>
                         </div>
+                        {{/if}}
                     </div>
                 </div>
             </div>

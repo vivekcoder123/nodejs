@@ -97,7 +97,15 @@
                         </div>
                         <div class="ps-block--user-header">
                             <div class="ps-block__left"><i class="icon-user"></i></div>
-                            <div class="ps-block__right"><a href="{{config.root}}my-account">Login</a><a href="{{config.root}}my-account">Register</a></div>
+                            <div class="ps-block__right">
+                                {{#if user}}
+                                <a href="{{config.root}}dashboard">My Account</a>
+                                <a href="{{config.root}}logout">Logout</a>
+                                {{else}}
+                                <a href="{{config.root}}my-account">Login</a>
+                                <a href="{{config.root}}my-account">Register</a>
+                                {{/if}}
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -174,7 +182,15 @@
                     </div>
                     <div class="ps-block--user-header">
                         <div class="ps-block__left"><a href="{{config.root}}my-account"><i class="icon-user"></i></a></div>
-                        <div class="ps-block__right"><a href="{{config.root}}my-account">Login</a><a href="{{config.root}}my-account">Register</a></div>
+                        <div class="ps-block__right">
+                            {{#if user}}
+                            <a href="{{config.root}}dashboard">My Account</a>
+                            <a href="{{config.root}}logout">Logout</a>
+                            {{else}}
+                            <a href="{{config.root}}my-account">Login</a>
+                            <a href="{{config.root}}my-account">Register</a>
+                            {{/if}}
+                        </div>
                     </div>
                 </div>
             </div>

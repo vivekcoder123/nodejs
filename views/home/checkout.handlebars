@@ -8,88 +8,70 @@
                 </ul>
             </div>
         </div>
-        <div class="ps-checkout ps-section--shopping">
+        {{#if cart.items.length}}
+        <div class="ps-checkout">
             <div class="container">
-                <div class="ps-section__header">
+                <div class="ps-section__header text-center" style="padding-bottom:4%;padding-top:4%;">
                     <h1>Place Order</h1>
                 </div>
                 <div class="ps-section__content">
-                    <form class="ps-form--checkout" action="do_action" method="post">
+                    <form class="ps-form--checkout" action="{{PaypalConfig.paypal.url}}" method="post">
                         <div class="row">
-                            <div class="col-xl-7 col-lg-8 col-md-12 col-sm-12  ">
+                            
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12  ">
                                 <div class="ps-form__billing-info">
-                                    <h3 class="ps-form__heading">Billing Details</h3>
                                     <div class="form-group">
                                         <label>First Name<sup>*</sup>
                                         </label>
                                         <div class="form-group__content">
-                                            <input class="form-control" type="text">
+                                            <input class="form-control" type="text" name="first_name" value="{{user.first_name}}" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Last Name<sup>*</sup>
                                         </label>
                                         <div class="form-group__content">
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Company Name<sup>*</sup>
-                                        </label>
-                                        <div class="form-group__content">
-                                            <input class="form-control" type="text">
+                                            <input class="form-control" type="text" name="last_name" value="{{user.last_name}}" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Email Address<sup>*</sup>
                                         </label>
                                         <div class="form-group__content">
-                                            <input class="form-control" type="email">
+                                            <input class="form-control" type="email" name="email" value="{{user.email}}" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Country<sup>*</sup>
                                         </label>
                                         <div class="form-group__content">
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Phone<sup>*</sup>
-                                        </label>
-                                        <div class="form-group__content">
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Address<sup>*</sup>
-                                        </label>
-                                        <div class="form-group__content">
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="ps-checkbox">
-                                            <input class="form-control" type="checkbox" id="create-account">
-                                            <label for="create-account">Create an account?</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="ps-checkbox">
-                                            <input class="form-control" type="checkbox" id="cb01">
-                                            <label for="cb01">Ship to a different address?</label>
-                                        </div>
-                                    </div>
-                                    <h3 class="mt-40"> Addition information</h3>
-                                    <div class="form-group">
-                                        <label>Order Notes</label>
-                                        <div class="form-group__content">
-                                            <textarea class="form-control" rows="7" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                                            <input class="form-control" type="text" name="country" value="{{user.country}}" required>
                                         </div>
                                     </div>
                                 </div>
+                                <button class="ps-btn ps-btn--fullwidth" type="submit">Pay with Paypal</button>
                             </div>
-                            <div class="col-xl-5 col-lg-4 col-md-12 col-sm-12  ">
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                        <label>Phone<sup>*</sup>
+                                        </label>
+                                        <div class="form-group__content">
+                                            <input class="form-control" type="text" name="phone" value="{{user.phone}}" required>
+                                        </div>
+                                    </div>
+                                <div class="form-group">
+                                        <label>Address<sup>*</sup>
+                                        </label>
+                                        <div class="form-group__content">
+                                            <input class="form-control" type="text" name="address" value="{{user.address}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Order Notes (Optional)</label>
+                                        <div class="form-group__content">
+                                            <textarea class="form-control" rows="7" placeholder="Notes about your order, e.g. special notes for delivery." name="order_notes" style="height:15.75rem;"></textarea>
+                                        </div>
+                                    </div>
                                 <div class="ps-form__total">
                                     <h3 class="ps-form__heading">Your Order</h3>
                                     <div class="content">
@@ -124,7 +106,19 @@
                                                 </div> --}}
                                                 <h3>Total <span>{{session.cart.formattedTotals}}</span></h3>
                                             </div>
-                                        </div><a class="ps-btn ps-btn--fullwidth" href="checkout.html">Proceed to checkout</a>
+                                        </div>
+                                        <input type="hidden" name="cmd" value="_cart">
+                                        <input type="hidden" name="upload" value="1">
+                                        <input type="hidden" name="business" value="{{PaypalConfig.paypal.businessEmail}}">
+                                        <input type="hidden" name="currency_code" value="{{PaypalConfig.paypal.currency}}">
+                                        {{#each cart.items}}
+                                        <input type="hidden" name="quantity_{{add @index 1}}" value="{{qty}}">
+                                        <input type="hidden" name="item_name_{{add @index 1}}" value="{{title}}">
+                                        <input type="hidden" name="amount_{{add @index 1}}" value="{{price}}">
+                                        {{/each}}
+                                        <div class="text-center">
+                                        <input type="image" id="paypal-btn" alt="Pay with PayPal" src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593702925/paypal.png" style="width:15rem;height:auto;">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -133,4 +127,7 @@
                 </div>
             </div>
         </div>
+        {{else}}
+        <h2 class="alert alert-danger text-center my-4">Your cart is empty ! <a href="/shop" class="ps-btn ml-4">Go to Shop</a></h2>
+        {{/if}}
     </div>

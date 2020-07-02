@@ -52,4 +52,7 @@ module.exports = {
     },
 
     multiply: (v1,v2) => v1*v2,
+    add: (v1,v2) => v1+v2,
+    subtract: (v1,v2) => v1-v2,
+    divide: (v1,v2) => v1/v2,
 };

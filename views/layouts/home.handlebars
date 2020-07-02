@@ -37,16 +37,8 @@
 
       {{>home/home-nav}}
 
-        {{#if errors}}
-            {{#each errors}}
-                <div class="alert-danger">
-                    {{message}}
-                </div>
-            {{/each}}
-        {{/if}}
-
         {{#if success_message}}
-          <div class="alert alert-success alert-dismissible fade show mt-2">
+          <div class="alert alert-success alert-dismissible fade show mt-2 text-center">
             <button class="close" data-dismiss="alert" type="button">
                 <span>&times;</span>
             </button>
@@ -55,7 +47,7 @@
         {{/if}}
 
         {{#if error_message}}
-            <div class="alert alert-danger">
+            <div class="alert alert-danger text-center">
                 <strong>{{error_message}}</strong>
             </div>
         {{/if}}

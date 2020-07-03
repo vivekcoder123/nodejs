@@ -24,7 +24,7 @@ router.post('/create',(req,res)=>{
 
 			if(req.files.image.size!=0){
 
-				cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+				cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"png"}).then(result=>{
 					const subcategory = new SubCategory({
 						name: req.body.name,
 						image:result.secure_url
@@ -75,7 +75,7 @@ router.put('/edit/:id',(req,res)=>{
 		subcategory.name = req.body.name;
 		subcategory.category = req.body.category;
 		if(req.files.image.size!=0){
-			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"png"}).then(result=>{
 				subcategory.image=result.secure_url;
 				subcategory.save().then(savedCategory =>{
 					req.flash("success_message","subcategory updated successfully !");

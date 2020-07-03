@@ -80,13 +80,13 @@ router.post('/create',async (req,res)=>{
 	if(typeof req.files.images.length !="undefined"){
 
 		for(const image of req.files.images){
-			const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"png"});
 			images.push(cloudRes.secure_url);
 		}
 
 	}else{
 
-		const cloudRes=await cloudinary.uploader.upload(req.files.images.tempFilePath,{quality:"auto",format:"webp"});
+		const cloudRes=await cloudinary.uploader.upload(req.files.images.tempFilePath,{quality:"auto",format:"png"});
 		images.push(cloudRes.secure_url);
 	}
 	const product = new Product({
@@ -170,13 +170,13 @@ router.put('/edit/:id',async (req,res) =>{
 			if(typeof req.files.images.length !="undefined"){
 
 				for(const image of req.files.images){
-					const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"webp"});
+					const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"png"});
 					images.push(cloudRes.secure_url);
 				}
 	
 			}else{
 	
-				const cloudRes=await cloudinary.uploader.upload(req.files.images.tempFilePath,{quality:"auto",format:"webp"});
+				const cloudRes=await cloudinary.uploader.upload(req.files.images.tempFilePath,{quality:"auto",format:"png"});
 				images.push(cloudRes.secure_url);
 			}
 			product.images=images;

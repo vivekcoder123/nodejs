@@ -23,7 +23,7 @@ router.post('/create',(req,res)=>{
 		if(category==null){
 			if(req.files.image.size!=0){
 
-				cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+				cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"png"}).then(result=>{
 					const categories = new Category({
 						name: req.body.name,
 						image:result.secure_url
@@ -73,7 +73,7 @@ router.put('/edit/:id',(req,res)=>{
 	Category.findOne({_id:req.params.id}).then(categories => {
 		categories.name = req.body.name;
 		if(req.files.image.size!=0){
-			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"webp"}).then(result=>{
+			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"png"}).then(result=>{
 				categories.image=result.secure_url;
 				categories.save().then(savedCategory =>{
 					req.flash("success_message","Category updated successfully !");

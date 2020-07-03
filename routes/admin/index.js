@@ -51,13 +51,13 @@ router.post('/save_ads',async (req,res)=>{
 			if(typeof req.files.carousel_images.length !="undefined"){
 	
 				for(const image of req.files.carousel_images){
-					const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"webp"});
+					const cloudRes=await cloudinary.uploader.upload(image.tempFilePath,{quality:"auto",format:"png"});
 					carousel_images.push(cloudRes.secure_url);
 				}
 	
 			}else{
 	
-				const cloudRes=await cloudinary.uploader.upload(req.files.carousel_images.tempFilePath,{quality:"auto",format:"webp"});
+				const cloudRes=await cloudinary.uploader.upload(req.files.carousel_images.tempFilePath,{quality:"auto",format:"png"});
 				carousel_images.push(cloudRes.secure_url);
 			}
 			
@@ -66,56 +66,56 @@ router.post('/save_ads',async (req,res)=>{
 
 		if(req.files.top_side_ad_1.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.top_side_ad_1.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.top_side_ad_1.tempFilePath,{quality:"auto",format:"png"});
 			homepage.top_side_ad_1=cloudRes.secure_url;
 
 		}
 
 		if(req.files.top_side_ad_2.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.top_side_ad_2.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.top_side_ad_2.tempFilePath,{quality:"auto",format:"png"});
 			homepage.top_side_ad_2=cloudRes.secure_url;
 
 		}
 
 		if(req.files.mid_page_ad_1.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.mid_page_ad_1.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.mid_page_ad_1.tempFilePath,{quality:"auto",format:"png"});
 			homepage.mid_page_ad_1=cloudRes.secure_url;
 
 		}
 
 		if(req.files.mid_page_ad_2.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.mid_page_ad_2.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.mid_page_ad_2.tempFilePath,{quality:"auto",format:"png"});
 			homepage.mid_page_ad_2=cloudRes.secure_url;
 
 		}
 
 		if(req.files.mid_page_ad_3.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.mid_page_ad_3.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.mid_page_ad_3.tempFilePath,{quality:"auto",format:"png"});
 			homepage.mid_page_ad_3=cloudRes.secure_url;
 
 		}
 
 		if(req.files.bottom_page_ad_1.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.bottom_page_ad_1.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.bottom_page_ad_1.tempFilePath,{quality:"auto",format:"png"});
 			homepage.bottom_page_ad_1=cloudRes.secure_url;
 
 		}
 		
 		if(req.files.bottom_page_ad_2.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.bottom_page_ad_2.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.bottom_page_ad_2.tempFilePath,{quality:"auto",format:"png"});
 			homepage.bottom_page_ad_2=cloudRes.secure_url;
 
 		}
 
 		if(req.files.android_app.size!=0){
 
-			const cloudRes=await cloudinary.uploader.upload(req.files.android_app.tempFilePath,{quality:"auto",format:"webp"});
+			const cloudRes=await cloudinary.uploader.upload(req.files.android_app.tempFilePath,{quality:"auto",format:"png"});
 			homepage.android_app=cloudRes.secure_url;
 
 		}

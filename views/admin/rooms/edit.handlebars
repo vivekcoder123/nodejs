@@ -1,0 +1,13 @@
+<h2 class="text-center my-4">Edit Room</h2>
+
+<form class="form" action="/admin/rooms/edit/{{rooms._id}}?_method=PUT" method="post" enctype="multipart/form-data">
+  <div class="form-group">
+	<label for="name">Name</label>
+	<input type="text" name="name" value="{{rooms.name}}" placeholder="Room name" class="form-control" required/>
+  </div>
+  <div class="form-group">
+    <label for="image">Image</label>
+    <input type="file" name="image" placeholder="Room image" class="form-control"/>
+  </div>
+  <button type="submit" class="btn btn-info">Update Room</button>
+</form>

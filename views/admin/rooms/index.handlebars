@@ -1,0 +1,44 @@
+<h4 class="text-center my-4">Create Rooms</h4>
+
+	<form class="form" action="/admin/rooms/create" method="post" enctype="multipart/form-data">
+		<div class="form-group">
+		<div class="row">
+			<div class="col-md-6">
+				<label for="name">Name</label>
+				<input type="text" name="name" placeholder="Room name" class="form-control" required/>
+			</div>
+			<div class="col-md-6">
+				<label for="image">Image</label>
+				<input type="file" name="image" placeholder="Room image" class="form-control" required/>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-info">Add Room</button>
+		</div>
+	</form>
+	<hr>
+
+	<h4 class="text-center my-4">All Rooms Data</h4>
+		<table class="table table-bordered table-striped text-center">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Image</th>
+				<th>Date</th>
+				<th colspan="2">Action</th>
+			</tr>
+
+			{{#each rooms}}
+			<tr>
+				<td>{{_id}}</td>
+				<td>{{name}}</td>
+				<td><a href="{{image}}" target="_blank"><img src="{{image}}" width="50" height="50"></a></td>
+				<td>{{generateTime date 'MMMM Do YYYY'}}</td>
+				<td><a href="/admin/rooms/edit/{{_id}}" class="btn btn-info">Edit</a></td>
+				<td>
+					<form action="/admin/rooms/{{_id}}?_method=DELETE" method="post">
+						<button class="btn btn-danger" type="submit">Delete</button>
+					</form>
+				</td>
+			</tr>
+			{{/each}}
+		</table>

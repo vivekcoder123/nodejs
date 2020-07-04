@@ -1,0 +1,34 @@
+<div class="container my-4">
+            
+            <div class="ps-block--container-hightlight">
+                <div class="ps-section__header">
+                    <h3>{{room.name}}</h3>
+                </div>
+                <div class="ps-section__content">
+                    <div class="row">
+                        {{#each products}}
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                            <div class="ps-product">
+                                <div class="ps-product__thumbnail"><a href="/{{config.root}}product/{{slug}}"><img src="{{images.[0]}}" alt="" class="imgRoom"></a>
+                                </div>
+                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">{{vendor}}</a>
+                                    <div class="ps-product__content"><a class="ps-product__title" href="/{{config.root}}product/{{slug}}">{{name}}</a>
+                                        <p class="ps-product__price">${{final_price}}</p>
+                                    </div>
+                                    <div class="ps-product__content hover"><a class="ps-product__title" href="/{{config.root}}product/{{slug}}">{{name}}</a>
+                                        <p class="ps-product__price">${{final_price}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            
+            {{#if products.length}}
+            <div class="ps-pagination">
+                {{{pagination}}}
+            </div>
+            {{/if}}
+        </div>

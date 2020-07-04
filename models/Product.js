@@ -12,6 +12,10 @@ const ProductSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref:'subcategories'
     },
+    room:{
+        type: Schema.Types.ObjectId,
+        ref:'rooms'
+    },
     price:{
         type: Number,
         required:true

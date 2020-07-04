@@ -72,6 +72,17 @@
       </div>
 
       <div class="form-group">
+        <label for="room">Room</label>
+        <select class="form-control" name="room" id="room" required>
+          {{#select product.room}}
+        {{#each rooms}}
+          <option value="{{_id}}">{{name}}</option>
+        {{/each}}
+         {{/select}}
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="brand">Brand</label>
         <input type="text" placeholder="Enter brand" name="brand" required class="form-control" value="{{product.brand}}">
       </div>

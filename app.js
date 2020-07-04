@@ -83,6 +83,7 @@ const admin = require('./routes/admin/index');
 const products = require('./routes/admin/products');
 const categories = require('./routes/admin/categories');
 const subcategories = require('./routes/admin/subcategories');
+const rooms = require('./routes/admin/rooms');
 const comments = require('./routes/admin/comments');
 
 //use routes
@@ -92,6 +93,7 @@ app.use('/admin/products', products);
 app.use('/admin/categories', categories);
 app.use('/admin/subcategories', subcategories);
 app.use('/admin/comments', comments);
+app.use('/admin/rooms', rooms);
 app.use((req, res) => {
 	res.render("errors/404",{error_page:Math.ceil(Math.random()*2)})
 });

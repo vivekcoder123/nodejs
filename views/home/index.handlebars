@@ -40,12 +40,12 @@
                         <div class="ps-product ps-product--inner">
                             <div class="ps-product__thumbnail"><a href="{{config.root}}product/{{slug}}"><img class="imgFixed" src="{{images.[0]}}" alt=""></a>
                                 {{#if (gt discount 0) }}<div class="ps-product__badge">-{{discount}}%</div>{{/if}}
-                                <ul class="ps-product__actions">
+                                {{!-- <ul class="ps-product__actions">
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Read More"><i class="icon-bag2"></i></a></li>
                                     <li><a href="#" data-placement="top" title="Quick View" data-toggle="modal" data-target="#product-quickview"><i class="icon-eye"></i></a></li>
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist"><i class="icon-heart"></i></a></li>
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><i class="icon-chart-bars"></i></a></li>
-                                </ul>
+                                </ul> --}}
                             </div>
                             <div class="ps-product__container">
                                 <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}<small>{{discount}}% off</small></p>
@@ -95,13 +95,15 @@
         </div>
         <div class="ps-top-categories">
             <div class="ps-container">
-                <h3>Top categories of the month</h3>
+                <h3>Shop By Room</h3>
                 <div class="row">
-                    {{#each topCategories}}
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 ">
-                        <div class="ps-block--category"><a class="ps-block__overlay" href="{{config.root}}category/{{slug}}"></a><img class="imgFixed" src="{{image}}" alt="" loading="lazy">
-                            <p>{{name}}</p>
+                    {{#each rooms}}
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-6 ">
+                        <a href="{{config.root}}room/{{slug}}">
+                        <div class=""><img class="imgRoom" src="{{image}}" alt="" loading="lazy">
+                            <p style="text-align:center;margin-top:1.4rem;font-size:1.6rem;color:black;text-transform:capitalize;">{{name}}</p>
                         </div>
+                        </a>
                     </div>
                     {{/each}}
                 </div>
@@ -127,12 +129,12 @@
                         <div class="ps-product">
                             <div class="ps-product__thumbnail"><a href="{{config.root}}product/{{slug}}"><img class="imgFixed" src="{{images.[0]}}" alt=""></a>
                                 {{#if (gt discount 0) }}<div class="ps-product__badge">-{{discount}}%</div>{{/if}}
-                                <ul class="ps-product__actions">
+                                {{!-- <ul class="ps-product__actions">
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Read More"><i class="icon-bag2"></i></a></li>
                                     <li><a href="#" data-placement="top" title="Quick View" data-toggle="modal" data-target="#product-quickview"><i class="icon-eye"></i></a></li>
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist"><i class="icon-heart"></i></a></li>
                                     <li><a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><i class="icon-chart-bars"></i></a></li>
-                                </ul>
+                                </ul> --}}
                             </div>
                             <div class="ps-product__container"><a class="ps-product__vendor" href="#">{{vendor}}</a>
                                 <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product/{{slug}}">{{name}}</a>

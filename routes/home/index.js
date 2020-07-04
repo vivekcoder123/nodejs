@@ -4,6 +4,7 @@ const Product = require('../../models/Product');
 const Category = require('../../models/Category');
 const Homepage = require('../../models/Homepage');
 const User = require('../../models/User');
+const Room = require('../../models/Room');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const { route } = require('../admin');
@@ -33,7 +34,7 @@ router.get('/', async (req, res)=>{
         .group({_id:{category_id:'$category'},products:{$push:{name:"$name",_id:"$_id",slug:"$slug",images:"$images",price:"$price",discount:"$discount",final_price:"$final_price"}},category:{$addToSet:"$cat"}})
         .project({products:{$slice:['$products',10]},category:{$arrayElemAt:[{$arrayElemAt:["$category",0]},0]},_id:0});
     
-    const topCategories=await Category.find({}).limit(12);
+    const rooms=await Room.find({});
     const newArrivals=await Product.find({status:"publish"}).sort({created_at:-1}).limit(8)
                         .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1});
     const homepage=await Homepage.findOne({type:'homepage'});
@@ -41,7 +42,7 @@ router.get('/', async (req, res)=>{
     metaData.title="Postidal: Online Shopping for Electronics, Furniture ...";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Free delivery on millions of items with Gold Membership. Very low prices on top brands, books, furniture, Clothes, electronics, computers, software, apparel ...";
-    res.render('home/index',{metaData,dotdProducts,allCategoriesWithProducts,topCategories,newArrivals,homepage,headerCategories});
+    res.render('home/index',{metaData,dotdProducts,allCategoriesWithProducts,rooms,newArrivals,homepage,headerCategories});
 });
  
 
@@ -281,6 +282,45 @@ router.get('/category/:slug',async (req,res)=>{
 		}			
 		pagination+=`<li><a href="/category/${req.params.slug}?page=${next_page}">Next</a></li></ul>`;
         res.render('home/category-detail',{metaData,category,products,pagination,headerCategories});
+
+    });
+});
+
+router.get('/room/:slug',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let page=req.query.page;
+    if(!page){
+        page=1;
+    }
+    const room=await Room.findOne({slug:req.params.slug})
+    let metaData=[];
+    metaData.title=room.name;
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description=`Shop By Room`;
+    const products=Product.paginate({room:room._id,status:"publish"},{ page, limit: 20,sort:{created_at:-1}}).then(response=>{
+
+        const products=response.docs;
+		const current_page=parseInt(response.page);
+		const totalPages=parseInt(response.pages);
+		let previous_page=current_page-1;
+		let next_page=current_page+1;
+		if(previous_page<1){
+			previous_page=1;
+		}
+		if(next_page>totalPages){
+			next_page=totalPages;
+		}
+		let pagination="";
+		pagination+=`<ul class="pagination"><li><a href="/room/${req.params.slug}?page=${previous_page}">Previous</a></li>`;
+		for(let i=1;i<=totalPages;i++){
+			if(i==current_page){
+				pagination+=`<li class="active"><a href="/room/${req.params.slug}?page=${i}">${i}</a></li>`;
+			}else{
+				pagination+=`<li><a href="/room/${req.params.slug}?page=${i}">${i}</a></li>`;
+			}
+		}			
+		pagination+=`<li><a href="/room/${req.params.slug}?page=${next_page}">Next</a></li></ul>`;
+        res.render('home/room-detail',{metaData,room,products,pagination,headerCategories});
 
     });
 });

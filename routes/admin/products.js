@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../../models/Product');
 const Category = require('../../models/Category');
 const SubCategory = require('../../models/SubCategory');
+const Room = require('../../models/Room');
 const fs = require('fs');
 const { isEmpty } = require('../../helpers/upload-helper');
 const {userAuthenticated} = require('../../helpers/authentication');
@@ -15,7 +16,9 @@ router.all('/*', userAuthenticated,(req,res,next)=>{
 
 router.get('/add',(req,res)=>{
 	Category.find({}).then(categories => {
-		res.render('admin/products/create',{categories: categories});
+		Room.find({}).then(rooms=>{
+			res.render('admin/products/create',{categories,rooms});
+		});
 	});
 });
 
@@ -66,6 +69,7 @@ router.post('/create',async (req,res)=>{
 	const shipping_price=req.body.shipping_price;
 	const color=req.body.color;
 	const colorsAvailable=req.body.colorsAvailable;
+	const room=req.body.room;
 	let specifications=[];
 	let mainPoints=[];
 	if(req.body.hidden_specs && req.body.hidden_specs!=""){
@@ -109,7 +113,8 @@ router.post('/create',async (req,res)=>{
 		images,
 		color,
 		colorsAvailable,
-		shipping_price
+		shipping_price,
+		room
 	});
 	product.save().then(savedproduct=>{		
 		req.flash('success_message', `product ${savedproduct.name} was CREATED succesfully`);	
@@ -134,7 +139,9 @@ router.get('/edit/:id',(req,res) =>{
 		product.mainPoints=JSON.stringify(mainPointsArray);
 		Category.find({}).then(categories => {
 			SubCategory.find({}).then(subcategories=>{
-				res.render('admin/products/edit',{product,categories,subcategories});
+				Room.find({}).then(rooms=>{
+					res.render('admin/products/edit',{product,categories,subcategories,rooms});
+				});
 			});
 		});
 	});
@@ -157,6 +164,7 @@ router.put('/edit/:id',async (req,res) =>{
 		product.name=req.body.name;
 		product.status=req.body.status;
 		product.description=req.body.hidden_description;
+		product.room=req.body.room;
 		if(req.body.hidden_specs && req.body.hidden_specs!=""){
 			product.specifications=JSON.parse(req.body.hidden_specs);
 		}

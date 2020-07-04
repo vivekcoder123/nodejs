@@ -118,3 +118,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.ps-block--user-header .ps-block__right a{
+    color:white !important;
+}
+.ps-block--user-header .ps-block__right a:hover{
+    color:#fcb800 !important;
+}

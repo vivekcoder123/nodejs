@@ -11,6 +11,7 @@ class Cart {
               id: product._id,
               title: product.name,
               price: product.final_price,
+              shipping_price: product.shipping_price,
               qty: qty,
               slug:product.slug,
               vendor:product.vendor,
@@ -72,12 +73,13 @@ class Cart {
 
     static calculateTotals(cart) {
         cart.totals = 0.00;
+        cart.withoutShippingTotals=0.00;
         cart.items.forEach(item => {
             let price = item.price;
             let qty = item.qty;
             let amount = price * qty;
-
-            cart.totals += amount;
+            cart.withoutShippingTotals+=amount;
+            cart.totals += amount+item.shipping_price;
         });
         this.setFormattedTotals(cart);
     }

@@ -21,9 +21,9 @@ app.use(express.static(path.join(__dirname,'public')));
 
 //set view engine
 
-const {select, generateTime, paginate, gt, ne, multiply, add, subtract, divide} = require('./helpers/handlebars-helpers');
+const {select, generateTime, paginate, gt, ne, multiply, add, subtract, divide, eq} = require('./helpers/handlebars-helpers');
 
-app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select,generateTime,paginate,gt,ne,multiply,add,subtract,divide}}));
+app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select,generateTime,paginate,gt,ne,multiply,add,subtract,divide,eq}}));
 app.set('view engine','handlebars');
  
 //upload middleware
@@ -71,6 +71,7 @@ app.use((req,res,next) => {
 		req.session.cart = {
 			items: [],
 			totals: 0.00,
+			withoutShippingTotals: 0.00,
 			formattedTotals: ''
 		};
 	} 
@@ -84,6 +85,7 @@ const products = require('./routes/admin/products');
 const categories = require('./routes/admin/categories');
 const subcategories = require('./routes/admin/subcategories');
 const rooms = require('./routes/admin/rooms');
+const orders = require('./routes/admin/orders');
 const comments = require('./routes/admin/comments');
 
 //use routes
@@ -94,6 +96,7 @@ app.use('/admin/categories', categories);
 app.use('/admin/subcategories', subcategories);
 app.use('/admin/comments', comments);
 app.use('/admin/rooms', rooms);
+app.use('/admin/orders', orders);
 app.use((req, res) => {
 	res.render("errors/404",{error_page:Math.ceil(Math.random()*2)})
 });

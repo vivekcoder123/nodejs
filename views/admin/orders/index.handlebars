@@ -1,0 +1,40 @@
+<h2 class="text-center mt-2 mb-4">All Orders Data</h2>
+
+<table class="table table-striped">
+  <thead class="thead-inverse">
+    <tr>
+      <th>Order Id</th>
+      <th>Product Name</th>
+      <th>Product Price</th>
+      <th>Product Quantity</th>
+      <th>Order Status</th>
+      <th>Shipping Price</th>
+      <th>User Name</th>
+      <th>User Email</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {{#each orders}}
+
+    <tr>
+      <td>{{order_id}}</td>
+      <td>{{product_name}}</td>
+      <td>{{product_price}}</td>
+      <td>{{product_quantity}}</td>
+      <td><form method="post" action="/admin/orders/update_status">
+      <input value="{{order_status}}" name="order_status" type="text" >
+      <input type="hidden" name="report_id" value="{{_id}}">
+      <input type="submit" style="display:none;">
+      </form>
+      </td>
+      <td>{{shipping_price}}</td>
+      <td>{{user_id.first_name}} {{user_id.last_name}}</td>
+      <td>{{user_id.email}}</td>
+    </tr>
+
+    {{/each}}
+        
+  </tbody>
+</table>
+{{{pagination}}}

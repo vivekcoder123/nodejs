@@ -1,0 +1,28 @@
+<style>
+    p{
+        color:black;
+        font-weight:bold;
+    }
+</style>
+<div class="mt-4 p-4 text-center">
+{{#if (eq savedOrder.payment_status "Completed") }}
+<div class="alert alert-success">
+    <h4>Your payment has been done successfully and your order has been placed !</h4>
+    <p>Your order Id is : <strong>{{savedOrder._id}}</strong></p>
+    <p>Your paypal transaction Id is : <strong>{{savedOrder.paypal_transaction_id}}</strong></p>
+</div>
+{{else if (eq savedOrder.payment_status "Pending") }}
+<div class="alert alert-warning">
+    <h4>Your payment is currently in pending state , once we receive it we will place your order !</h4>
+    <p>Your order Id is : <strong>{{savedOrder._id}}</strong></p>
+    <p>Your paypal transaction Id is : <strong>{{savedOrder.paypal_transaction_id}}</strong></p>
+</div>
+{{else}}
+<div class="alert alert-danger">
+    <h4>Your payment has been failed !</h4>
+    <p>Your order Id is : <strong>{{savedOrder._id}}</strong></p>
+    <p>Your paypal transaction Id is : <strong>{{savedOrder.paypal_transaction_id}}</strong></p>
+</div>
+{{/if}}
+<a href="/shop" class="ps-btn ml-4">Go to Shop</a>
+</div>

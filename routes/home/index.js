@@ -11,6 +11,8 @@ const { route } = require('../admin');
 const LocalStrategy = require('passport-local').Strategy;
 const Cart = require('../../config/Cart');
 const PaypalConfig = require('../../config/config');
+const Report = require('../../models/Report');
+const Order = require('../../models/Order');
 
 
 router.all('/*',(req,res,next)=>{
@@ -204,7 +206,9 @@ router.get('/shop',async (req,res)=>{
     if(req.query.tag && req.query.tag!=""){
         conditions['tags']={$in:[req.query.tag]};
     }
-    console.log('c',conditions);
+    if(req.query.room && req.query.room!=""){
+        conditions['room']=req.query.room;
+    }
     const brands=await Product.aggregate([{$match:{status:"publish"}}]).group({_id:{name:'$brand',count:{$sum:1}}});
     let brandsData=[];
     brands.forEach(brand=>{
@@ -325,60 +329,67 @@ router.get('/room/:slug',async (req,res)=>{
     });
 });
 
-router.get('/about-us',(req,res)=>{
+router.get('/about-us',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="About Us";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="We connect millions of buyers and sellers around the world, empowering people & creating economic opportunity for all.";
-    res.render('home/about-us',{metaData});
+    res.render('home/about-us',{metaData,headerCategories});
 });
 
-router.get('/contact-us',(req,res)=>{
+router.get('/contact-us',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="Contact Us";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Contact Us For Any Questions";
-    res.render('home/contact-us',{metaData});
+    res.render('home/contact-us',{metaData,headerCategories});
 });
 
-router.get('/faq',(req,res)=>{
+router.get('/faq',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="FAQ";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Frequently Asked Questions";
-    res.render('home/faq',{metaData});
+    res.render('home/faq',{metaData,headerCategories});
 });
 
-router.get('/privacy-policy',(req,res)=>{
+router.get('/privacy-policy',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="Privacy Policy";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Privacy Policy";
-    res.render('home/privacy-policy',{metaData});
+    res.render('home/privacy-policy',{metaData,headerCategories});
 });
 
-router.get('/cookie-policy',(req,res)=>{
+router.get('/cookie-policy',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="Cookie Policy";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Cookie Policy";
-    res.render('home/cookie-policy',{metaData});
+    res.render('home/cookie-policy',{metaData,headerCategories});
 });
 
-router.get('/return-policy',(req,res)=>{
+router.get('/return-policy',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="Return Policy";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Return Policy";
-    res.render('home/return-policy',{metaData});
+    res.render('home/return-policy',{metaData,headerCategories});
 });
 
-router.get('/terms-and-conditions',(req,res)=>{
+router.get('/terms-and-conditions',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
     metaData.title="Terms and Conditions";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Terms and Conditions";
-    res.render('home/terms-and-conditions',{metaData});
+    res.render('home/terms-and-conditions',{metaData,headerCategories});
 });
 
 // APP LOGIN
@@ -455,6 +466,89 @@ router.post('/register', (req, res)=>{
             res.redirect('/my-account');
         }
     });
+});
+
+router.post('/get_order_id',(req,res)=>{
+    const first_name=req.body.first_name;
+    const last_name=req.body.last_name;
+    const user_id=req.body.user_id;
+    const email=req.body.email;
+    const country=req.body.country;
+    const phone=req.body.phone;
+    const address=req.body.address;
+    const order_notes=req.body.order_notes;
+    const payment_status="started";
+    const order=new Order({
+        first_name,
+        last_name,
+        user_id,
+        email,
+        country,
+        phone,
+        address,
+        order_notes,
+        payment_status
+    });
+    order.save().then(order=>{
+        const cart=req.session.cart;
+        if(cart && cart.items.length>0){
+            cart.items.forEach(async (item) => {
+                const product_price = item.price;
+                const shipping_price = item.shipping_price;
+                const product_name=item.title;
+                const product_quantity = item.qty;
+                const order_id=order._id;
+                const product_id=item.id;
+                const order_status="Waiting For Payment";
+                const report=new Report({
+                    product_price,
+                    product_name,
+                    product_quantity,
+                    order_id,
+                    product_id,
+                    shipping_price,
+                    order_status,
+                    user_id
+                });
+                const save=await report.save();
+            });
+        }
+        res.send(order._id);
+
+    });
+});
+
+router.get('/payment_callback',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let metaData=[];
+    metaData.title="Order Summary";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Order Summary";
+    if(req.query.tx && req.query.st && req.query.cm){
+        const order_id=req.query.cm;
+        Order.findOne({_id:order_id}).then(order=>{
+            if(order.payment_status!="started"){
+                return res.redirect('/shop');
+            }
+            order.payment_status=req.query.st;
+            order.paypal_transaction_id=req.query.tx;
+            order.save().then(savedOrder=>{
+                const reportStatus=`Payment ${savedOrder.payment_status}`;
+                Report.find({order_id}).updateMany({order_status:reportStatus}).then(reports=>{
+                    req.session.cart = {
+                        items: [],
+                        totals: 0.00,
+                        withoutShippingTotals: 0.00,
+                        formattedTotals: ''
+                    };
+                    res.render('home/payment_status',{headerCategories,metaData,savedOrder});
+                });
+            })
+        });
+    }else{
+        req.flash("error_message","Some Error Occured ! Please try again");
+        return res.redirect("/checkout");
+    }
 });
 
 module.exports = router;

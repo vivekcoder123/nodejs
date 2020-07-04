@@ -106,7 +106,7 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
                             <div class="ps-block--shopping-total">
                                 <div class="ps-block__header">
-                                    <p>Subtotal <span> {{cart.formattedTotals}}</span></p>
+                                    <p>Subtotal <span> ${{cart.withoutShippingTotals}}</span></p>
                                 </div>
                                 <div class="ps-block__content">
                                     <ul class="ps-block__product">
@@ -119,7 +119,7 @@
                                         </li>
                                         {{/each}}
                                     </ul>
-                                    <h3>Total <span>{{cart.formattedTotals}}</span></h3>
+                                    <h3>Total <span>${{cart.withoutShippingTotals}}</span></h3>
                                 </div>
                             </div><a class="ps-btn ps-btn--fullwidth" href="{{config.root}}checkout">Proceed to checkout</a>
                         </div>

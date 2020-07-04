@@ -238,13 +238,13 @@
         <div class="ps-panel__content">
             <ul class="menu--mobile">
                 {{#each headerCategories}}
-                <li class="menu-item-has-children has-mega-menu"><a href="#">{{name}}</a><span class="sub-toggle"></span>
+                <li class="menu-item-has-children has-mega-menu"><a href="/{{config.root}}category/{{slug}}">{{name}}</a><span class="sub-toggle"></span>
                     {{#if subcat.length}}
                     <div class="mega-menu" style="margin-left:1rem;padding-top:0px;">
                         <div class="mega-menu__column">
                             <ul>
                                 {{#each subcat}}
-                                <li><a href="#">{{name}}</a></li>
+                                <li><a href="/{{config.root}}shop?subcategory={{_id}}">{{name}}</a></li>
                                 {{/each}}
                             </ul>
                         </div>

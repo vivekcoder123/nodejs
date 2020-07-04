@@ -15,7 +15,7 @@
                     <h1>Place Order</h1>
                 </div>
                 <div class="ps-section__content">
-                    <form class="ps-form--checkout" action="{{PaypalConfig.paypal.url}}" method="post">
+                    <form class="ps-form--checkout" action="{{PaypalConfig.paypal.url}}" method="post" id="paypalForm">
                         <div class="row">
                             
                             <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12  ">
@@ -49,7 +49,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="ps-btn ps-btn--fullwidth" type="submit">Pay with Paypal</button>
+                                <button class="ps-btn ps-btn--fullwidth paypal-btn" type="submit">Pay with Paypal</button>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                                 <div class="form-group">
@@ -76,12 +76,16 @@
                                     <h3 class="ps-form__heading">Your Order</h3>
                                     <div class="content">
                                         <div class="ps-block--checkout-total">
-                                            <div class="ps-block__header">
-                                                <p>Product</p>
-                                                <p>Total</p>
-                                            </div>
                                             <div class="ps-block__content">
-                                                <table class="table ps-block__products">
+                                                <table class="table ps-block__products table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Product</td>
+                                                            <td>Price</td>
+                                                            <td>Shipping Price</td>
+                                                            <td>Subtotal</td>
+                                                        </tr>
+                                                    </thead>
                                                     <tbody>
                                                         {{#each session.cart.items}}
                                                         <tr>
@@ -89,22 +93,13 @@
                                                                 <p>Sold By:<strong style="text-transform:uppercase;">{{vendor}}</strong></p>
                                                             </td>
                                                             <td>${{multiply price qty}}</td>
+                                                            <td>${{shipping_price}}</td>
+                                                            <td>${{add (multiply price qty) shipping_price }}</td>
                                                         </tr>
                                                         {{/each}}
                                                     </tbody>
                                                 </table>
-                                                {{!-- <h4 class="ps-block__title">Subtotal <span>$863.49</span></h4> --}}
-                                                {{!-- <div class="ps-block__shippings">
-                                                    <figure>
-                                                        <h4>YOUNG SHOP Shipping</h4>
-                                                        <p>Free shipping</p><a href="#"> MVMTH Classical Leather Watch In Black ×1</a>
-                                                    </figure>
-                                                    <figure>
-                                                        <h4>ROBERT’S STORE Shipping</h4>
-                                                        <p>Free shipping</p><a href="#">Apple Macbook Retina Display 12” ×1</a>
-                                                    </figure>
-                                                </div> --}}
-                                                <h3>Total <span>{{session.cart.formattedTotals}}</span></h3>
+                                                <h3>Total : <span>{{session.cart.formattedTotals}}</span></h3>
                                             </div>
                                         </div>
                                         <input type="hidden" name="cmd" value="_cart">
@@ -114,10 +109,11 @@
                                         {{#each cart.items}}
                                         <input type="hidden" name="quantity_{{add @index 1}}" value="{{qty}}">
                                         <input type="hidden" name="item_name_{{add @index 1}}" value="{{title}}">
-                                        <input type="hidden" name="amount_{{add @index 1}}" value="{{price}}">
+                                        <input type="hidden" name="amount_{{add @index 1}}" value="{{add price shipping_price}}">
                                         {{/each}}
+                                        <input type="hidden" name="custom" id="order_id">
                                         <div class="text-center">
-                                        <input type="image" id="paypal-btn" alt="Pay with PayPal" src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593702925/paypal.png" style="width:15rem;height:auto;">
+                                        <input type="image" class="paypal-btn" alt="Pay with PayPal" src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593702925/paypal.png" style="width:15rem;height:auto;">
                                         </div>
                                     </div>
                                 </div>
@@ -131,3 +127,24 @@
         <h2 class="alert alert-danger text-center my-4">Your cart is empty ! <a href="/shop" class="ps-btn ml-4">Go to Shop</a></h2>
         {{/if}}
     </div>
+
+    <script>
+        $(document).on("click",".paypal-btn",function(e){
+            e.preventDefault();
+            let formArray={};
+            $("#paypalForm input").each(function(){
+                formArray[$(this).attr("name")]=$(this).val();
+            });
+            formArray['order_notes']=$("textarea[name=order_notes]").val();
+            formArray['user_id']="{{user._id}}";
+            console.log(formArray);
+            $.ajax({
+                method:"post",
+                url:"/get_order_id",
+                data:formArray
+            }).done(response=>{
+                $("#order_id").val(response);
+                $("#paypalForm").submit();
+            });
+        });
+    </script>

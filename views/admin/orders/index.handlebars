@@ -5,10 +5,8 @@
     <tr>
       <th>Order Id</th>
       <th>Product Name</th>
-      <th>Product Price</th>
       <th>Product Quantity</th>
       <th>Order Status</th>
-      <th>Shipping Price</th>
       <th>User Name</th>
       <th>User Email</th>
     </tr>
@@ -20,7 +18,6 @@
     <tr>
       <td>{{order_id}}</td>
       <td>{{product_name}}</td>
-      <td>{{product_price}}</td>
       <td>{{product_quantity}}</td>
       <td><form method="post" action="/admin/orders/update_status">
       <input value="{{order_status}}" name="order_status" type="text" >
@@ -28,7 +25,6 @@
       <input type="submit" style="display:none;">
       </form>
       </td>
-      <td>{{shipping_price}}</td>
       <td>{{user_id.first_name}} {{user_id.last_name}}</td>
       <td>{{user_id.email}}</td>
     </tr>

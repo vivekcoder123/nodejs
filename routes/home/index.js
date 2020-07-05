@@ -163,6 +163,7 @@ router.post('/cart/update/:id',(req,res)=>{
 
 router.get('/checkout',async (req,res)=>{
     if(!res.locals.user){
+        req.session.redirectUrl="/checkout";
         return res.redirect('/my-account');
     }
     let cart = (req.session.cart) ? req.session.cart : null;
@@ -456,8 +457,13 @@ passport.deserializeUser(function(id, done) {
 
 
 router.post('/login', (req, res, next)=>{
+    let successRedirect='/dashboard';
+    if(req.session.redirectUrl && req.session.redirectUrl!=null){
+     successRedirect=req.session.redirectUrl;
+     req.session.redirectUrl=null;       
+    }
     passport.authenticate('local', {
-        successRedirect: '/dashboard',
+        successRedirect: successRedirect,
         failureRedirect: '/my-account'
     })(req, res, next);
 });
@@ -504,7 +510,6 @@ router.post('/save_profile', (req, res)=>{
                 user.first_name= req.body.first_name,
                 user.last_name= req.body.last_name,
                 user.email= req.body.email,
-                user.password= req.body.password,
                 user.gender=req.body.gender,
                 user.city=req.body.city,
                 user.country=req.body.country,

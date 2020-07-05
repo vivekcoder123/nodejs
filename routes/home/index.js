@@ -126,7 +126,7 @@ router.post('/submit_review',async (req,res)=>{
     const product_id=req.body.product_id;
     const user=req.body.user_id;
     const product_slug=req.body.product_slug;
-    Comment.findOne({user}).then(userReview=>{
+    Comment.findOne({user,product_id}).then(userReview=>{
         if(userReview){
             req.flash("error_message","You have already submitted review for this product");
             return res.redirect(`/product/${product_slug}`);

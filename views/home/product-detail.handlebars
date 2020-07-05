@@ -114,7 +114,7 @@
                                 <li class="active"><a href="#tab-1">Description</a></li>
                                 <li class=""><a href="#tab-2">Specification</a></li>
                                 <li class=""><a href="#tab-3">Vendor</a></li>
-                                <li class=""><a href="#tab-4">Reviews ({{reviews.count}})</a></li>
+                                <li class=""><a href="#tab-4">Reviews ({{#if reviews.count}} {{reviews.count}} {{else}}0{{/if}})</a></li>
                             </ul>
                             <div class="ps-tabs">
                                 <div class="ps-tab active" id="tab-1">
@@ -141,10 +141,11 @@
                                 </div>
                                 <div class="ps-tab" id="tab-4">
                                     <div class="row">
+                                        {{#if reviews.count}}
                                         <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12 ">
                                             <div class="ps-block--average-rating">
                                                 <div class="ps-block__header">
-                                                    <h3>{{reviews.average}} <i class="fa fa-star" style="font-size:5rem;color:#fcb800;"></i></h3>
+                                                    <h3>{{reviews.average}}<i class="fa fa-star" style="font-size:3.5rem;color:#fcb800;position:relative;top:-0.65rem;"></i></h3>
                                                     <span>{{reviews.count}} Reviews</span>
                                                 </div>
                                                 {{#each averageRatings as |avgRating avgIndex| }}
@@ -165,6 +166,7 @@
                                                 {{/each}}
                                             </div> --}}
                                         </div>
+                                        {{/if}}
                                         <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
                                             {{#if user}}
                                             <form class="ps-form--review" action="/submit_review" method="post">

@@ -518,7 +518,7 @@ router.post('/save_profile', (req, res)=>{
                 address=req.body.address
                 user.save().then(savedUser=>{
                     req.flash('success_message', 'You profile has been updated successfully !')
-                    res.redirect('/dashboard');
+                    return res.redirect('/dashboard');
                 });
         }
     });

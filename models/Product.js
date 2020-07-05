@@ -103,7 +103,7 @@ const ProductSchema = new Schema({
 
 },{usePushEach: true,strict:false});
 
-ProductSchema.plugin(URLSlugs('name', {field: 'slug'}));
+ProductSchema.plugin(URLSlugs('name', {field: 'slug',update:true}));
 ProductSchema.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('products',ProductSchema);

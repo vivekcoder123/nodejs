@@ -25,5 +25,5 @@ const RoomSchema = new Schema({
 },{strict:false});
 
 RoomSchema.plugin(mongoosePaginate)
-RoomSchema.plugin(URLSlugs('name', {field: 'slug'}));
+RoomSchema.plugin(URLSlugs('name', {field: 'slug',update:true}));
 module.exports = mongoose.model('rooms',RoomSchema);

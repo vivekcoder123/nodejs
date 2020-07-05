@@ -25,5 +25,5 @@ const CategorySchema = new Schema({
 },{strict:false});
 
 CategorySchema.plugin(mongoosePaginate)
-CategorySchema.plugin(URLSlugs('name', {field: 'slug'}));
+CategorySchema.plugin(URLSlugs('name', {field: 'slug',update:true}));
 module.exports = mongoose.model('categories',CategorySchema);

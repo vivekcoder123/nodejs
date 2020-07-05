@@ -28,5 +28,5 @@ const SubCategorySchema = new Schema({
    
 });
 SubCategorySchema.plugin(mongoosePaginate)
-SubCategorySchema.plugin(URLSlugs('name', {field: 'slug'}));
+SubCategorySchema.plugin(URLSlugs('name', {field: 'slug',update:true}));
 module.exports = mongoose.model('subcategories',SubCategorySchema);

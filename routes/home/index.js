@@ -13,6 +13,7 @@ const Cart = require('../../config/Cart');
 const PaypalConfig = require('../../config/config');
 const Report = require('../../models/Report');
 const Order = require('../../models/Order');
+const Comment = require('../../models/Comment');
 
 
 router.all('/*',(req,res,next)=>{
@@ -112,10 +113,40 @@ router.get('/product/:slug',async (req,res)=>{
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description=product.description.replace(/<(.|\n)*?>/g, '');
     metaData.description=metaData.description.replace(/&nbsp;/g,' ');
-	res.render('home/product-detail',{metaData,product,relatedProducts,sameBrandProducts,headerCategories});
+    let reviews=await Comment.aggregate([{$match:{product_id:product._id}}]).group({_id:"$product_id",count:{$sum:1},average:{$avg:"$rating"}});
+    reviews=reviews[0];
+    req.session.redirectUrl=`/product/${req.params.slug}`;
+    const averageRatings=await Comment.aggregate([{$match:{product_id:product._id}}]).group({_id:{rating:'$rating',count:{$sum:1}}});
+	res.render('home/product-detail',{metaData,product,relatedProducts,sameBrandProducts,headerCategories,reviews,averageRatings});
 });
 
-router.get('/cart',(req,res)=>{
+router.post('/submit_review',async (req,res)=>{
+    const rating=req.body.rating;
+    const comment=req.body.comment;
+    const product_id=req.body.product_id;
+    const user=req.body.user_id;
+    const product_slug=req.body.product_slug;
+    Comment.findOne({user}).then(userReview=>{
+        if(userReview){
+            req.flash("error_message","You have already submitted review for this product");
+            return res.redirect(`/product/${product_slug}`);
+        }else{
+            const review=new Comment({
+                rating,
+                comment,
+                product_id,
+                user
+            });
+            review.save().then(savedReview=>{
+                req.flash("success_message","Your review has been submitted successfully");
+                return res.redirect(`/product/${product_slug}`);
+            });
+        }
+    });
+});
+
+router.get('/cart',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
     let metaData=[];
@@ -123,7 +154,7 @@ router.get('/cart',(req,res)=>{
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Your cart is ready , please click on buy now to book these items";
     console.log('cart',cart);
-    res.render('home/cart',{metaData,cart});
+    res.render('home/cart',{metaData,cart,headerCategories});
 });
 
 router.post('/cart',(req,res)=>{

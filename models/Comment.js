@@ -6,13 +6,21 @@ const CommentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref:'users'
     },
-    body:{
+    comment:{
         type:String,
+        required:true
+    },
+    rating:{
+        type:Number,
         required:true
     },
     approveComment:{
         type:Boolean,
         default: true
+    },
+    product_id:{
+        type: Schema.Types.ObjectId,
+        ref:'products'
     },
     date:{
         type:Date,

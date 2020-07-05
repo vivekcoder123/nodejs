@@ -262,7 +262,7 @@ router.get('/shop',async (req,res)=>{
     }
     let searchValue="";
     if(req.query.search && req.query.search!=""){
-        conditions['name']={ $regex : req.query.search };
+        conditions['slug']={ $regex : req.query.search.toLowerCase() };
         searchValue=req.query.search;
     }
     if(req.query.tag && req.query.tag!=""){

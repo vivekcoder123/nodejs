@@ -7,10 +7,10 @@ const ReportSchema = new Schema({
     product_name:{
         type:String
     },
-    product__price: {
+    product_price: {
         type: Number
     },
-    shipping__price: {
+    shipping_price: {
         type: Number
     },
     product_quantity:{

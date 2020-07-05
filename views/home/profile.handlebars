@@ -1,0 +1,114 @@
+<div class="container">
+    <div class="row">
+    	<div class="col-sm-12">
+          <div class="tab-content">
+            <div class="tab-pane active" id="home">
+                <hr>
+                  <form class="form" action="/save_profile" method="post" id="registrationForm">
+                        <input type="hidden" name="user_id" value="{{user._id}}">
+                      <div class="row">
+
+                          <div class="col-md-6">
+
+                              <div class="form-group">
+                          
+                                <div class="col-xs-6">
+                                    <label for="first_name"><h4>First name</h4></label>
+                                    <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first name" title="enter your first name" required value="{{user.first_name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                <div class="col-xs-6">
+                                    <label for="last_name"><h4>Last name</h4></label>
+                                    <input type="text" class="form-control" name="last_name" id="last_name" placeholder="last name" title="enter your last name" required value="{{user.last_name}}">
+                                </div>
+                            </div>
+                
+                            <div class="form-group">
+                                
+                                <div class="col-xs-6">
+                                    <label for="phone"><h4>Phone</h4></label>
+                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number"  required value="{{user.phone}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                
+                                <div class="col-xs-6">
+                                    <label for="address"><h4>Address</h4></label>
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="enter address" title="enter your address"  required value="{{user.address}}">
+                                </div>
+                            </div>
+
+                          </div>
+
+                          <div class="col-md-6">
+
+                              <div class="form-group">
+                          
+                                    <div class="col-xs-6">
+                                        <label for="email"><h4>Email</h4></label>
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email" required value="{{user.email}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender" class="mt-2"><h4>Gender</h4></label>
+                                    <br>
+                                    {{#if (eq user.gender "male") }}
+                                        <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" value="male" checked>
+                                        <span class="form-check-label"> Male </span>
+                                        </label>
+                                        <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" value="female">
+                                        <span class="form-check-label"> Female</span>
+                                        </label>
+                                    {{else}}
+                                        <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" value="male">
+                                        <span class="form-check-label"> Male </span>
+                                        </label>
+                                        <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" value="female" checked>
+                                        <span class="form-check-label"> Female</span>
+                                        </label>
+                                    {{/if}}
+                                </div>
+
+                                <div class="form-group">
+                          
+                                    <div class="col-xs-6">
+                                        <label for="city"><h4>City</h4></label>
+                                        <input type="text" class="form-control" name="city" id="city" placeholder="City" required value="{{user.city}}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                          
+                                    <div class="col-xs-6">
+                                        <label for="country"><h4>Country</h4></label>
+                                        <input type="text" class="form-control" name="country" id="country" placeholder="Country" required value="{{user.country}}">
+                                    </div>
+                                </div>
+                              
+                          </div>
+
+                      </div>
+                      
+                      <div class="form-group text-center">
+                           <div class="col-xs-12">
+                              	<button class="btn btn-lg btn-success" type="submit" style="font-size:1.4rem;width:10%;"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                            </div>
+                      </div>
+              	</form>
+              
+              <hr>
+              
+             </div>
+               
+              </div>
+          </div>
+
+        </div>
+    </div>

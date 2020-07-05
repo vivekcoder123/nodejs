@@ -62,7 +62,7 @@ router.get('/my-account',async (req,res)=>{
 
 router.get('/dashboard',async (req,res)=>{
     if(!res.locals.user){
-        return res.redirect('/my-account');
+        //return res.redirect('/my-account');
     }
     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
@@ -70,6 +70,36 @@ router.get('/dashboard',async (req,res)=>{
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Hello Welcome to Your Dashboard";
 	res.render('home/dashboard',{metaData,headerCategories});
+});
+
+router.get('/my-profile',async (req,res)=>{
+
+    if(!res.locals.user){
+        return res.redirect('/my-account');
+    }
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let metaData=[];
+    metaData.title="User Profile";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Hello Welcome to Your Profile";
+	res.render('home/profile',{metaData,headerCategories});
+
+});
+
+router.get('/my-orders',async (req,res)=>{
+
+    if(!res.locals.user){
+        return res.redirect('/my-account');
+    }
+    user_id=res.locals.user._id;
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let metaData=[];
+    metaData.title="User Orders";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Hello Welcome to Your Orders";
+    const orders=await Report.find({user_id}).populate('product_id');
+	res.render('home/orders',{metaData,headerCategories,orders});
+
 });
 
 router.get('/product/:slug',async (req,res)=>{
@@ -133,6 +163,7 @@ router.post('/cart/update/:id',(req,res)=>{
 
 router.get('/checkout',async (req,res)=>{
     if(!res.locals.user){
+        req.session.redirectUrl="/checkout";
         return res.redirect('/my-account');
     }
     let cart = (req.session.cart) ? req.session.cart : null;
@@ -426,9 +457,14 @@ passport.deserializeUser(function(id, done) {
 
 
 router.post('/login', (req, res, next)=>{
+    let successRedirect='/dashboard';
+    if(req.session.redirectUrl && req.session.redirectUrl!=null){
+     successRedirect=req.session.redirectUrl;
+     req.session.redirectUrl=null;       
+    }
     passport.authenticate('local', {
-        successRedirect: '/dashboard',
-        failureRedirect: '/my-account',
+        successRedirect: successRedirect,
+        failureRedirect: '/my-account'
     })(req, res, next);
 });
 
@@ -464,6 +500,26 @@ router.post('/register', (req, res)=>{
         } else {
             req.flash('error_message', 'That email already exists, please login !');
             res.redirect('/my-account');
+        }
+    });
+});
+
+router.post('/save_profile', (req, res)=>{
+    User.findOne({_id: req.body.user_id}).then(user=>{
+        if(user){
+                user.first_name= req.body.first_name,
+                user.last_name= req.body.last_name,
+                user.email= req.body.email,
+                user.password= req.body.password,
+                user.gender=req.body.gender,
+                user.city=req.body.city,
+                user.country=req.body.country,
+                user.phone=req.body.phone,
+                address=req.body.address
+                user.save().then(savedUser=>{
+                    req.flash('success_message', 'You profile has been updated successfully !')
+                    res.redirect('/dashboard');
+                });
         }
     });
 });

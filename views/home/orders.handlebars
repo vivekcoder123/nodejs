@@ -1,0 +1,57 @@
+<div class="container-fluid my-5 justify-content-center" style="padding-left:12%;padding-right:12%;">
+<div class="card card-1">
+<div class="card-header bg-white">
+<div class="media flex-sm-row flex-column-reverse justify-content-between ">
+<div class="col my-auto">
+<h4 class="mb-0">Hello, <span class="change-color">{{user.first_name}} {{user.last_name}}</span> !</h4>
+</div>
+<div class="col-auto text-center my-auto pl-0 pt-sm-4"> 
+<p class="mb-4 pt-0 Glasses font-weight-bold">Your Orders</p>
+</div>
+</div>
+</div>
+<div class="card-body">
+    {{#each orders}}
+    <div class="row">
+    <div class="col">
+    <div class="card card-2">
+    <div class="card-body">
+    <div class="media">
+    <div class="sq align-self-center "> 
+        <img class="img-fluid my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="{{product_id.images.[0]}}" style="width:135px;height:135px" /> </div>
+    <div class="media-body my-auto text-right">
+    <div class="row my-auto flex-column flex-md-row">
+    <div class="col my-auto">
+    <h6 class="mb-0"> {{product_name}}</h6>
+    </div>
+    <div class="col-auto my-auto"> <small>Price: ${{product_price}} </small></div>
+    <div class="col my-auto"> <small>Shipping Price : ${{shipping_price}}</small></div>
+    <div class="col my-auto"> <small>Qty : {{product_quantity}}</small></div>
+    <div class="col my-auto">
+    <h6 class="mb-0">${{add (multiply product_price product_quantity) shipping_price}}</h6>
+    </div>
+    </div>
+    </div>
+    </div>
+    <hr class="my-3 ">
+    <div class="row">
+    <div class="col-md-3 mb-3"></div>
+    <div class="col mt-auto">
+    <div class="media row justify-content-between">
+    <div class="flex-col"> 
+        <span><small>Order Status : </small></span>
+        <span> <small class="text-right mr-sm-2">{{order_status}}</small></span></div>
+
+        <span class="mr-sm-5"><small>Order Id : {{order_id}}</small></span>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    {{/each}}
+</div>
+</div>
+</div>

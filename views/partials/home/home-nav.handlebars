@@ -158,7 +158,7 @@
             <div class="navigation__left"><a class="ps-logo" href="{{config.root}}"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593630269/WhatsApp_Image_2020-07-02_at_12.32.47_AM.jpg" alt=""></a></div>
             <div class="navigation__right">
                 <div class="header__actions">
-                    <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>0</i></span></a>
+                    <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>{{session.cart.items.length}}</i></span></a>
                         <div class="ps-cart__content">
                             <div class="ps-cart__items">
                                 {{#each session.cart.items}}
@@ -256,7 +256,7 @@
         </div>
     </div>
     <div class="navigation--list">
-        <div class="navigation__content"><a class="navigation__item ps-toggle--sidebar" href="#menu-mobile"><i class="icon-menu"></i><span> Menu</span></a><a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile"><i class="icon-list4"></i><span> Categories</span></a><a class="navigation__item ps-toggle--sidebar" href="#search-sidebar"><i class="icon-cart"></i><span> Purchases</span></a><a class="navigation__item ps-toggle--sidebar" href="#cart-mobile"><i class="icon-bag2"></i><span> Cart</span></a></div>
+        <div class="navigation__content"><a class="navigation__item ps-toggle--sidebar" href="#menu-mobile"><i class="icon-menu"></i><span> Menu</span></a><a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile"><i class="icon-list4"></i><span> Categories</span></a><a class="navigation__item ps-toggle--sidebar" href="#search-sidebar"><i class="icon-cart"></i><span> Purchases</span></a><a class="navigation__item ps-toggle--sidebar" href="#cart-mobile"><i class="icon-bag2"></i><span> Cart ({{session.cart.items.length}})</span></a></div>
     </div>
     <div class="ps-panel--sidebar" id="search-sidebar">
         <div class="ps-panel__header">

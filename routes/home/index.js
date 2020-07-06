@@ -164,6 +164,7 @@ router.post('/cart',(req,res)=>{
         Product.findOne({_id: product}).then(prod => {
             let cart = (req.session.cart) ? req.session.cart : null;
             Cart.addToCart(prod, qty, cart);
+            req.flash("success_message","Product is added to the cart successfully !");
             res.redirect('/cart');
         }).catch(err => {
             console.log('err',err);
@@ -177,11 +178,13 @@ router.post('/cart',(req,res)=>{
 router.post('/cart/remove/:id',(req,res)=>{
     const id = req.params.id;
     Cart.removeFromCart(id, req.session.cart);
+    req.flash("error_message","Product is removed from the cart !");
     res.redirect('/cart');
 });
 
 router.post('/cart/empty',(req,res)=>{
     Cart.emptyCart(req);
+    req.flash("error_message","All products are removed from the cart !");
     res.redirect('/cart');
 });
 
@@ -189,6 +192,7 @@ router.post('/cart/update/:id',(req,res)=>{
     const product_id=req.params.id;
     const qty=req.body.qty;
     Cart.updateProductQuantity(product_id,qty,req.session.cart);
+    req.flash("success_message","Cart is updated successfully !");
     res.redirect('/cart');
 });
 

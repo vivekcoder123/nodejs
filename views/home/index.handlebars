@@ -4,8 +4,12 @@
                 <div class="ps-section__left">
                     <div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
                         
-                        {{#each homepage.carousel_images}}
-                        <div class="ps-banner"><a href="{{homepage.carousel_images_link}}"><img class="carouselAdImg" src="{{.}}" alt=""></a></div>
+                        {{#each homepage.carousel_images as |item i| }}
+                        <div class="ps-banner">
+                            <a href="{{ lookup @root.homepage.carousel_images_link i}}">
+                            <img class="carouselAdImg" src="{{item}}" alt="">
+                            </a>
+                            </div>
                         {{/each}}
 
                     </div>

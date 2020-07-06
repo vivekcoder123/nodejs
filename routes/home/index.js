@@ -40,7 +40,7 @@ router.get('/', async (req, res)=>{
     const rooms=await Room.find({});
     const newArrivals=await Product.find({status:"publish"}).sort({created_at:-1}).limit(8)
                         .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1});
-    const homepage=await Homepage.findOne({type:'homepage'});
+    let homepage=await Homepage.findOne({type:'homepage'});
     let metaData=[];
     metaData.title="Postidal: Online Shopping for Electronics, Furniture ...";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";

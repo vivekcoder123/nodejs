@@ -121,7 +121,7 @@ router.post('/save_ads',async (req,res)=>{
 		}
 
 		if(req.body.carousel_images_link){
-			homepage.carousel_images_link=req.body.carousel_images_link;
+			homepage.carousel_images_link=req.body.carousel_images_link.split(",");
 		}
 
 		if(req.body.top_side_ad_1_link){

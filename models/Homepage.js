@@ -35,7 +35,7 @@ const HomepageSchema = new Schema({
         default:"homepage"
     },
     carousel_images_link:{
-        type:String
+        type:Array
     },
     top_side_ad_1_link:{
         type:String

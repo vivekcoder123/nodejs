@@ -395,14 +395,14 @@ router.get('/room/:slug',async (req,res)=>{
     });
 });
 
-router.get('/about-us',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
-    let metaData=[];
-    metaData.title="About Us";
-    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
-    metaData.description="We connect millions of buyers and sellers around the world, empowering people & creating economic opportunity for all.";
-    res.render('home/about-us',{metaData,headerCategories});
-});
+// router.get('/about-us',async (req,res)=>{
+//     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+//     let metaData=[];
+//     metaData.title="About Us";
+//     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+//     metaData.description="We connect millions of buyers and sellers around the world, empowering people & creating economic opportunity for all.";
+//     res.render('home/about-us',{metaData,headerCategories});
+// });
 
 router.get('/contact-us',async (req,res)=>{
     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
@@ -413,14 +413,14 @@ router.get('/contact-us',async (req,res)=>{
     res.render('home/contact-us',{metaData,headerCategories});
 });
 
-router.get('/faq',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
-    let metaData=[];
-    metaData.title="FAQ";
-    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
-    metaData.description="Frequently Asked Questions";
-    res.render('home/faq',{metaData,headerCategories});
-});
+// router.get('/faq',async (req,res)=>{
+//     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+//     let metaData=[];
+//     metaData.title="FAQ";
+//     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+//     metaData.description="Frequently Asked Questions";
+//     res.render('home/faq',{metaData,headerCategories});
+// });
 
 router.get('/privacy-policy',async (req,res)=>{
     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);

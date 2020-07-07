@@ -102,6 +102,15 @@
                 <h3>Shop By Room</h3>
                 <div class="row">
                     {{#each rooms}}
+                    {{#if (or (contains name "Game") (contains name "Patio"))}}
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-6 hideInMobile">
+                        <a href="{{config.root}}room/{{slug}}">
+                        <div class=""><img class="imgRoom" src="{{image}}" alt="" loading="lazy">
+                            <p style="text-align:center;margin-top:1.4rem;font-size:1.6rem;color:black;text-transform:capitalize;">{{name}}</p>
+                        </div>
+                        </a>
+                    </div>
+                    {{else}}
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-6 ">
                         <a href="{{config.root}}room/{{slug}}">
                         <div class=""><img class="imgRoom" src="{{image}}" alt="" loading="lazy">
@@ -109,6 +118,7 @@
                         </div>
                         </a>
                     </div>
+                    {{/if}}
                     {{/each}}
                 </div>
             </div>

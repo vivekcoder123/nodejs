@@ -55,4 +55,10 @@ module.exports = {
     add: (v1,v2) => v1+v2,
     subtract: (v1,v2) => v1-v2,
     divide: (v1,v2) => v1/v2,
+    contains: (v1,v2)=>{
+        if(v1.includes(v2)){
+            return true;
+        }
+        return false;
+    },
 };

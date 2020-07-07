@@ -44,6 +44,9 @@ img{
     .hideInMobile{
         display:none;
     }
+    .centerMobile{
+        text-align:center;
+    }
     #menu-mobile .menu--mobile .current-menu-item span{
         margin-left:4.4rem;
         position:absolute;

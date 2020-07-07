@@ -51,6 +51,16 @@
                             {{/each}}
                         </ul>
                     </aside>
+                    <aside class="widget widget_shop">
+                        <h4 class="widget-title">Rooms</h4>
+                        <ul class="ps-list--categories">
+                            {{#each rooms }}
+                            <li class="current-menu-item menu-item-has-children">
+                                <a href="{{config.root}}shop?page=1&room={{_id}}">{{name}}</a>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </aside>
                     {{!-- <aside class="widget widget_shop">
                         <h4 class="widget-title">BY BRANDS</h4>
                         <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><figure class="ps-custom-scrollbar" data-height="250" style="overflow: hidden; width: auto; height: 250px;">

@@ -286,6 +286,7 @@ router.get('/shop',async (req,res)=>{
         }
     });
     const countProducts=await Product.countDocuments(conditions);
+    const rooms=await Room.find({});
 	Product.paginate(conditions, { page, limit: 12,populate:['category','subcategory'],sort:sortConditions }).then(response=>{
         const products=response.docs;
 		const current_page=parseInt(response.page);
@@ -312,7 +313,7 @@ router.get('/shop',async (req,res)=>{
         metaData.title="Daily Deals";
         metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
         metaData.description="Save money on the Best Deals online on Postidal Daily Deals….";
-        res.render('home/all-products',{metaData,headerCategories,products,pagination,countProducts,brandsData,sorting,searchValue});
+        res.render('home/all-products',{metaData,headerCategories,products,pagination,countProducts,brandsData,sorting,searchValue,rooms});
 	});
     
 });

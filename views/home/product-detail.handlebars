@@ -225,7 +225,7 @@
                             {{#each sameBrandProducts}}
                             <div class="ps-product">
                                 <div class="ps-product__thumbnail"><a href="/{{config.root}}product/{{slug}}"><img src="{{images.[0]}}" alt="" class="imgFixed"></a>
-                                    <div class="ps-product__badge">-{{discount}}%</div>
+                                    {{#if (gt discount 0)}}<div class="ps-product__badge">-{{discount}}%</div>{{/if}}
                                     {{!-- <ul class="ps-product__actions">
                                         <li><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Read More"><i class="icon-bag2"></i></a></li>
                                         <li><a href="#" data-placement="top" title="Quick View" data-toggle="modal" data-target="#product-quickview"><i class="icon-eye"></i></a></li>
@@ -246,7 +246,7 @@
                                         </div> --}}
                                         <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}</p>
                                     </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="product-default.html">Grand Slam Indoor Of Show Jumping Novel</a>
+                                    <div class="ps-product__content hover"><a class="ps-product__title" href="/{{config.root}}product/{{slug}}">{{name}}</a>
                                         <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}</p>
                                     </div>
                                 </div>
@@ -470,7 +470,7 @@
                                 </ul> --}}
                             </div>
                             <div class="ps-product__container">
-                                <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}<small>{{discount}}% off</small></p>
+                                <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}{{#if (gt discount 0)}}<small>{{discount}}% off</small>{{/if}}</p>
                                 <div class="ps-product__content"><a class="ps-product__title" href="/{{config.root}}product/{{slug}}">{{name}}</a>
                                     {{!-- <div class="ps-product__rating">
                                         <select class="ps-rating" data-read-only="true">

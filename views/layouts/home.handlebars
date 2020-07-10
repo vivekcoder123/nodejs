@@ -12,6 +12,20 @@
     <meta name="keywords" content="{{metaData.keywords}}">
     <meta name="description" content="{{metaData.description}}">
     <title>{{metaData.title}}</title>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://www.postidal.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://postidal.com/shop?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700&amp;amp;subset=latin-ext" rel="stylesheet">
     <link rel="stylesheet" href="{{config.root}}fonts/Linearicons/Linearicons/Font/demo-files/demo.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">

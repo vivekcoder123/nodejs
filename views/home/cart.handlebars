@@ -63,7 +63,7 @@
                         <a class="ps-btn" href="{{config.root}}shop"><i class="icon-arrow-left"></i> Back to Shop</a>
                     {{#if cart.items.length}}
                     <form action="{{config.root}}cart/empty" method="post">
-                    <button class="ps-btn ps-btn--outline" type="submit"><i class="icon-sync"></i> Empty cart</a>
+                    <button class="ps-btn" type="submit"><i class="icon-sync"></i> Empty cart</a>
                     </form>
                     {{/if}}
                     </div>
@@ -103,7 +103,7 @@
                             </figure>
                         </div> --}}
                         {{#if cart.items.length}}
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                        <div class="col-xl-6 col-12 m-auto">
                             <div class="ps-block--shopping-total">
                                 <div class="ps-block__header">
                                     <p>Subtotal <span> ${{cart.withoutShippingTotals}}</span></p>

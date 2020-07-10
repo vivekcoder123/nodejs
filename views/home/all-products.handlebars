@@ -87,17 +87,13 @@
                         <div class="ps-shopping__header">
                             <p><strong> {{countProducts}}</strong> Products found</p>
                             <div class="ps-shopping__actions">
-                                <select class="p-2" data-placeholder="Sort Items" data-select2-id="4" tabindex="-1" aria-hidden="true" id="sortingSelect">
+                                <select class="p-2 hideInMobile" data-placeholder="Sort Items" data-select2-id="4" tabindex="-1" aria-hidden="true" id="sortingSelect">
                                     {{#select sorting}}
                                     <option value="sortKey=created_at&sortValue=-1">Sort by latest</option>
                                     <option value="sortKey=price&sortValue=1">Sort by price: low to high</option>
                                     <option value="sortKey=price&sortValue=-1">Sort by price: high to low</option>
                                     {{/select}}
                                 </select>
-                                <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 177px;">
-                                    <span class="selection"></span>
-                                    <span class="dropdown-wrapper" aria-hidden="true"></span>
-                                    </span>
                                 <div class="ps-shopping__view">
                                     <p>View</p>
                                     <ul class="ps-tab-list">

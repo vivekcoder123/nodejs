@@ -95,8 +95,9 @@
                                     <form method="post" action="{{config.root}}cart">
                                     <input type="hidden" name="_id" value="{{product._id}}">
                                     <input type="hidden" name="qty" value="1">
-                                    <button class="ps-btn ps-btn--black" type="submit">Add to cart</button>
-                                    <button class="ps-btn" type="submit">Buy Now</button>
+                                    <button class="ps-btn ps-btn--black marginBottomInMobile" type="submit">Add to cart</button>
+                                    <input type="hidden" name="buttonClicked" id="buttonClicked" value="">
+                                    <button class="ps-btn" type="submit" id="buyNowBtn">Buy Now</button>
                                     </form>
                                     {{!-- <div class="ps-product__actions"><a href="#"><i class="icon-heart"></i></a></div> --}}
                                 </div>
@@ -206,20 +207,20 @@
                     </div>
                 </div>
                 <div class="ps-page__right">
-                    <aside class="widget widget_product widget_features">
+                    {{!-- <aside class="widget widget_product widget_features">
                         <p><i class="icon-network"></i> Shipping worldwide</p>
                         <p><i class="icon-3d-rotate"></i> Free 7-day return if eligible, so easy</p>
                         <p><i class="icon-receipt"></i> Supplier give bills for this product.</p>
                         <p><i class="icon-credit-card"></i> Pay online or when receiving goods</p>
-                    </aside>
+                    </aside> --}}
                     {{!-- <aside class="widget widget_sell-on-site">
                         <p><i class="icon-store"></i> Sell on Postidal?<a href="{{config.root}}my-account"> Register Now !</a></p>
                     </aside> --}}
                     {{!-- <aside class="widget widget_ads"><a href="#"><img src="/img/ads/product-ads.png" alt=""></a></aside> --}}
                     
                     {{#if sameBrandProducts.length}}
-                    <aside class="widget widget_same-brand">
-                        <h3>Same Brand</h3>
+                    <aside class="widget widget_same-brand pb-0">
+                        <h3 style="margin-bottom:0;padding-bottom:0;">Same Brand</h3>
                         <div class="widget__content">
                             {{#each sameBrandProducts}}
                             <div class="ps-product">
@@ -233,7 +234,7 @@
                                     </ul> --}}
                                 </div>
                                 <div class="ps-product__container"><a class="ps-product__vendor" href="#">{{vendor}}</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product/{{slug}}">{{name}}</a>
+                                    <div class="ps-product__content"><a class="ps-product__title" href="/{{config.root}}product/{{slug}}">{{name}}</a>
                                         {{!-- <div class="ps-product__rating">
                                             <div class="br-wrapper br-theme-fontawesome-stars"><select class="ps-rating" data-read-only="true" style="display: none;">
                                                 <option value="1">1</option>
@@ -470,7 +471,7 @@
                             </div>
                             <div class="ps-product__container">
                                 <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}<small>{{discount}}% off</small></p>
-                                <div class="ps-product__content"><a class="ps-product__title" href="{{config.root}}product/{{slug}}">{{name}}</a>
+                                <div class="ps-product__content"><a class="ps-product__title" href="/{{config.root}}product/{{slug}}">{{name}}</a>
                                     {{!-- <div class="ps-product__rating">
                                         <select class="ps-rating" data-read-only="true">
                                             <option value="1">1</option>
@@ -497,3 +498,9 @@
         </div>
         </div>
     </div>
+
+    <script>
+        $("#buyNowBtn").click(function(){
+            $("#buttonClicked").val("buy_now");
+        });
+    </script>

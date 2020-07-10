@@ -164,8 +164,11 @@ router.post('/cart',(req,res)=>{
         Product.findOne({_id: product}).then(prod => {
             let cart = (req.session.cart) ? req.session.cart : null;
             Cart.addToCart(prod, qty, cart);
+            if(req.body.buttonClicked){
+                return res.redirect('/checkout');
+            }
             req.flash("success_message","Product is added to the cart successfully !");
-            res.redirect('/cart');
+            return res.redirect('/cart');
         }).catch(err => {
             console.log('err',err);
            res.redirect('/');

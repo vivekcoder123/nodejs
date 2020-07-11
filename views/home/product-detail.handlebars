@@ -16,26 +16,12 @@
                             <div class="ps-product__thumbnail" data-vertical="true">
                                 <figure>
                                     <div class="ps-wrapper">
-                                        <div class="ps-product__gallery slick-initialized slick-slider" data-arrow="true"><a href="#" class="slick-arrow slick-disabled" aria-disabled="true" style="display: block;"><i class="fa fa-angle-left"></i></a>
-                                            <div aria-live="polite" class="slick-list draggable">
-                                                <div class="slick-track" role="listbox" style="opacity: 1; width: 1047px;"><div class="item slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide00" style="width: 349px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
-                                                <a href="{{product.images.[0]}}" tabindex="0">
-                                                <img src="{{product.images.[0]}}" alt="" class="imgProductDetail"></a>
-                                                </div>
-                                                {{#each product.images}}
-                                                {{#if (ne @index 0)}}
-                                                <div class="item slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide01" style="width: 349px; position: relative; left: -349px; top: 0px; z-index: 998; opacity: 0;">
-                                                    <a href="{{.}}" tabindex="-1">
-                                                    <img src="{{.}}" alt="" class="imgProductDetail"></a>
-                                                    </div>
-                                                    {{/if}}
-                                                    {{/each}}
-                                                    
-                                                        </div>
-                                                        </div>
-                                            
-                                            
-                                        <a href="#" class="slick-arrow" style="display: block;" aria-disabled="false"><i class="fa fa-angle-right"></i></a></div>
+                                        <div class="ps-product__gallery slider" data-arrow="true">
+                                        {{#each product.images}}
+                                            <a href="{{.}}" tabindex="-1">
+                                            <img src="{{.}}" alt="" class="imgProductDetail">
+                                            </a>
+                                        {{/each}}
                                     </div>
                                 </figure>
                                 {{!-- <div class="ps-product__variants slick-initialized slick-slider" data-item="4" data-md="4" data-sm="4" data-arrow="false">
@@ -500,7 +486,9 @@
     </div>
 
     <script>
+        
         $("#buyNowBtn").click(function(){
             $("#buttonClicked").val("buy_now");
         });
+
     </script>

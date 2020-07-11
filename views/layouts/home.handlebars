@@ -30,7 +30,9 @@
     <link rel="stylesheet" href="{{config.root}}fonts/Linearicons/Linearicons/Font/demo-files/demo.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{config.root}}plugins/owl-carousel/assets/owl.carousel.css">
-    <link rel="stylesheet" href="{{config.root}}plugins/slick/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <link rel="stylesheet" href="{{config.root}}plugins/lightGallery-master/dist/css/lightgallery.min.css">
     <link rel="stylesheet" href="{{config.root}}plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css">
     <link rel="stylesheet" href="{{config.root}}plugins/jquery-ui/jquery-ui.min.css">
@@ -81,9 +83,8 @@
 <script src="{{config.root}}plugins/masonry.pkgd.min.js"></script>
 <script src="{{config.root}}plugins/isotope.pkgd.min.js"></script>
 <script src="{{config.root}}plugins/jquery.matchHeight-min.js"></script>
-<script src="{{config.root}}plugins/slick/slick/slick.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="{{config.root}}plugins/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
-<script src="{{config.root}}plugins/slick-animation.min.js"></script>
 <script src="{{config.root}}plugins/lightGallery-master/dist/js/lightgallery-all.min.js"></script>
 <script src="{{config.root}}plugins/jquery-ui/jquery-ui.min.js"></script>
 <script src="{{config.root}}plugins/sticky-sidebar/dist/sticky-sidebar.min.js"></script>
@@ -117,4 +118,15 @@ shadowColor  : 'rgba(0,   0,   0,   .6)'
       $("#mainContainer").css("opacity",1);
       topbar.hide()
   }
+
+  $(".slider").slick({
+
+            // normal options...
+            infinite: true,
+            arrows:true,
+            autoplay:true,
+            autoplaySpeed:5000,
+            centerMode:true,
+            slidesToShow: 1,
+            });
 </script>

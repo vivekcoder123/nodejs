@@ -79,6 +79,9 @@ img{
     .ps-collection{
         margin-bottom:0px !important;
     }
+    .ps-section__header{
+        margin-bottom:8px !important;
+    }
 }
 @media only screen and (min-width:701px) and (max-width:800px){
     .midPageAdImg{

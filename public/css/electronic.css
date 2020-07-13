@@ -100,10 +100,12 @@ img{
     .bottomPageAdImg1{
         width:100% !important;
         height:20rem !important;
+        margin-bottom:4rem;
     }
     .bottomPageAdImg2{
         width:100% !important;
         height:20rem !important;
+        margin-bottom:4rem;
     }
     .androidAppAdImg{
         width:80% !important;
@@ -155,6 +157,6 @@ input[type=number] {
     color:#fcb800 !important;
     font-size:24px !important;
 }
-.carouselAdImg,.topSideAdImg{
+.carouselAdImg,.topSideAdImg,.bottomPageAdImg1,.bottomPageAdImg2{
     object-fit: cover;
 }

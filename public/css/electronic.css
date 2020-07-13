@@ -90,8 +90,8 @@ img{
     .topSideAdImg{
         width:100% !important;
         margin-top:2rem;
-        padding-left:5%;
-        padding-right:5%;
+        padding-left:5% !important;
+        padding-right:5% !important;
     }
     .midPageAdImg{
         width:100% !important;

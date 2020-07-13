@@ -85,7 +85,7 @@ img{
 @media only screen and (min-width:801px){
     .carouselAdImg{
         width:100% !important;
-        height:29rem !important;
+        height:35rem !important;
     }
     .topSideAdImg{
         width:100% !important;
@@ -151,4 +151,7 @@ input[type=number] {
 .slick-prev:before, .slick-next:before{
     color:#fcb800 !important;
     font-size:24px !important;
+}
+.carouselAdImg,.topSideAdImg{
+    object-fit: cover;
 }

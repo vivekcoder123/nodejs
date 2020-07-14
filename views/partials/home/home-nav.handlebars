@@ -258,23 +258,25 @@
         <div class="navigation__content"></div>
     </div>
     <div class="ps-panel--sidebar" id="menu-mobile">
-        <div class="ps-panel__header">
+        <div class="ps-panel__header hideInMobile">
             <h3>Menu</h3>
         </div>
         <div class="ps-panel__content">
             <ul class="menu--mobile">
+                <li class="current-menu-item"><a href="{{config.root}}my-account"><i class="fa fa-user-o"></i> <span>Sign In</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}"><i class="fa fa-home"></i> <span>Home</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}notifications"><i class="fa fa-bell-o"></i> <span>Notifications</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-shopping-cart"></i> <span>Shopping Cart</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-heart-o"></i> <span>Wish Cart</span></a></li>
+                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-heart-o"></i> <span>Like it a Lot Cart</span></a></li>
+                <li class="current-menu-item borderBottom"><a href="{{config.root}}login"><i class="fa fa-gift"></i> <span>Login Rewards</span></a></li>
+                <h4 class="itemHeading">My Postidal</h4>
+                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-users"></i> <span>My Account</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-history"></i> <span>Order History</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-address-card-o"></i> <span>Shipping Address</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-bullhorn"></i> <span>Apply Promo</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}"><i class="fa fa-bolt"></i> <span>Today's Deals</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-cog"></i> <span>Settings: USA</span></a></li>
+                <li class="current-menu-item borderBottom"><a href="{{config.root}}"><i class="fa fa-bolt"></i> <span>Today's Deals</span></a></li>
+                <li class="current-menu-item"><a href="{{config.root}}"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}shop"><i class="fa fa-tag"></i> <span>Shop by Department</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}login"><i class="fa fa-gift"></i> <span>Login Rewards: 100 Points</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}my-account"><i class="fa fa-user-o"></i> <span>My Account</span></a></li>
                 <li class="current-menu-item menu-item-has-children">
                     <a href="#helpSubItems"><i class="fa fa-question"></i> <span>Help</span></a><span class="sub-toggle"></span>
                     <ul class="sub-menu" id="helpSubItems">
@@ -289,3 +291,27 @@
             </ul>
         </div>
     </div>
+    <style>
+        .menu--mobile>li{
+            border-bottom: 0px;
+        }
+        .mainItem a{
+            margin-bottom: 1rem;
+            font-weight: bold;
+            font-size: 1.4em;
+            color: black;
+        }
+        .mainItem span{
+            margin-left:0;
+        }
+        .borderBottom{
+            border-bottom:1px solid #ccc !important;
+            padding-bottom:2%;
+        }
+        .itemHeading{
+            margin:5%;
+        }
+        #menu-mobile{
+            width:75%;
+        }
+    </style>

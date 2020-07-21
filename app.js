@@ -14,6 +14,7 @@ const Cartconfig = require('./config/config.js');
 const compression = require('compression');
 const redis=require("redis");
 let headerCategories=[];
+let menuCategories=[];
 
 mongoose.Promise = global.Promise;
 app.use(compression());
@@ -25,7 +26,7 @@ const {select, generateTime, paginate, gt, ne, multiply, add, subtract, divide, 
 
 app.engine ('handlebars',exphbs({defaultLayout:'home', helpers: {select,generateTime,paginate,gt,ne,multiply,add,subtract,divide,eq,contains,or,and}}));
 app.set('view engine','handlebars');
- 
+
 //upload middleware
 app.use(upload({
     useTempFiles : true,
@@ -39,7 +40,7 @@ mongoose.connect('mongodb://localhost:27017/postidal',{useNewUrlParser:true,useC
 	console.log('connected to server');
 }).catch(error=>{
 	console.log('could not connect');
-}); 
+});
 
 //methode override middleware
 app.use(methodOverride('_method'));
@@ -64,6 +65,7 @@ app.use((req,res,next) => {
 	res.locals.error = req.flash('error');
 	res.locals.config=config;
 	res.locals.headerCategories=headerCategories;
+	res.locals.menuCategories=menuCategories;
 	res.locals.paypal = Cartconfig.paypal;
 	res.locals.locale = Cartconfig.locale;
 	res.locals.session=req.session;
@@ -74,7 +76,7 @@ app.use((req,res,next) => {
 			withoutShippingTotals: 0.00,
 			formattedTotals: ''
 		};
-	} 
+	}
 	next();
 })
 

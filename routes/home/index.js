@@ -14,6 +14,17 @@ const PaypalConfig = require('../../config/config');
 const Report = require('../../models/Report');
 const Order = require('../../models/Order');
 const Comment = require('../../models/Comment');
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+    host: "smtp.ionos.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "support@postidal.com",
+      pass: "Lidialidia11@#",
+    },
+});
 
 
 router.all('/*',(req,res,next)=>{
@@ -51,7 +62,7 @@ router.get('/', async (req, res)=>{
 
 router.get('/my-account',async (req,res)=>{
     if(res.locals.user){
-        return res.redirect('/dashboard');
+        return res.redirect('/');
     }
     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
     let metaData=[];
@@ -408,14 +419,14 @@ router.get('/room/:slug',async (req,res)=>{
 //     res.render('home/about-us',{metaData,headerCategories});
 // });
 
-router.get('/contact-us',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
-    let metaData=[];
-    metaData.title="Contact Us";
-    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
-    metaData.description="Contact Us For Any Questions";
-    res.render('home/contact-us',{metaData,headerCategories});
-});
+// router.get('/contact-us',async (req,res)=>{
+//     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+//     let metaData=[];
+//     metaData.title="Contact Us";
+//     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+//     metaData.description="Contact Us For Any Questions";
+//     res.render('home/contact-us',{metaData,headerCategories});
+// });
 
 // router.get('/faq',async (req,res)=>{
 //     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
@@ -473,8 +484,13 @@ passport.use(new LocalStrategy({usernameField: 'email',passReqToCallback:true}, 
         bcrypt.compare(password, user.password, (err, matched)=>{
             if(err) return err;
             if(matched){
-                req.flash("success_message","You have logged in successfully !");
-                return done(null, user);
+                if(user.verified==1){
+                    req.flash("success_message","You have logged in successfully !");
+                    return done(null, user);
+                }else{
+                    req.flash("error_message","Please verify your email !");
+                    return done(null, false);
+                }
             } else {
                 req.flash("error_message","Please enter correct credentials !");
                 return done(null, false);
@@ -496,7 +512,7 @@ passport.deserializeUser(function(id, done) {
 
 
 router.post('/login', (req, res, next)=>{
-    let successRedirect='/dashboard';
+    let successRedirect='/';
     if(req.session.redirectUrl && req.session.redirectUrl!=null){
      successRedirect=req.session.redirectUrl;
      req.session.redirectUrl=null;       
@@ -512,6 +528,21 @@ router.get('/logout', (req, res)=>{
     res.redirect('/my-account');
 });
 
+router.get('/verify',(req,res)=>{
+
+    let user_id=req.query.user_id;
+    User.findOne({_id:user_id}).then(async user=>{
+        if(user!=null && user.verified==0){
+            user.verified=1
+            req.flash('success_message', 'You email has been verified successfully !')
+        }else{
+            req.flash('error_message', 'You have already verified your email !')
+        }
+        await user.save();
+        return res.redirect("/my-account");
+    })
+
+});
 
 router.post('/register', (req, res)=>{
     User.findOne({email: req.body.email}).then(user=>{
@@ -521,18 +552,43 @@ router.post('/register', (req, res)=>{
                 last_name: req.body.last_name,
                 email: req.body.email,
                 password: req.body.password,
-                gender:req.body.gender,
-                city:req.body.city,
-                country:req.body.country,
-                phone:req.body.phone,
-                address:req.body.address
             });
             bcrypt.genSalt(10, (err, salt)=>{
                 bcrypt.hash(newUser.password, salt, (err, hash)=>{
                     newUser.password = hash;
                     newUser.save().then(savedUser=>{
-                        req.flash('success_message', 'You have been registered successfully, please login !')
-                        res.redirect('/my-account');
+                        const base_url=res.locals.config.base_url;
+                        const url=base_url+"/verify?user_id="+savedUser._id;
+                        const emailBody=`Hi ${savedUser.first_name},
+                        <br><br>
+                        Thanks for choosing us. It is truly appreciated. Please confirm your email address to start using Postidal.
+                        <br><br>
+                        <a href="${url}">Click here to confirm</a>
+                        <br><br>
+                        Best regard,
+                        <br>
+                        <a href="https://postidal.com">Postidal.com</a>`;
+                        var mailOptions = {
+                            from: 'support@postidal.com',
+                            to: savedUser.email,
+                            subject: 'Postidal Email Confirmation',
+                            html: emailBody
+                        };
+                        
+                        transporter.sendMail(mailOptions, function(error, info){
+                            if (error) {
+                            console.log(error);
+                            req.flash('error_message', 'Some error occured !');
+                            } else {
+                            console.log('Email sent: ' + info.response);
+                                req.flash('success_message', 'A verification mail has been sent in your email adress , please verify it to login !');
+                            }
+                            res.redirect('/my-account');
+                        });
+                    }).catch(err=>{
+                        console.log('err',err);
+                        req.flash('error_message', 'Some error occured !');
+                        return res.redirect('/my-account');
                     });
                 })
             });
@@ -556,7 +612,7 @@ router.post('/save_profile', (req, res)=>{
                 user.address=req.body.address
                 user.save().then(savedUser=>{
                     req.flash('success_message', 'You profile has been updated successfully !')
-                    return res.redirect('/dashboard');
+                    return res.redirect('/my-profile');
                 });
         }
     });

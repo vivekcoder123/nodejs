@@ -8,23 +8,14 @@
                 </ul>
             </div>
         </div>
-        <div class="ps-section--shopping ps-shopping-cart">
+        <div class="ps-section--shopping ps-shopping-cart pt-0">
             <div class="container">
-                <div class="ps-section__header">
-                    <h1>Shopping Cart</h1>
+                <div class="hideInDesktop mt-4">
+                    <a class="ps-btn ps-btn--fullwidth" href="{{config.root}}checkout">Proceed to checkout</a>
                 </div>
                 <div class="ps-section__content">
                     <div class="table-responsive">
                         <table class="table ps-table--shopping-cart">
-                            <thead>
-                                <tr>
-                                    <th>Product name</th>
-                                    <th>PRICE</th>
-                                    <th>QUANTITY</th>
-                                    <th>TOTAL</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 {{#each cart.items}}
                                 <tr class="text-center">
@@ -59,14 +50,14 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="ps-section__cart-actions">
+                    {{!-- <div class="ps-section__cart-actions">
                         <a class="ps-btn" href="{{config.root}}shop"><i class="icon-arrow-left"></i> Back to Shop</a>
                     {{#if cart.items.length}}
                     <form action="{{config.root}}cart/empty" method="post">
                     <button class="ps-btn" type="submit"><i class="icon-sync"></i> Empty cart</a>
                     </form>
                     {{/if}}
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="ps-section__footer">
                     <div class="row">

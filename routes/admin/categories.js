@@ -51,7 +51,7 @@ router.post('/create',(req,res)=>{
 				});
 
 			}
-			
+
 		}else{
 			req.flash('error_message', 'Category already exists !');
 			res.redirect('/admin/categories');
@@ -59,7 +59,7 @@ router.post('/create',(req,res)=>{
 	}).catch(err=>{
 		console.log('err',err);
 	});
-	
+
 });
 
 router.get('/edit/:id',(req,res)=>{
@@ -72,6 +72,7 @@ router.get('/edit/:id',(req,res)=>{
 router.put('/edit/:id',(req,res)=>{
 	Category.findOne({_id:req.params.id}).then(categories => {
 		categories.name = req.body.name;
+		categories.sequence = req.body.sequence
 		if(req.files.image.size!=0){
 			cloudinary.uploader.upload(req.files.image.tempFilePath,{quality:"auto",format:"png"}).then(result=>{
 				categories.image=result.secure_url;
@@ -88,12 +89,12 @@ router.put('/edit/:id',(req,res)=>{
 				res.redirect('/admin/categories');
 			});
 		}
-	});	
+	});
 });
 
 router.delete('/:id', (req,res) => {
 	Category.deleteOne({_id:req.params.id})
-	.then(category=>{			
+	.then(category=>{
 		SubCategory.deleteMany({category:req.params.id}).then(subcategories=>{
 			req.flash("success_message","Category deleted successfully !");
 			res.redirect('/admin/categories');

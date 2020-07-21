@@ -3,7 +3,7 @@
             <div class="ps-container p-0" style="flex-wrap:wrap;">
                 <div class="col-md-12 p-0">
                     <div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
-                        
+
                         {{#each homepage.carousel_images as |item i| }}
                         <div class="ps-banner">
                             <a href="{{ lookup @root.homepage.carousel_images_link i}}">
@@ -19,7 +19,7 @@
                     <a class="ps-collection col-6 p-1" href="{{homepage.top_side_ad_2_link}}"><img class="topSideAdImg" src="{{homepage.top_side_ad_2}}" alt=""></a></div>
             </div>
         </div>
-        
+
         <div class="ps-deal-of-day pb-0">
             <div class="ps-container">
                 <div class="ps-section__header">
@@ -140,7 +140,7 @@
                 </div>
                 <div class="ps-section__content">
                     <div class="ps-carousel--nav owl-slider" data-owl-auto="false" data-owl-loop="false" data-owl-speed="10000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="7" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="6" data-owl-duration="1000" data-owl-mousedrag="on">
-                        
+
                         {{#each products}}
                         <div class="ps-product">
                             <div class="ps-product__thumbnail"><a href="{{config.root}}product/{{slug}}"><img class="imgFixed" src="{{images.[0]}}" alt=""></a>
@@ -169,7 +169,7 @@
                                     <p class="ps-product__price sale">${{final_price}} {{#if (gt price final_price)}}<del>${{price}} </del>{{/if}}</p>
                                 </div>
                             </div>
-                        
+
                         </div>
                         {{/each}}
 
@@ -256,7 +256,7 @@
                             </div>
                         </div>
                         {{/each}}
-                        
+
                     </div>
                 </div>
             </div>

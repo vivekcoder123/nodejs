@@ -4,7 +4,7 @@ const mongoosePaginate = require('mongoose-paginate');
 const URLSlugs = require('mongoose-url-slugs');
 
 const CategorySchema = new Schema({
-    
+
     name:{
         type:String,
         required:true
@@ -20,8 +20,11 @@ const CategorySchema = new Schema({
     date:{
         type:Date,
         default:Date.now()
+    },
+    sequence: {
+        type: Number
     }
-   
+
 },{strict:false});
 
 CategorySchema.plugin(mongoosePaginate)

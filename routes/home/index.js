@@ -34,7 +34,11 @@ router.all('/*',(req,res,next)=>{
 
 
 router.get('/', async (req, res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+            {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+            {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+            {$sort: {sequence: 1, created_at: -1}}
+        ]);
     const dotdProducts=await Product.find({show_in_deals_of_day:true,status:"publish"})
                      .limit(10).sort({created_at:-1})
                      .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1,quantity:1});
@@ -47,7 +51,7 @@ router.get('/', async (req, res)=>{
         {$lookup:{from:"categories",localField:"category",foreignField:"_id",as:"cat"}},{$sort:{created_at:-1}}])
         .group({_id:{category_id:'$category'},products:{$push:{name:"$name",_id:"$_id",slug:"$slug",images:"$images",price:"$price",discount:"$discount",final_price:"$final_price"}},category:{$addToSet:"$cat"}})
         .project({products:{$slice:['$products',10]},category:{$arrayElemAt:[{$arrayElemAt:["$category",0]},0]},_id:0});
-    
+
     const rooms=await Room.find({});
     const newArrivals=await Product.find({status:"publish"}).sort({created_at:-1}).limit(8)
                         .select({slug:1,name:1,images:1,price:1,discount:1,final_price:1});
@@ -58,13 +62,17 @@ router.get('/', async (req, res)=>{
     metaData.description="Free delivery on millions of items with Gold Membership. Very low prices on top brands, books, furniture, Clothes, electronics, computers, software, apparel ...";
     res.render('home/index',{metaData,dotdProducts,allCategoriesWithProducts,rooms,newArrivals,homepage,headerCategories});
 });
- 
+
 
 router.get('/my-account',async (req,res)=>{
     if(res.locals.user){
         return res.redirect('/');
     }
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="Postidal Sign In";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -76,7 +84,11 @@ router.get('/dashboard',async (req,res)=>{
     if(!res.locals.user){
         //return res.redirect('/my-account');
     }
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="User Dashboard";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -89,7 +101,11 @@ router.get('/my-profile',async (req,res)=>{
     if(!res.locals.user){
         return res.redirect('/my-account');
     }
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="User Profile";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -104,7 +120,11 @@ router.get('/my-orders',async (req,res)=>{
         return res.redirect('/my-account');
     }
     user_id=res.locals.user._id;
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="User Orders";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -118,7 +138,11 @@ router.get('/product/:slug',async (req,res)=>{
     const product=await Product.findOne({slug:req.params.slug}).populate('category').populate('subcategory');
     const relatedProducts=await Product.find({category:product.category}).select({slug:1,name:1,images:1,price:1,final_price:1}).where('_id').ne(product._id).sort({created_at:-1}).limit(10);
     const sameBrandProducts=await Product.find({brand:product.brand}).select({slug:1,name:1,images:1,price:1,final_price:1}).where('_id').ne(product._id).sort({created_at:-1}).limit(2);
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title=product.name;
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -157,7 +181,11 @@ router.post('/submit_review',async (req,res)=>{
 });
 
 router.get('/cart',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let sess = req.session;
     let cart = (typeof sess.cart !== 'undefined') ? sess.cart : false;
     let metaData=[];
@@ -217,7 +245,11 @@ router.get('/checkout',async (req,res)=>{
     }
     let cart = (req.session.cart) ? req.session.cart : null;
     console.log('cart',cart);
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="Checkout Page";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -226,7 +258,11 @@ router.get('/checkout',async (req,res)=>{
 });
 
 router.get('/shop/categories',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     // const categories=await Category.find({},{name:1,image:1}).sort({created_at:1}).select({_id:1});
     // let arrayCats=[];
     // categories.forEach(cat=>{
@@ -244,7 +280,11 @@ router.get('/shop/categories',async (req,res)=>{
 });
 
 router.get('/shop',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let page=req.query.page;
     if(!page){
         page=1;
@@ -321,7 +361,7 @@ router.get('/shop',async (req,res)=>{
 			}else{
 				pagination+=`<li><a href="/shop?page=${i}${queryParams}">${i}</a></li>`;
 			}
-		}			
+		}
 		pagination+=`<li><a href="/shop?page=${next_page}${queryParams}">Next</a></li></ul>`;
         let metaData=[];
         metaData.title="Daily Deals";
@@ -329,11 +369,15 @@ router.get('/shop',async (req,res)=>{
         metaData.description="Save money on the Best Deals online on Postidal Daily Deals….";
         res.render('home/all-products',{metaData,headerCategories,products,pagination,countProducts,brandsData,sorting,searchValue,rooms});
 	});
-    
+
 });
 
 router.get('/category/:slug',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let page=req.query.page;
     if(!page){
         page=1;
@@ -364,7 +408,7 @@ router.get('/category/:slug',async (req,res)=>{
 			}else{
 				pagination+=`<li><a href="/category/${req.params.slug}?page=${i}">${i}</a></li>`;
 			}
-		}			
+		}
 		pagination+=`<li><a href="/category/${req.params.slug}?page=${next_page}">Next</a></li></ul>`;
         res.render('home/category-detail',{metaData,category,products,pagination,headerCategories});
 
@@ -372,7 +416,11 @@ router.get('/category/:slug',async (req,res)=>{
 });
 
 router.get('/room/:slug',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let page=req.query.page;
     if(!page){
         page=1;
@@ -403,7 +451,7 @@ router.get('/room/:slug',async (req,res)=>{
 			}else{
 				pagination+=`<li><a href="/room/${req.params.slug}?page=${i}">${i}</a></li>`;
 			}
-		}			
+		}
 		pagination+=`<li><a href="/room/${req.params.slug}?page=${next_page}">Next</a></li></ul>`;
         res.render('home/room-detail',{metaData,room,products,pagination,headerCategories});
 
@@ -438,7 +486,11 @@ router.get('/room/:slug',async (req,res)=>{
 // });
 
 router.get('/privacy-policy',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="Privacy Policy";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -447,7 +499,11 @@ router.get('/privacy-policy',async (req,res)=>{
 });
 
 router.get('/cookie-policy',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="Cookie Policy";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -456,7 +512,11 @@ router.get('/cookie-policy',async (req,res)=>{
 });
 
 router.get('/return-policy',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="Return Policy";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -465,7 +525,11 @@ router.get('/return-policy',async (req,res)=>{
 });
 
 router.get('/terms-and-conditions',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="Terms and Conditions";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
@@ -515,7 +579,7 @@ router.post('/login', (req, res, next)=>{
     let successRedirect='/';
     if(req.session.redirectUrl && req.session.redirectUrl!=null){
      successRedirect=req.session.redirectUrl;
-     req.session.redirectUrl=null;       
+     req.session.redirectUrl=null;
     }
     passport.authenticate('local', {
         successRedirect: successRedirect,
@@ -669,7 +733,11 @@ router.post('/get_order_id',(req,res)=>{
 });
 
 router.get('/payment_callback',async (req,res)=>{
-    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
     let metaData=[];
     metaData.title="Order Summary";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";

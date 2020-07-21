@@ -110,7 +110,7 @@
                     {{#each headerCategories}}
                     <li>
                         <a href="homepage-4.html">
-                        <i class="icon-star"></i> 
+                        <i class="icon-star"></i>
                         {{name}}
                         </a>
                     </li>
@@ -224,32 +224,84 @@
             </div>
         </div>
     </div>
-    <div class="ps-panel--sidebar" id="navigation-mobile">
-        <div class="ps-panel__header">
-            <h3>Categories</h3>
-        </div>
-        <div class="ps-panel__content">
-            <ul class="menu--mobile">
-                {{#each headerCategories}}
-                <li class="menu-item-has-children has-mega-menu"><a href="/{{config.root}}category/{{slug}}">{{name}}</a><span class="sub-toggle"></span>
-                    {{#if subcat.length}}
-                    <div class="mega-menu" style="margin-left:1rem;padding-top:0px;">
-                        <div class="mega-menu__column">
-                            <ul>
-                                {{#each subcat}}
-                                <li><a href="/{{config.root}}shop?subcategory={{_id}}">{{name}}</a></li>
+    <div class="ps-panel--sidebar hideInDesktop" id="navigation-mobile">
+        <di class="header header--mobile electronic">
+            <div class="navigation--mobile" style="padding-bottom:0 !important;">
+            <div class="navigation__left"><a class="ps-logo" href="{{config.root}}"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593630269/WhatsApp_Image_2020-07-02_at_12.32.47_AM.jpg" alt=""></a></div>
+            <div class="navigation__right">
+                <div class="header__actions">
+                    <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>{{session.cart.items.length}}</i></span></a>
+                        <div class="ps-cart__content">
+                            <div class="ps-cart__items">
+                                {{#each session.cart.items}}
+                                    <div class="ps-product--cart-mobile">
+                                        <div class="ps-product__thumbnail"><a href="#"><img src="{{image}}" alt="" width="56" height="56"></a></div>
+                                        <div class="ps-product__content">
+                                            <form action="{{config.root}}cart/remove/{{id}}" method="post">
+                                                <button style="border:0px;background-color:white;" class="ps-product__remove" type="submit"><i class="icon-cross"></i></button>
+                                            </form>
+                                            <a href="{{config.root}}product/{{slug}}">{{title}}</a>
+                                            <p><strong>Sold by:</strong> {{vendor}}</p><small>{{qty}} x {{formattedPrice}}</small>
+                                        </div>
+                                    </div>
                                 {{/each}}
-                            </ul>
+                            </div>
+                            <div class="ps-cart__footer">
+                                <h3>Sub Total:<strong>{{session.cart.formattedTotals}}</strong></h3>
+                                <figure><a class="ps-btn" href="{{config.root}}cart">View Cart</a><a class="ps-btn" href="{{config.root}}checkout">Checkout</a></figure>
+                            </div>
                         </div>
                     </div>
-                    {{/if}}
-                </li>
-                {{/each}}
+                    <div class="ps-block--user-header">
+                        <div class="ps-block__left"><a href="{{config.root}}my-account"><i class="icon-user"></i></a></div>
+                        <div class="ps-block__right">
+                            {{#if user}}
+                                <a href="{{config.root}}dashboard">My Account</a>
+                                <a href="{{config.root}}logout">Logout</a>
+                            {{else}}
+                                <a href="{{config.root}}my-account">Login</a>
+                                <a href="{{config.root}}my-account">Register</a>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+            <div class="ps-search--mobile">
+                <form class="ps-form--search-mobile" action="{{config.root}}shop" method="get">
+                    <div class="form-group--nest">
+                        <input class="form-control" type="text" placeholder="Search something..." value="{{searchValue}}" name="search">
+                        <button><i class="icon-magnifier"></i></button>
+                    </div>
+                </form>
+            </div>
+        </di>
+        <div class="ps-panel__content">
+            <ul class="menu--mobile">
+                <div class="row" style="padding-right: 16px; padding-left: 16px">
+                    {{#each headerCategories}}
+                        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+                            <a href="{{config.root}}category/{{slug}}">
+                                <div class="">
+                                    {{#if image}}
+                                        <img class="imgRoom" src="{{image}}" alt="" loading="lazy">
+                                    {{else}}
+                                        <img class="imgRoom" src="https://drjohnroberson.com/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png" alt="" loading="lazy">
+                                    {{/if}}
+                                    <p style="text-align:center;margin-top:1.4rem;font-size:1.6rem;color:black;text-transform:capitalize;">{{name}}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {{/each}}
+                </div>
             </ul>
         </div>
     </div>
     <div class="navigation--list">
-        <div class="navigation__content"><a class="navigation__item ps-toggle--sidebar" href="#menu-mobile"><i class="icon-menu"></i><span> Menu</span></a><a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile"><i class="icon-list4"></i><span> Categories</span></a><a class="navigation__item ps-toggle--sidebar" href="#search-sidebar"><i class="icon-cart"></i><span> Purchases</span></a><a class="navigation__item ps-toggle--sidebar" href="#cart-mobile"><i class="icon-bag2"></i><span> Cart ({{session.cart.items.length}})</span></a></div>
+        <div class="navigation__content">
+            <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile"><i class="icon-menu"></i><span> Menu</span></a>
+            <a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile"><i class="icon-list4"></i><span> Categories</span></a>
+            <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar"><i class="icon-cart"></i><span> Purchases</span></a>
+            <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile"><i class="icon-bag2"></i><span> Cart ({{session.cart.items.length}})</span></a></div>
     </div>
     <div class="ps-panel--sidebar" id="search-sidebar">
         <div class="ps-panel__header">

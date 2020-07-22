@@ -33,6 +33,10 @@ const UserSchema = new Schema({
     },
     address:{
         type:String
+    },
+    verified:{
+        type:Number,
+        default:0
     }
    
 });

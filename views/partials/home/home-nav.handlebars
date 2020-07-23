@@ -2,7 +2,7 @@
         <div class="header__top">
             <div class="container">
                 <div class="header__left">
-                    <p>Welcome to Postidal Online Shopping Store !</p>
+                    <p class="greetingsTop"></p>
                 </div>
                 <div class="header__right">
                     <ul class="header__top-links">
@@ -30,7 +30,7 @@
                             <ul class="menu--dropdown">
 
                                 {{#each headerCategories}}
-                                <li class="menu-item-has-children has-mega-menu"><a href="/{{config.root}}category/{{slug}}"><i class="icon-laundry"></i> {{name}}</a>
+                                <li class="menu-item-has-children has-mega-menu"><a href="/{{config.root}}category/{{slug}}"> {{name}}</a>
                                     {{#if subcat.length}}
                                     <div class="mega-menu">
                                         <div class="mega-menu__column">
@@ -315,16 +315,24 @@
         </div>
         <div class="ps-panel__content">
             <ul class="menu--mobile">
+                {{#if user}}
+                <li class="current-menu-item" style="margin-bottom:2rem !important;"><a href="{{config.root}}my-account"><span class="greetingsTop font-weight-bold m-0"></span></a></li>
+                {{else}}
                 <li class="current-menu-item"><a href="{{config.root}}my-account"><i class="fa fa-user-o"></i> <span>Sign In</span></a></li>
+                {{/if}}
                 <li class="current-menu-item"><a href="{{config.root}}"><i class="fa fa-home"></i> <span>Home</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}notifications"><i class="fa fa-bell-o"></i> <span>Notifications</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-shopping-cart"></i> <span>Shopping Cart</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-heart-o"></i> <span>Like it a Lot Cart</span></a></li>
+                {{#if user}}
+                <li class="current-menu-item"><a href="{{config.root}}wishlist"><i class="fa fa-heart-o"></i> <span>Like it a Lot Cart</span></a></li>
+                {{/if}}
                 <li class="current-menu-item borderBottom"><a href="{{config.root}}login"><i class="fa fa-gift"></i> <span>Login Rewards</span></a></li>
                 <h4 class="itemHeading">My Postidal</h4>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-users"></i> <span>My Account</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-history"></i> <span>Order History</span></a></li>
+                {{#if user}}
+                <li class="current-menu-item"><a href="{{config.root}}my-orders"><i class="fa fa-history"></i> <span>Order History</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-address-card-o"></i> <span>Shipping Address</span></a></li>
+                {{/if}}
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-bullhorn"></i> <span>Apply Promo</span></a></li>
                 <li class="current-menu-item borderBottom"><a href="{{config.root}}"><i class="fa fa-bolt"></i> <span>Today's Deals</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
@@ -367,3 +375,22 @@
             width:75%;
         }
     </style>
+<script>
+    let user_name="{{user.first_name}}";
+    let greetings="";
+    if(user_name){
+        let today = new Date();
+        let curHr = today.getHours();
+        if (curHr < 12) {
+        greetings='Good Morning';
+        } else if (curHr < 18) {
+        greetings='Good Afternoon';
+        } else {
+        greetings='Good Evening';
+        }
+        greetings+=`, ${user_name}`;
+    }else{
+        greetings="Welcome to Postidal Online Shopping Store !";
+    }
+    $(".greetingsTop").html(greetings);
+</script>

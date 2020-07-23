@@ -31,13 +31,15 @@
                                     <input class="form-control" type="email" placeholder="Email" name="email" required>
                                 </div>
                                 <div class="form-group form-forgot">
-                                    <input class="form-control" type="password" placeholder="Password" name="password" required>
-                                    {{!-- <a href="#">Forgot?</a> --}}
+                                    <input class="form-control" type="password" placeholder="Password" name="password" required id="loginPassword">
+                                    <div class="mt-3">
+                                        <input type="checkbox" onclick="togglePasswordVisibility()" style="height:1.1rem !important;cursor:pointer" id="show_password"> 
+                                        <label style="font-size:1.2rem;cursor:pointer;" for="show_password">Show Password</label>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="ps-checkbox">
-                                        <input class="form-control" type="checkbox" id="remember-me" name="remember-me">
-                                        <label for="remember-me">Remember me</label>
+                                    <div class="">
+                                        <label for="remember-me"><a href="{{config.base_url}}/forgot-password">Forgot password?</a></label>
                                     </div>
                                 </div>
                                 <div class="form-group submtit">
@@ -72,7 +74,7 @@
                                 <div class="form-group">
                                     <button class="ps-btn ps-btn--fullwidth" type="submit">Register</button>
                                 </div>     
-                                <small class="text-muted">By clicking the 'Register' button, you confirm that you accept our <br> <a href="{{config.root}}terms-and-conditions" style="text-decoration:underline;">Terms of use</a> and <a href="{{config.root}}privacy-policy" style="text-decoration:underline;">Privacy Policy</a>.</small>                                          
+                                <small class="text-muted">By clicking the 'Register' button, you confirm that you accept our <a href="{{config.root}}terms-and-conditions" style="text-decoration:underline;">Terms of use</a> , <a href="{{config.root}}privacy-policy" style="text-decoration:underline;">Privacy Policy</a> and <a href="{{config.root}}cookie-policy" style="text-decoration:underline;">Cookies Policy</a>.</small>                                          
                             </form>
                             </div>
                         </div>
@@ -81,3 +83,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+        function togglePasswordVisibility() {
+            var x = document.getElementById("loginPassword");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+
+    </script>

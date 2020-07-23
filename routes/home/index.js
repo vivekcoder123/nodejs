@@ -22,7 +22,7 @@ var transporter = nodemailer.createTransport({
     secure: true,
     auth: {
       user: "support@postidal.com",
-      pass: "Lidialidia11@#",
+      pass: "Lidialidia2020@",
     },
 });
 
@@ -112,6 +112,105 @@ router.get('/my-profile',async (req,res)=>{
     metaData.description="Hello Welcome to Your Profile";
 	res.render('home/profile',{metaData,headerCategories});
 
+});
+
+router.get('/forgot-password',async (req,res)=>{
+
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
+    let metaData=[];
+    metaData.title="Forgot Password";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Forgot Password";
+	res.render('home/forgot-password',{metaData,headerCategories});
+
+});
+
+router.post('/sendNewPasswordLink',async (req,res)=>{
+
+    function randomString(length, chars) {
+        var result = '';
+        for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+        return result;
+    }
+    const email=req.body.email;
+    User.findOne({email}).then(user=>{
+        if(user!=null){
+
+            const base_url=res.locals.config.base_url;
+            const token=randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+            const url=base_url+"/reset-password?user_id="+user._id+"&token="+token;
+            const emailBody=`Hi ${user.first_name},
+            <br><br>
+            <a href="${url}">Click here to reset your password</a>
+            <br><br>
+            Best regard,
+            <br>
+            <a href="https://postidal.com">Postidal.com</a>`;
+            var mailOptions = {
+                from: 'support@postidal.com',
+                to: user.email,
+                subject: 'Reset Your Password - Postidal',
+                html: emailBody
+            };
+            
+            transporter.sendMail(mailOptions, async function(error, info){
+                if (error) {
+                    console.log(error);
+                    req.flash('error_message', 'Some error occured !');
+                    return res.redirect(`/forgot-password`);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    req.flash("success_message","Password reset link has been sent to your email address!");
+                    user.token=token;
+                    await user.save();
+                    return res.redirect(`/forgot-password`);
+                }
+            });
+
+        }else{
+
+            req.flash("error_message","User with this email does not exists, please Register!");
+            return res.redirect(`/forgot-password`);
+
+        }
+    });
+
+});
+
+router.get("/reset-password",(req,res)=>{
+    const user_id=req.query.user_id;
+    const token=req.query.token;
+    User.findOne({_id:user_id,token}).then(userFound=>{
+        if(userFound!=null){
+            res.render('home/reset-password',{userFound});
+        }else{
+            return res.redirect("/");
+        }
+    });
+});
+
+router.post("/reset-password",(req,res)=>{
+    const user_id=req.body.user_id;
+    const password=req.body.password;
+    User.findOne({_id:user_id}).then(userFound=>{
+        if(userFound!=null){
+            bcrypt.genSalt(10, (err, salt)=>{
+                bcrypt.hash(password, salt, (err, hash)=>{
+                    userFound.password = hash;
+                    userFound.save().then(savedUser=>{
+                        req.flash("success_message","Your password has been changed successfully!");
+                        return res.redirect("/my-account");
+                    });
+                });
+            });
+        }else{
+            return res.redirect("/");
+        }
+    });
 });
 
 router.get('/my-orders',async (req,res)=>{
@@ -598,7 +697,7 @@ router.get('/verify',(req,res)=>{
     User.findOne({_id:user_id}).then(async user=>{
         if(user!=null && user.verified==0){
             user.verified=1
-            req.flash('success_message', 'You email has been verified successfully !')
+            req.flash('success_message', 'Congratulations! Your email has been successfully verified.')
         }else{
             req.flash('error_message', 'You have already verified your email !')
         }
@@ -645,7 +744,7 @@ router.post('/register', (req, res)=>{
                             req.flash('error_message', 'Some error occured !');
                             } else {
                             console.log('Email sent: ' + info.response);
-                                req.flash('success_message', 'A verification mail has been sent in your email adress , please verify it to login !');
+                                req.flash('success_message', 'A verification mail has been sent in your email asdress , please verify it to login!');
                             }
                             res.redirect('/my-account');
                         });
@@ -682,7 +781,7 @@ router.post('/save_profile', (req, res)=>{
     });
 });
 
-router.post('/get_order_id',(req,res)=>{
+router.post('/get_order_id',async (req,res)=>{
     const first_name=req.body.first_name;
     const last_name=req.body.last_name;
     const user_id=req.body.user_id;
@@ -692,6 +791,13 @@ router.post('/get_order_id',(req,res)=>{
     const address=req.body.address;
     const order_notes=req.body.order_notes;
     const payment_status="started";
+    let user=await User.findOne({_id:user_id});
+    if(user){
+        user.country=country;
+        user.phone=phone;
+        user.address=address;
+        await user.save();
+    }
     const order=new Order({
         first_name,
         last_name,

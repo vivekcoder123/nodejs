@@ -37,6 +37,9 @@ const UserSchema = new Schema({
     verified:{
         type:Number,
         default:0
+    },
+    token:{
+        type:String
     }
    
 });

@@ -22,7 +22,7 @@ var transporter = nodemailer.createTransport({
     secure: true,
     auth: {
       user: "support@postidal.com",
-      pass: "Lidialidia2020@",
+      pass: "Lidialidia22@@",
     },
 });
 

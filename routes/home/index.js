@@ -14,6 +14,7 @@ const PaypalConfig = require('../../config/config');
 const Report = require('../../models/Report');
 const Order = require('../../models/Order');
 const Comment = require('../../models/Comment');
+const SavedForLater = require('../../models/SavedForLater');
 var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
@@ -280,6 +281,7 @@ router.post('/submit_review',async (req,res)=>{
 });
 
 router.get('/cart',async (req,res)=>{
+    req.session.redirectUrl="/cart";
     const headerCategories=await Category.aggregate([
         {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
         {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
@@ -291,8 +293,81 @@ router.get('/cart',async (req,res)=>{
     metaData.title="Your Cart";
     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
     metaData.description="Your cart is ready , please click on buy now to book these items";
-    console.log('cart',cart);
+    if(!cart || cart.items.length<1){
+        return res.redirect('/');
+    }else{
+        cart.items.map(async item=>{
+            if(res.locals.user){
+                let user_id=res.locals.user._id;
+                const savedForLater=await SavedForLater.findOne({user_id,product_id:item.id});
+                if(savedForLater!=null){
+                    item.savedForLater=true;
+                }else{
+                    item.savedForLater=false;
+                }
+            }else{
+                item.savedForLater=false;
+            }
+            return item;
+        });
+    }
     res.render('home/cart',{metaData,cart,headerCategories});
+});
+
+router.get('/saved-for-later',async (req,res)=>{
+    console.log('user',res.locals.user);
+    if(res.locals.user==null){
+        req.session.redirectUrl="/saved-for-later";
+        return res.redirect("/my-account");
+    }
+    const headerCategories=await Category.aggregate([
+        {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
+        {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
+        {$sort: {sequence: 1, created_at: -1}}
+    ]);
+    let items = await SavedForLater.find({user_id:res.locals.user._id}).populate('product_id');
+    let metaData=[];
+    metaData.title="Your Wishlist";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Your wishlist is ready , please click on buy now to book these items";
+    res.render('home/saved-for-later',{metaData,items,headerCategories});
+});
+
+router.get('/save-for-later',(req,res)=>{
+
+    let user=res.locals.user;
+    if(user==null){
+        req.session.redirectUrl="/saved-for-later";
+        return res.redirect("/my-account");
+    }
+
+    let user_id=user._id;
+    let product_id=req.query.product_id;
+    SavedForLater.findOne({product_id,user_id}).then(saveForLater=>{
+        if(saveForLater!=null){
+
+          SavedForLater.deleteMany({user_id,product_id}).then(response=>{
+            if(req.session.redirectUrl){
+                return res.redirect(req.session.redirectUrl);
+            }
+            return res.redirect("/saved-for-later");
+          });  
+
+        }else{
+            
+            const newSaveForLater = new SavedForLater({
+                user_id,product_id
+            });
+            newSaveForLater.save().then(response=>{
+                if(req.session.redirectUrl){
+                    return res.redirect(req.session.redirectUrl);
+                }
+                return res.redirect("/saved-for-later");
+            });
+        }
+    }).catch(err=>console.log('error',err));
+
+
 });
 
 router.post('/cart',(req,res)=>{
@@ -305,7 +380,6 @@ router.post('/cart',(req,res)=>{
             if(req.body.buttonClicked){
                 return res.redirect('/checkout');
             }
-            req.flash("success_message","Product is added to the cart successfully !");
             return res.redirect('/cart');
         }).catch(err => {
             console.log('err',err);
@@ -319,13 +393,11 @@ router.post('/cart',(req,res)=>{
 router.post('/cart/remove/:id',(req,res)=>{
     const id = req.params.id;
     Cart.removeFromCart(id, req.session.cart);
-    req.flash("error_message","Product is removed from the cart !");
     res.redirect('/cart');
 });
 
 router.post('/cart/empty',(req,res)=>{
     Cart.emptyCart(req);
-    req.flash("error_message","All products are removed from the cart !");
     res.redirect('/cart');
 });
 
@@ -333,7 +405,6 @@ router.post('/cart/update/:id',(req,res)=>{
     const product_id=req.params.id;
     const qty=req.body.qty;
     Cart.updateProductQuantity(product_id,qty,req.session.cart);
-    req.flash("success_message","Cart is updated successfully !");
     res.redirect('/cart');
 });
 
@@ -343,7 +414,6 @@ router.get('/checkout',async (req,res)=>{
         return res.redirect('/my-account');
     }
     let cart = (req.session.cart) ? req.session.cart : null;
-    console.log('cart',cart);
     const headerCategories=await Category.aggregate([
         {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},
         {$project: {name: 1, image: 1, slug: 1, sequence: 1, category: 1, subcat: 1, sequence: {$ifNull: ["$sequence", Number.MAX_VALUE]}}},
@@ -566,14 +636,14 @@ router.get('/room/:slug',async (req,res)=>{
 //     res.render('home/about-us',{metaData,headerCategories});
 // });
 
-// router.get('/contact-us',async (req,res)=>{
-//     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
-//     let metaData=[];
-//     metaData.title="Contact Us";
-//     metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
-//     metaData.description="Contact Us For Any Questions";
-//     res.render('home/contact-us',{metaData,headerCategories});
-// });
+router.get('/contact-us',async (req,res)=>{
+    const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
+    let metaData=[];
+    metaData.title="Contact Us";
+    metaData.keywords="shopping,ecommerce platform,ecommerce store,ecommerce multi vendor,marketplace multi vendor,seller marketplace";
+    metaData.description="Contact Us For Any Questions";
+    res.render('home/contact-us',{metaData,headerCategories});
+});
 
 // router.get('/faq',async (req,res)=>{
 //     const headerCategories=await Category.aggregate([{$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},{$sort:{created_at:-1}}]);
@@ -792,6 +862,7 @@ router.post('/get_order_id',async (req,res)=>{
     const order_notes=req.body.order_notes;
     const payment_status="started";
     let user=await User.findOne({_id:user_id});
+    console.log('user',user);
     if(user){
         user.country=country;
         user.phone=phone;

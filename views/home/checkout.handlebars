@@ -12,7 +12,8 @@
         <div class="ps-checkout">
             <div class="container">
                 <div class="ps-section__header text-center" style="padding-bottom:4%;padding-top:4%;">
-                    <h1>Place Order</h1>
+                    <h1 class="hideInMobile">Place Order</h1>
+                    <h3 class="hideInDesktop">Place Order</h3>
                 </div>
                 <div class="ps-section__content">
                     <form class="ps-form--checkout" action="{{PaypalConfig.paypal.url}}" method="post" id="paypalForm">
@@ -72,7 +73,7 @@
                                             <textarea class="form-control" rows="7" placeholder="Notes about your order, e.g. special notes for delivery." name="order_notes" style="height:15.75rem;"></textarea>
                                         </div>
                                     </div>
-                                <div class="ps-form__total">
+                                <div class="ps-form__total mb-5">
                                     <h3 class="ps-form__heading">Your Order</h3>
                                     <div class="content">
                                         <div class="ps-block--checkout-total">
@@ -113,7 +114,8 @@
                                         {{/each}}
                                         <input type="hidden" name="custom" id="order_id">
                                         <div class="text-center">
-                                        <input type="image" class="paypal-btn" alt="Pay with PayPal" src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593702925/paypal.png" style="width:15rem;height:auto;">
+                                        <p id="errorMessage" class="text-danger" style="font-weight:bold;"></p>
+                                        <button class="ps-btn btn-block paypal-btn" type="submit">Place Order</button>
                                         </div>
                                     </div>
                                 </div>
@@ -132,19 +134,26 @@
         $(document).on("click",".paypal-btn",function(e){
             e.preventDefault();
             let formArray={};
+            let error=false;
             $("#paypalForm input").each(function(){
+                if($(this).val()=="" && $(this).prop('required')){
+                    $("#errorMessage").html("*Please fill all the required fields")
+                    error=true;
+                }
                 formArray[$(this).attr("name")]=$(this).val();
             });
-            formArray['order_notes']=$("textarea[name=order_notes]").val();
-            formArray['user_id']="{{user._id}}";
-            console.log(formArray);
-            $.ajax({
-                method:"post",
-                url:"/get_order_id",
-                data:formArray
-            }).done(response=>{
-                $("#order_id").val(response);
-                $("#paypalForm").submit();
-            });
+            if(!error){
+                $("#errorMessage").html("");
+                formArray['order_notes']=$("textarea[name=order_notes]").val();
+                formArray['user_id']="{{user._id}}";
+                $.ajax({
+                    method:"post",
+                    url:"/get_order_id",
+                    data:formArray
+                }).done(response=>{
+                    $("#order_id").val(response);
+                    $("#paypalForm").submit();
+                });
+            }
         });
     </script>

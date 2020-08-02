@@ -65,7 +65,7 @@
                     </form>
                 </div>
                 <div class="header__content-right">
-                    <div class="header__actions"><a class="header__extra" href="#"><i class="icon-heart"></i><span><i>0</i></span></a>
+                    <div class="header__actions"><a class="header__extra" href="{{config.base_url}}/saved-for-later"><i class="icon-heart"></i><span><i></i></span></a>
                         <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>{{session.cart.items.length}}</i></span></a>
                             <div class="ps-cart__content">
                                 <div class="ps-cart__items">
@@ -92,7 +92,7 @@
                             <div class="ps-block__left"><i class="icon-user"></i></div>
                             <div class="ps-block__right">
                                 {{#if user}}
-                                <a href="{{config.root}}dashboard">My Account</a>
+                                <a href="{{config.root}}my-profile">My Account</a>
                                 <a href="{{config.root}}logout">Logout</a>
                                 {{else}}
                                 <a href="{{config.root}}my-account">Login</a>
@@ -127,7 +127,7 @@
             <div class="header__right">
                 <ul class="navigation__extra">
                     <li><a href="#">Sell on Postidal</a></li>
-                    <li><a href="#">Tract your order</a></li>
+                    <li><a href="#">Track your order</a></li>
                     <li>
                         <div class="ps-dropdown"><a href="#">US Dollar</a>
                             <ul class="ps-dropdown-menu">
@@ -177,7 +177,7 @@
                         <div class="ps-block__left"><a href="{{config.root}}my-account"><i class="icon-user"></i></a></div>
                         <div class="ps-block__right">
                             {{#if user}}
-                            <a href="{{config.root}}dashboard">My Account</a>
+                            <a href="{{config.root}}my-profile">My Account</a>
                             <a href="{{config.root}}logout">Logout</a>
                             {{else}}
                             <a href="{{config.root}}my-account">Login</a>
@@ -229,7 +229,7 @@
                             <div class="ps-block__left"><a href="{{config.root}}my-account"><i class="icon-user"></i></a></div>
                             <div class="ps-block__right">
                                 {{#if user}}
-                                    <a href="{{config.root}}dashboard">My Account</a>
+                                    <a href="{{config.root}}my-profile">My Account</a>
                                     <a href="{{config.root}}logout">Logout</a>
                                 {{else}}
                                     <a href="{{config.root}}my-account">Login</a>
@@ -418,14 +418,14 @@
                 <li class="current-menu-item"><a href="{{config.root}}notifications"><i class="fa fa-bell-o"></i> <span>Notifications</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-shopping-cart"></i> <span>Shopping Cart</span></a></li>
                 {{#if user}}
-                <li class="current-menu-item"><a href="{{config.root}}wishlist"><i class="fa fa-heart-o"></i> <span>Like it a Lot Cart</span></a></li>
+                <li class="current-menu-item"><a href="{{config.root}}saved-for-later"><i class="fa fa-heart-o"></i> <span>Like it a Lot Cart</span></a></li>
                 {{/if}}
                 <li class="current-menu-item borderBottom"><a href="{{config.root}}login"><i class="fa fa-gift"></i> <span>Login Rewards</span></a></li>
                 <h4 class="itemHeading">My Postidal</h4>
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-users"></i> <span>My Account</span></a></li>
                 {{#if user}}
                 <li class="current-menu-item"><a href="{{config.root}}my-orders"><i class="fa fa-history"></i> <span>Order History</span></a></li>
-                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-address-card-o"></i> <span>Shipping Address</span></a></li>
+                <li class="current-menu-item"><a href="{{config.root}}my-profile"><i class="fa fa-address-card-o"></i> <span>Shipping Address</span></a></li>
                 {{/if}}
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-bullhorn"></i> <span>Apply Promo</span></a></li>
                 <li class="current-menu-item borderBottom"><a href="{{config.root}}"><i class="fa fa-bolt"></i> <span>Today's Deals</span></a></li>

@@ -1,0 +1,87 @@
+<style>
+    .hideInDesktop .ps-product--cart{
+        max-width:100% !important;
+    }
+    @media only screen and (max-width:800px){
+        .ps-product--cart .ps-product__content{
+            padding-left:4rem !important;
+            text-align:left;
+        }
+        .ps-table--shopping-cart tbody tr td:last-child a{
+            font-size:14px;
+        }
+        .ps-table--shopping-cart tbody tr td:first-child{
+            min-width:0px !important;
+        }
+    }
+</style>
+<div class="ps-page--simple">
+        <div class="ps-breadcrumb">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li><a href="{{config.root}}">Home</a></li>
+                    <li><a href="{{config.root}}shop">Shop</a></li>
+                    <li>Saved Items</li>
+                </ul>
+            </div>
+        </div>
+        <div class="ps-section--shopping ps-shopping-cart pt-0">
+            <div class="container">
+                <div class="ps-section__content">
+                    <div class="table-responsive">
+                        <table class="table ps-table--shopping-cart">
+                            <tbody>
+                                {{#each items}}
+                                <tr class="text-center hideInMobile">
+                                    <td>
+                                        <div class="ps-product--cart">
+                                            <div class="ps-product__thumbnail"><a href="{{product_id.images.[0]}}"><img src="{{product_id.images.[0]}}" alt="" width="100" height="100"></a></div>
+                                            <div class="ps-product__content"><a href="{{config.root}}product/{{product_id.slug}}">
+                                                {{product_id.name}}</a>
+                                                <p>SOLD BY <strong>{{product_id.vendor}}</strong></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="price">${{product_id.price}}</td>
+                                    <td>
+                                        <form method="post" action="{{config.base_url}}/cart">
+                                        <input type="hidden" name="_id" value="{{product_id._id}}">
+                                        <input type="hidden" name="qty" value="1">
+                                        <button class="ps-btn marginBottomInMobile" type="submit">Move to cart</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="/save-for-later?product_id={{product_id.id}}">
+                                        <i class="icon-trash" style="font-size:18px;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class="text-center hideInDesktop">
+                                    <td>
+                                        <div class="ps-product--cart">
+                                            <div class="ps-product__thumbnail"><a href="{{product_id.images.[0]}}"><img src="{{product_id.images.[0]}}" alt="" width="100" height="100"></a></div>
+                                            <div class="ps-product__content"><a href="{{config.root}}product/{{product_id.slug}}">
+                                                {{product_id.name}}</a>
+                                                <p>SOLD BY <strong>{{product_id.vendor}}</strong></p>
+                                                <p class="price">${{product_id.price}}</p>
+                                                <form method="post" action="{{config.base_url}}/cart">
+                                                <input type="hidden" name="_id" value="{{product_id._id}}">
+                                                <input type="hidden" name="qty" value="1">
+                                                <button class="ps-btn marginBottomInMobile" type="submit">Move to cart</button>
+                                                </form>
+                                                <a href="/save-for-later?product_id={{product_id.id}}">
+                                                <i class="icon-trash" style="font-size:18px;"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

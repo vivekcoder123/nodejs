@@ -25,10 +25,21 @@
                 </ul>
             </div>
         </div>
-        <div class="ps-section--shopping ps-shopping-cart pt-0">
+        <div class="ps-section--shopping ps-shopping-cart pt-0 mt-3">
             <div class="container">
-                <div class="hideInDesktop mt-4">
-                    <a class="ps-btn ps-btn--fullwidth" href="{{config.root}}checkout">Proceed to checkout</a>
+                <div class="">
+                    {{#if cart.items.length}}
+                        <div class="col-xl-6 col-12 m-auto">
+                            <div class="ps-block--shopping-total">
+                                {{!-- <div class="ps-block__header">
+                                    <p>Subtotal <span> ${{cart.withoutShippingTotals}}</span></p>
+                                </div> --}}
+                                <div class="ps-block__content">
+                                    <h3>Subtotal <span>${{cart.withoutShippingTotals}}</span></h3>
+                                </div>
+                            </div><a class="ps-btn ps-btn--fullwidth mb-3" href="{{config.root}}checkout" style="background-color: #ff9900; color : black">Proceed to checkout</a>
+                        </div>
+                    {{/if}}
                 </div>
                 <div class="ps-section__content">
                     <div class="table-responsive">
@@ -46,11 +57,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="/save-for-later?product_id={{id}}">
+                                        <a href="/save-for-later?product_id={{id}}" class="button-amz mr-2" style="padding-top:10px;padding-bottom:10px">
                                         {{#if savedForLater}}
-                                        <i class="fa fa-heart" style="font-size:24px;color:#fcb800;"></i>
+                                            Already saved
                                         {{else}}
-                                        <i class="fa fa-heart-o" style="font-size:24px;color:grey;"></i>
+                                            Save for later
                                         {{/if}}
                                         </a>
                                     </td>
@@ -68,7 +79,7 @@
                                     <td>${{multiply price qty}}</td>
                                     <td>
                                         <form action="{{config.root}}cart/remove/{{id}}" method="post">
-                                        <button type="submit" style="border:0px;"><i class="icon-cross"></i></button>
+                                            <button type="submit" class="button-amz mr-2" style="width:auto !important">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -77,32 +88,33 @@
                                         <div class="ps-product--cart">
                                             <div class="ps-product__thumbnail"><a href="{{image}}"><img src="{{image}}" alt="" width="100" height="100"></a></div>
                                             <div class="ps-product__content"><a href="{{config.root}}product/{{slug}}">
-                                                {{title}}</a>
-                                                <p>SOLD BY <strong>{{vendor}}</strong></p>
-                                                <p class="price">{{formattedPrice}}</p>
-                                                <form method="post" action="{{config.root}}cart/update/{{id}}" id="updateForm{{id}}">
-                                                <div class="form-group--number">
+                                                {{title}} SOLD BY <strong>{{vendor}}</strong></a>
+                                                <p class="price red-large font-weight-bold">{{formattedPrice}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="cont" style="display : flex; justify-content:space-between">
+                                            <form method="post" action="{{config.root}}cart/update/{{id}}" id="updateForm{{id}}">
+                                                <div class="form-group--number mt-5">
                                                     <button type="button" class="up addItem" data-id="{{id}}" data-qty="{{qty}}">+</button>
                                                     <button type="button" class="down removeItem" data-id="{{id}}" data-qty="{{qty}}">-</button>
                                                     <input class="form-control" type="text" value="{{qty}}" min="1" name="qty">
                                                 </div>
                                                 <button type="submit" style="display:none;"></button>
-                                                </form>
-                                                <p class="mt-2 mb-0">Subtotal : ${{multiply price qty}}</p>
-                                                <form action="{{config.root}}cart/remove/{{id}}" method="post">
-                                                <button type="submit" style="border:0px;"><i class="icon-trash"></i></button>
-                                                <a href="/save-for-later?product_id={{id}}">
-                                                {{#if savedForLater}}
-                                                <i class="fa fa-heart" style="font-size:18px;color:#fcb800;"></i>
-                                                {{else}}
-                                                <i class="fa fa-heart-o" style="font-size:18px;color:grey;"></i>
-                                                {{/if}}
-                                                </a>
-                                                </form>
-                                            </div>
+                                            </form>
+                                            <form action="{{config.root}}cart/remove/{{id}}" method="post">
+                                                <button type="submit" class="button-amz mr-2 mt-5">Delete</button>
+                                            </form>
+                                            <a href="/save-for-later?product_id={{id}}" class="button-amz mr-2 mt-5" style="padding-top:10px;">
+                                            {{#if savedForLater}}
+                                                Already saved
+                                            {{else}}
+                                                Save for later
+                                            {{/if}}
+                                            </a>
                                         </div>
                                     </td>
-                                    
+                                </tr>
+                                <tr  class="text-center hideInDesktop">
                                 </tr>
                                 {{/each}}
                             </tbody>
@@ -158,19 +170,9 @@
                                     <p>Subtotal <span> ${{cart.withoutShippingTotals}}</span></p>
                                 </div> --}}
                                 <div class="ps-block__content">
-                                    <ul class="ps-block__product">
-                                        {{#each cart.items}}
-                                        <li><span class="ps-block__shop">{{vendor}} Shipping</span>
-                                        {{!-- <span class="ps-block__shipping">Free Shipping</span> --}}
-                                        <span class="ps-block__estimate">
-                                        <a href="#"> {{title}} x {{qty}}</a>
-                                        </span>
-                                        </li>
-                                        {{/each}}
-                                    </ul>
-                                    <h3>Total <span>${{cart.withoutShippingTotals}}</span></h3>
+                                    <h3>Subtotal <span>${{cart.withoutShippingTotals}}</span></h3>
                                 </div>
-                            </div><a class="ps-btn ps-btn--fullwidth" href="{{config.root}}checkout">Proceed to checkout</a>
+                            </div><a class="ps-btn ps-btn--fullwidth" href="{{config.root}}checkout" style="background-color: #ff9900; color : black">Proceed to checkout</a>
                         </div>
                         {{/if}}
                     </div>
@@ -192,3 +194,23 @@
             $(`#updateForm${product_id}`).submit();
         });
     </script>
+    <style>
+        .red-large{
+            color:#ff3300 !important; 
+            font-size:medium !important;
+        }
+        .button-amz{
+            height: 40px !important;
+            padding-left:8px;
+            padding-right:8px;
+            border-radius: 4px;
+            border: 0px;
+            background-color: rgb(189, 195, 199);
+            font-family: Ubuntu, sans-serif;
+            font-size: 15px;
+            font-weight: 200;
+        }
+        .button-amz:hover{
+            background-color: beige;
+        }
+    </style>

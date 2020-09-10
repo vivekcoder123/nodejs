@@ -22,6 +22,9 @@ const UserSchema = new Schema({
     city:{
         type:String
     },
+    zip:{
+        type:Number,
+    },
     country:{
         type:String
     },

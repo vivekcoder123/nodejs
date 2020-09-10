@@ -3,13 +3,15 @@
             <div class="container">
                 <div class="header__left">
                     <p class="greetingsTop"></p>
+                    
                 </div>
                 <div class="header__right">
                     <ul class="header__top-links">
-                        <li><a href="/postidal-robotic-delis">Postidal Robotic Delis</a></li>
-                        <li><a href="/gold-membership">Gold Membership</a></li>
-                        <li><a href="/track-your-order">Track Your Order</a></li>
-                        <li>
+                            <li><a href="">Coupons</a></li>
+                            <li><a href="">Gift Cards</a></li>
+                            <li><a href="">Free Shipping</a></li>
+                            <li><a href="/gold-membership">Gold Membership Perks</a></li>
+                            <li><a href="/postidal-robotic-delis">Postidal Robotic Delis</a></li>
                             <div class="ps-dropdown language"><a href="#"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1594411073/flag.png" alt="" width="24" height="20">English</a>
                                 <ul class="ps-dropdown-menu">
                                     <li><a href="#"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1591383602/germany.png" alt=""> Spanish</a></li>
@@ -22,13 +24,12 @@
             </div>
         </div>
         <div class="header__content">
-            <div class="container">
-                <div class="header__content-left"><a class="ps-logo" href="{{config.root}}"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593630269/WhatsApp_Image_2020-07-02_at_12.32.47_AM.jpg" alt=""></a>
+            <div class="container" style="margin-right:80px !important;">
+                <div class="header__content-left"><a class="ps-logo" href="{{config.root}}"><img src="{{config.root}}img/pc-logo.jpeg" alt=""></a>
                     <div class="menu--product-categories">
                         <div class="menu__toggle"><i class="icon-menu"></i><span> Shop by Department</span></div>
                         <div class="menu__content">
                             <ul class="menu--dropdown">
-
                                 {{#each headerCategories}}
                                 <li class="menu-item-has-children has-mega-menu"><a href="/{{config.root}}category/{{slug}}"> {{name}}</a>
                                     {{#if subcat.length}}
@@ -65,8 +66,40 @@
                     </form>
                 </div>
                 <div class="header__content-right">
-                    <div class="header__actions"><a class="header__extra" href="{{config.base_url}}/saved-for-later"><i class="icon-heart"></i><span><i></i></span></a>
-                        <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>{{session.cart.items.length}}</i></span></a>
+                    <div class="header__actions">
+                        <div class="ps-block__right">
+                            <div class="dropdown">
+                                <a href="{{config.root}}my-profile" data-toggle="dropdown" class="drop">My Account</a>
+                                <div class="dropdown-menu text-center">
+                                    {{#if user}}
+                                    <p class="dropdown-header" class="menu-head" style="font-size:medium;color:black;font-weight:500" id="menu-greet">Hi {{user.first_name}}</p>
+                                    <a class="dropdown-item menu-item" class="" href="#" >Shopping Cart</a>
+                                    <a class="dropdown-item menu-item">Orders &amp; Returns</a>
+                                    <a class="dropdown-item menu-item">Todays deals</a>
+                                    <a class="dropdown-item menu-item" href='{{config.root}}logout'>Logout</a>
+                                    <p class="dropdown-header" class="menu-head" style="font-size:medium;color:black;font-weight:500">My Postidal</p>
+                                    <a class="dropdown-item menu-item">My Account</a>
+                                    <a class="dropdown-item menu-item">Apply Promo</a>
+                                    <a class="dropdown-item menu-item">Settings</a>
+                                    <a class="dropdown-item menu-item">Help</a>
+                                    {{else}}
+                                    <a class="btn btn-warning button" href="{{config.root}}my-account" >Sign in/Sign Up</a>
+                                    <a class="dropdown-item menu-item">Shopping Cart</a>
+                                    <a class="dropdown-item menu-item">Orders &amp; Returns</a>
+                                    <a class="dropdown-item menu-item">Todays deals</a>
+                                    <p class="dropdown-header" class="menu-head" style="font-size:medium;color:black;font-weight:500">My Postidal</p>
+                                    <a class="dropdown-item menu-item">My Account</a>
+                                    <a class="dropdown-item menu-item">Apply Promo</a>
+                                    <a class="dropdown-item menu-item">Settings</a>
+                                    <a class="dropdown-item menu-item">Help</a>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="menu-item-large">Returns &amp; Orders</a>
+                        <a href="#" class="menu-item-large">COVID-19 Supplies</a>
+                        <!--a class="header__extra" href="{{config.base_url}}/saved-for-later"><i class="icon-heart"></i><span><i></i></span></a-->
+                        <!--div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>{{session.cart.items.length}}</i></span></a>
                             <div class="ps-cart__content">
                                 <div class="ps-cart__items">
                                     {{#each session.cart.items}}
@@ -87,19 +120,7 @@
                                     <figure><a class="ps-btn" href="{{config.root}}cart">View Cart</a><a class="ps-btn" href="{{config.root}}checkout">Checkout</a></figure>
                                 </div>
                             </div>
-                        </div>
-                        <div class="ps-block--user-header">
-                            <div class="ps-block__left"><i class="icon-user"></i></div>
-                            <div class="ps-block__right">
-                                {{#if user}}
-                                <a href="{{config.root}}my-profile">My Account</a>
-                                <a href="{{config.root}}logout">Logout</a>
-                                {{else}}
-                                <a href="{{config.root}}my-account">Login</a>
-                                <a href="{{config.root}}my-account">Register</a>
-                                {{/if}}
-                                </div>
-                        </div>
+                        </div-->
                     </div>
                 </div>
             </div>
@@ -148,7 +169,10 @@
             </div>
         </div>
         <div class="navigation--mobile" style="padding-bottom:0 !important;">
-            <div class="navigation__left"><a class="ps-logo" href="{{config.root}}"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593630269/WhatsApp_Image_2020-07-02_at_12.32.47_AM.jpg" alt=""></a></div>
+            <div class="navigation__left">
+                <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile" style="color:white;font-size:25px"><i class="icon-menu" id="menu-bars"></i></a>
+                <a class="ps-logo" href="{{config.root}}"><img src="https://res.cloudinary.com/dwrl5mija/image/upload/v1593630269/WhatsApp_Image_2020-07-02_at_12.32.47_AM.jpg" alt=""></a>
+            </div>
             <div class="navigation__right">
                 <div class="header__actions">
                     <div class="ps-cart--mini"><a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>{{session.cart.items.length}}</i></span></a>
@@ -173,18 +197,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ps-block--user-header">
-                        <div class="ps-block__left"><a href="{{config.root}}my-account"><i class="icon-user"></i></a></div>
-                        <div class="ps-block__right">
-                            {{#if user}}
-                            <a href="{{config.root}}my-profile">My Account</a>
-                            <a href="{{config.root}}logout">Logout</a>
-                            {{else}}
-                            <a href="{{config.root}}my-account">Login</a>
-                            <a href="{{config.root}}my-account">Register</a>
-                            {{/if}}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -192,9 +204,16 @@
             <form class="ps-form--search-mobile" action="{{config.root}}shop" method="get">
                 <div class="form-group--nest">
                     <input class="form-control" type="text" placeholder="Search something..." value="{{searchValue}}" name="search">
-                    <button><i class="icon-magnifier"></i></button>
+                    <button style="position: absolute;top: 46.5%;right: 25px;background:transparent"><i class="icon-magnifier"style="color: #000 !important;font-size: 25px; font-weight:bolder;"></i></button>
                 </div>
             </form>
+        </div>
+        <div class="submenu">
+            <a class="l1"> Categories</span></a>
+            <a class="l2"> Buy Again</span></a>
+            <a class="l3">1$ Deals</a>
+            <a class="l4">Gold Member</a>
+            <span class="stretch"></span>
         </div>
     </header>
     <div class="ps-panel--sidebar" id="cart-mobile">
@@ -343,13 +362,6 @@
             </ul>
         </div>
     </div>
-    <div class="navigation--list">
-        <div class="navigation__content">
-            <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile"><i class="icon-menu"></i><span> Menu</span></a>
-            <a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile"><i class="icon-list4"></i><span> Categories</span></a>
-            <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar"><i class="icon-cart"></i><span> Purchases</span></a>
-            <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile"><i class="icon-bag2"></i><span> Cart ({{session.cart.items.length}})</span></a></div>
-    </div>
     <div class="ps-panel--sidebar" id="search-sidebar">
         <di class="header header--mobile electronic">
             <div class="navigation--mobile" style="padding-bottom:0 !important;">
@@ -422,10 +434,11 @@
                 {{/if}}
                 <li class="current-menu-item borderBottom"><a href="{{config.root}}login"><i class="fa fa-gift"></i> <span>Login Rewards</span></a></li>
                 <h4 class="itemHeading">My Postidal</h4>
-                <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-users"></i> <span>My Account</span></a></li>
+               <li class="current-menu-item"><a  href="{{config.root}}cart"><i class="fa fa-users"></i> <span>My Account</span></a></li>
                 {{#if user}}
                 <li class="current-menu-item"><a href="{{config.root}}my-orders"><i class="fa fa-history"></i> <span>Order History</span></a></li>
                 <li class="current-menu-item"><a href="{{config.root}}my-profile"><i class="fa fa-address-card-o"></i> <span>Shipping Address</span></a></li>
+                <li class="current-menu-item"><a  href="{{config.root}}logout"><i class="fa fa-sign-out"></i> <span>Log out</span></a></li>
                 {{/if}}
                 <li class="current-menu-item"><a href="{{config.root}}cart"><i class="fa fa-bullhorn"></i> <span>Apply Promo</span></a></li>
                 <li class="current-menu-item borderBottom"><a href="{{config.root}}"><i class="fa fa-bolt"></i> <span>Today's Deals</span></a></li>
@@ -443,9 +456,49 @@
                     </ul>
                     </li>
             </ul>
+            <!--button class="navigation__item ps-toggle--sidebar" href="#menu-mobile" style="margin-left:25px" id="close">Close Menu</button-->
         </div>
     </div>
     <style>
+        .button{
+            font-size: 15px !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(128, 128, 128, 0.1) inset;
+            border-color: #dedede;
+            border: 1px solid #fff;
+            margin-bottom: 10px;
+        }
+        .drop{
+            color:white ;
+            padding: 0;
+            margin-right:10px !important;
+            max-width: 100px !important;
+            text-align:center;
+        }
+        .menu-item-large{
+            color:white ;
+            max-width: 80px !important;
+            padding: 0;
+            margin-left:10px !important;
+            margin-right:10px !important;
+        }
+        .menu-item{
+            font-size:small !important;
+            color: black;
+        }
+        .menu-item:hover{
+            color:#fcb800 !important;
+        }
+        .submenu{
+            background:#022335;
+            padding-left: 3%;
+            color: white;
+            text-align: justify;
+            display: flex;
+            justify-content: space-between;
+        }
+        .menu-item-large:hover{
+            color : #fcb800;
+        }
         .menu--mobile>li{
             border-bottom: 0px;
         }
@@ -459,7 +512,7 @@
             margin-left:0;
         }
         .borderBottom{
-            border-bottom:1px solid #ccc !important;
+            border-bottom:1px #022335 !important;
             padding-bottom:2%;
         }
         .itemHeading{
@@ -486,5 +539,14 @@
     }else{
         greetings="Welcome to Postidal Online Shopping Store !";
     }
+    function detectMob() {
+        return ( ( window.innerWidth <= 800 ) && ( window.innerHeight <= 600 ) );
+    }
+    console.log(detectMob())
     $(".greetingsTop").html(greetings);
+    $("body").click(function(e){
+        if(!$(e.target).is(".ps-panel__content") && $(".ps-panel__content").has(e.target).length === 0  && !$(e.target).is("#menu-bars") && detectMob()){
+            $("#menu-mobile").toggleClass('active')
+        }
+    })
 </script>

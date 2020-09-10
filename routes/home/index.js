@@ -23,7 +23,7 @@ var transporter = nodemailer.createTransport({
     secure: true,
     auth: {
       user: "support@postidal.com",
-      pass: "Lidialidia22@@",
+      pass: "Lidialidia11@#",
     },
 });
 
@@ -33,7 +33,18 @@ router.all('/*',(req,res,next)=>{
 	next();
 });
 
-
+router.post('/update',async (req,res)=>{
+    console.log("test")
+    const id = req.body.id
+    const phone = req.body.phone
+    const address = req.body.address
+    const country = req.body.country
+    const zip = req.body.zipcode
+    const city = req.body.city
+    console.log(id,address,country,zip,city)
+    const x = await User.updateOne({_id : id},{$set:{phone : phone,address:address, country : country, city : city,zip: zip}})
+    console.log(x)
+})
 router.get('/', async (req, res)=>{
     const headerCategories=await Category.aggregate([
             {$lookup:{from:"subcategories",localField:"_id",foreignField:"category",as:"subcat"}},

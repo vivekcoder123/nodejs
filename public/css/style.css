@@ -15780,6 +15780,7 @@ textarea.form-control {
 .header .header__actions {
     display: -webkit-box;
     display: flex;
+    justify-content: space-between;
     -webkit-box-align: center;
     align-items: center;
     -webkit-box-pack: end;
@@ -15791,9 +15792,8 @@ textarea.form-control {
 }
 
 .header .header__left {
-    max-width: 300px;
+    max-width: 380px !important;
     display: -webkit-box;
-    display: flex;
     -webkit-box-align: center;
     align-items: center
 }
@@ -15803,7 +15803,7 @@ textarea.form-control {
 }
 
 .header .header__right {
-    max-width: 370px
+    max-width: 100% !important;
 }
 
 .header .header__top {
@@ -15819,7 +15819,13 @@ textarea.form-control {
     -webkit-box-direction: normal;
     flex-flow: row nowrap
 }
-
+.links{
+    color:white;
+    margin-left:25px;
+}
+.links :hover{
+    color : #fcb800;
+}
 .header .header__top .container > *, .header .header__top .ps-container > * {
     width: 100%
 }
@@ -15942,7 +15948,7 @@ textarea.form-control {
     align-items: center
 }
 
-.header--standard .header__top .header__left {
+.header--standard .header__top{
     max-width: 50%
 }
 
